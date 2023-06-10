@@ -1,19 +1,13 @@
-<script>
-	import { page } from '$app/stores';
-</script>
-
 <header>
-	<nav>
-		<ul>
-			<li aria-current={$page.url.pathname === '/' ? 'page' : undefined}>
-				<a href="/">Home</a>
-			</li>
-			<li aria-current={$page.url.pathname === '/about' ? 'page' : undefined}>
-				<a href="/about">About</a>
-			</li>
-			<li aria-current={$page.url.pathname.startsWith('/sverdle') ? 'page' : undefined}>
-				<a href="/sverdle">Sverdle</a>
-			</li>
-		</ul>
-	</nav>
+	<div class="navbar h-20">
+		<div class="navbar-start">
+
+		</div>
+		<div class="navbar-center">
+			<a class="btn btn-ghost text-xl" href="/">Megakuul</a>
+		</div>
+		<div class="navbar-end">
+			
+		</div>
+	</div>
 </header>
