@@ -4,7 +4,7 @@
 	import "$lib/tailwind.css";
 </script>
 
-<div class="app">
+<div class="app bg-slate-900">
 	<Header />
 
 	<main>
