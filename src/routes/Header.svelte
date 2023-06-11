@@ -1,7 +1,19 @@
 <script lang="ts">
 	import Icon from '@iconify/svelte';
+	import mk_logo_animate from "$lib/assets/mk_logo_animate.svg";
+	import AnimatedLogo from '$lib/components/AnimatedLogo.svelte';
 
 	let checked: boolean = false;
+
+	let animatedLogo: AnimatedLogo;
+
+	$: checked, animateLogo();
+
+	function animateLogo() {
+		if (checked && animatedLogo) {
+			animatedLogo.animate();
+		}
+	}
 
 	function checkNav() {
 		checked = !checked;
@@ -40,7 +52,7 @@
 				<li class="mt-2"><a href="/projects" on:click={checkNav}>Projects</a></li>
 				<li class="mt-2"><a href="/about" on:click={checkNav}>About</a></li>
 
-				<Icon icon="material-symbols:close-rounded" height="32" width="32" class="w-full"></Icon>
+				<div class="self-center mt-32"><AnimatedLogo bind:this={animatedLogo} width=200></AnimatedLogo></div>
 			</ul>
 		</div>
 </header>
