@@ -39,7 +39,7 @@
 
 	<div class="drawer drawer-mobile w-full h-full">
 		<input id="main-drawer" type="checkbox" bind:checked={checked} class="drawer-toggle"/>
-		<div class="drawer-side">
+		<div class="drawer-side z-30">
 			<label for="main-drawer" class="drawer-overlay"></label>
 
 			<ul class="menu w-80 h-full p-4 text-xl bg-base-200 text-base-content">

@@ -24,6 +24,7 @@
 			<span class="footer-title">Socials</span> 
 			<div class="grid grid-flow-col gap-4">
 			<a href="https://github.com/Megakuul" class="btn btn-square btn-ghost"><Icon icon="line-md:github-loop" height="32" width="32"></Icon></a>
+			<a href="https://www.youtube.com/channel/UCCtqqVSCIEt50F4aNKE7KZQ" class="btn btn-square btn-ghost"><Icon icon="mdi:youtube" height="32" width="32"></Icon></a>
 			</div>
 		</div>
 	</footer>
