@@ -12,11 +12,13 @@
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
-            css_class = classOnIntersect;
+          css_class = classOnIntersect;
         } else {
-            css_class = classOnDefault;
+          css_class = classOnDefault;
         }
       });
+    }, {
+      rootMargin: "-50px"
     });
     observer.observe(element);
     return () => {

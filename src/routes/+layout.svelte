@@ -3,7 +3,6 @@
 	import Icon from '@iconify/svelte';
 	import mk_logo_black from "$lib/assets/mk_logo_white.svg";
 	import mk_title from "$lib/assets/mk_title.png";
-	import './styles.css';
 	import "$lib/tailwind.css";
 </script>
 
@@ -25,6 +24,7 @@
 			<div class="grid grid-flow-col gap-4">
 			<a href="https://github.com/Megakuul" class="btn btn-square btn-ghost"><Icon icon="line-md:github-loop" height="32" width="32"></Icon></a>
 			<a href="https://www.youtube.com/channel/UCCtqqVSCIEt50F4aNKE7KZQ" class="btn btn-square btn-ghost"><Icon icon="mdi:youtube" height="32" width="32"></Icon></a>
+			<a href="https://www.linkedin.com/in/linus-moser-8897a527b" class="btn btn-square btn-ghost"><Icon icon="mdi:linkedin" height="32" width="32"></Icon></a>
 			</div>
 		</div>
 	</footer>

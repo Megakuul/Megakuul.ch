@@ -1,4 +1,8 @@
-<pre class="text-center text-base-content bg-base-100 shadow-none font-extrabold 2xl:text-sm lg:text-[10px] sm:text-[6px] text-[3px] overflow-hidden">
+<script lang="ts">
+  export let classes: string;
+</script>
+
+<pre class="text-center text-base-content shadow-none font-extrabold 2xl:text-sm lg:text-[10px] sm:text-[6px] text-[3px] overflow-hidden {classes}">
   {`
   MMMMMMMM               MMMMMMMM                                                         kkkkkkkk                                               lllllll 
   M:::::::M             M:::::::M                                                         k::::::k                                               l:::::l 

@@ -1,6 +1,5 @@
 <script lang="ts">
 	import Icon from '@iconify/svelte';
-	import mk_logo_animate from "$lib/assets/mk_logo_animate.svg";
 	import AnimatedLogo from '$lib/components/AnimatedLogo.svelte';
 
 	let checked: boolean = false;
