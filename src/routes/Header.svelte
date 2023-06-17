@@ -23,20 +23,20 @@
 	<div class="navbar h-20">
 		
 		<div class="navbar-start">
-			<label for="main-drawer" class="btn btn-square btn-ghost drawer-button">
-				<Icon icon="material-symbols:menu-rounded" height="32" width="32"/>
-			</label>
+			
 		</div>
 
 		<div class="navbar-center">
 			<a class="btn btn-ghost text-xl" href="/">Megakuul</a>
 		</div>
 		<div class="navbar-end">
-			
+			<label for="main-drawer" class="btn btn-square btn-ghost drawer-button">
+				<Icon icon="material-symbols:menu-rounded" height="32" width="32"/>
+			</label>
 		</div>
 	</div>
 
-	<div class="drawer drawer-mobile w-full h-full">
+	<div class="drawer drawer-end drawer-mobile">
 		<input id="main-drawer" type="checkbox" bind:checked={checked} class="drawer-toggle"/>
 		<div class="drawer-side z-30">
 			<label for="main-drawer" class="drawer-overlay"></label>

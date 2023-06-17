@@ -45,7 +45,7 @@
 		<pre data-prefix=">" class="whitespace-normal text-[0.8rem] sm:text-sm lg:text-lg xl:text-xl">
 			<br>
 			<div class="pl-6">
-				<WriteOnScroll scrollY={scroll} offset={-20} text = "
+				<WriteOnScroll scrollY={scroll} offset={-20} blinkingIntervall={400} text = "
 					<br>
 					<b>Welcome to Megakuul.ch</b>
 					<br><br><br>
@@ -61,7 +61,6 @@
 					Feel free to explore my work and reach out if you have any inquiries or questions about a project.
 					<br><br>
 					Your Linus
-				
 				" />
 			</div>
 		</pre>
