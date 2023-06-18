@@ -9,11 +9,11 @@
 
     export let blinkingIntervall: number;
 
+    let cursorOpacity: number;
+
     let absoluteOffset: number;
 
     let textElement: HTMLElement;
-
-    let cursorElement: HTMLElement;
 
     onMount(() => {
         // This will get the absolute position of the element
@@ -22,24 +22,38 @@
         // so that the absolute offset is shown if the element gets displayed + offset
         absoluteOffset = position - window.innerHeight - offset;
 
-        blinkCursor(blinkingIntervall, cursorElement);
+        blinkCursor(blinkingIntervall);
     });
 
-    function blinkCursor(intervall: number, cursorElement: HTMLElement) {
+    function blinkCursor(intervall: number) {
         let isVisible = true;
         setInterval(() => {  
             if (isVisible) {
                 isVisible = false;
-                cursorElement.style.opacity = "0";
+                cursorOpacity = 0;
             } else {
                 isVisible = true;
-                cursorElement.style.opacity = "1";
+                cursorOpacity = 1;
             }
         }, intervall)
     }
 </script>
 
-<code bind:this={textElement}>
+<!-- This Element contains the actual content, 
+    because the content is very buggy if the cursor is appended as span element,
+    it uses the css after element for the cursor, the after element is control through a css variable.
+    This is not a best practise, but in this case the only way I made it work clean and without problems.
+-->
+<code bind:this={textElement} class="textElement transition-opacity" style="--opacity: {cursorOpacity};">
     {@html text.slice(0, Math.max(scrollY-absoluteOffset, 0))}
 </code>
-<span bind:this={cursorElement} class="transition-opacity"><b>_</b></span>
+
+<style>
+
+    .textElement::after {
+        content: "_";
+        opacity: var(--opacity);
+        @apply transition-opacity;
+    }
+</style>
+

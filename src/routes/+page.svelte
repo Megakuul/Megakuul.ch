@@ -36,7 +36,7 @@
 		<MegakuulAsciiLogo classes="bg-base-100" />
 	</Intersector>
 
-	<Intersector classAdditional="mockup-code bg-base-300 w-5/6 mt-20 mb-10 h-[630px]" 
+	<Intersector classAdditional="mockup-code bg-base-300 w-5/6 mt-20 mb-10 h-[640px] xl:h-[600px]" 
 		classOnDefault="scale-90" 
 		classOnIntersect="scale-100" 
 		transition="all ease .5s"
