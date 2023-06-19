@@ -1,38 +1,28 @@
-# create-svelte
+# Megakuul.ch Official Page
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/master/packages/create-svelte).
+This is my personal portfolio/blog page.
 
-## Creating a project
+### Important 
 
-If you're seeing this, you've probably already done this step. Congrats!
+#### Deployment
 
-```bash
-# create a new project in the current directory
-npm create svelte@latest
+This app is designed to run on Vercel, the whole app is using prerendered pages because there is no dynamic data.
 
-# create a new project in my-app
-npm create svelte@latest my-app
-```
+There is an automatic CI/CD Pipeline to Vercel, pushes to the `main` branch will trigger the deployment.
 
-## Developing
+It is using the Vercel Adapter for SvelteKit.
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+#### Blogposts
 
-```bash
-npm run dev
+Blogposts are written in the Markdown format, and contained inside their folder in the `routes/projects` directory.
 
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
+The Layout for the Blogposts is contained in the `routes/projects/project.layout.svelte` file.
 
-## Building
+#### Design
 
-To create a production version of your app:
+Styling of the pages is handled with tailwindcss (+daisyUI).
 
-```bash
-npm run build
-```
+The styling for the markdown blogposts is handled in the mdsvex template (`project.layout.svelte`)
 
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
+Custom CSS classes are **ALWAYS** prefixed with `mk-`. 
+E.g. `mk-nav-item` this helps understanding whether the class is a tailwind function class or a custom css class.

@@ -27,8 +27,8 @@
 	let scroll: number;
 </script>
 
-<div class="w-full flex flex-col items-center justify-center mt-20">
-	<Intersector classAdditional="mockup-code bg-base-300 w-5/6 mt-20" 
+<div class="w-full flex flex-col items-center justify-center mt-10 sm:mt-20">
+	<Intersector classAdditional="mockup-code bg-base-300 w-5/6 mt-10 sm:mt-20" 
 		classOnDefault="scale-90" 
 		classOnIntersect="scale-100" 
 		transition="all ease .5s"
@@ -36,7 +36,7 @@
 		<MegakuulAsciiLogo classes="bg-base-100" />
 	</Intersector>
 
-	<Intersector classAdditional="mockup-code bg-base-300 w-5/6 mt-20 mb-10 h-[640px] xl:h-[600px]" 
+	<Intersector classAdditional="mockup-code bg-base-300 w-5/6 mt-20 mb-10 min-h-[640px] xl:h-[600px]" 
 		classOnDefault="scale-90" 
 		classOnIntersect="scale-100" 
 		transition="all ease .5s"
