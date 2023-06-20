@@ -18,13 +18,13 @@ export default [
     }, {
         title: "Gorbit",
         subtitle: "A blazingly fast and easy to use TCP Network Loadbalancer",
-        route: "gorbit",
+        route: "xmemo",
         published: "17.06.2023",
         mainimage: "xmemo.svg"
     }, {
         title: "Test",
         subtitle: "Im a description of the Test product",
-        route: "Test",
+        route: "xmemo",
         published: "17.06.2023",
         mainimage: "xmemo.svg"
     }, {
