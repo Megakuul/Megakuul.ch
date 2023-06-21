@@ -2,7 +2,7 @@
     import { page } from '$app/stores';
 </script>
 
-{#if $page.status = 500}
+{#if $page.status == 500}
 <div class="w-full h-screen bg-blue-500 flex items-center justify-center">
     <div class="flex items-start justify-center flex-col p-4">
         <h1 class="text-9xl mb-8">:&#40;</h1>
