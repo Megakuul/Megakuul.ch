@@ -10,6 +10,8 @@
 	import MegakuulAsciiLogo from "$lib/components/MegakuulAsciiLogo.svelte";
 	import WriteOnScroll from "$lib/components/WriteOnScroll.svelte";
 	import { onMount } from "svelte";
+	import list from "$lib/projects.list.js";
+	import CarouselPage from "$lib/components/CarouselPage.svelte";
 
 	let welcomeCommand: string;
 
@@ -36,7 +38,7 @@
 		<MegakuulAsciiLogo classes="bg-base-100" />
 	</Intersector>
 
-	<Intersector classAdditional="mockup-code bg-base-300 w-5/6 mt-20 mb-10 min-h-[640px] xl:h-[600px]" 
+	<Intersector classAdditional="mockup-code bg-base-300 w-5/6 my-20 min-h-[640px] xl:h-[600px]" 
 		classOnDefault="scale-90" 
 		classOnIntersect="scale-100" 
 		transition="all ease .5s"
@@ -64,6 +66,17 @@
 				" />
 			</div>
 		</pre>
+	</Intersector>
+
+	<Intersector classAdditional="carousel w-4/6 my-20"
+		classOnDefault="scale-90" 
+		classOnIntersect="scale-100" 
+		transition="all ease .5s"
+	>
+		<CarouselPage id="project1" nextid="project2" previousid="project4" project={list[Math.floor(Math.random() * list.length)]} />
+		<CarouselPage id="project2" nextid="project3" previousid="project1" project={list[Math.floor(Math.random() * list.length)]} />
+		<CarouselPage id="project3" nextid="project4" previousid="project2" project={list[Math.floor(Math.random() * list.length)]} />
+		<CarouselPage id="project4" nextid="project1" previousid="project3" project={list[Math.floor(Math.random() * list.length)]} />
 	</Intersector>
 </div>
 
