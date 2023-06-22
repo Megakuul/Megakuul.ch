@@ -18,9 +18,9 @@ export default [
     }, {
         title: "Gorbit",
         subtitle: "A blazingly fast and easy to use TCP Network Loadbalancer",
-        route: "xmemo",
+        route: "gorbit",
         published: "17.06.2023",
-        mainimage: "xmemo.svg"
+        mainimage: "gorbit.svg"
     }, {
         title: "Test",
         subtitle: "Im a description of the Test product",
