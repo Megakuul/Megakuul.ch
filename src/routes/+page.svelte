@@ -2,7 +2,8 @@
 
 <svelte:head>
 	<title>Home</title>
-	<meta name="description" content="Svelte demo app" />
+	<meta name="description" 
+	content="Welcome to Megakuul.ch! I'm Linus, a dedicated Platform Engineer and passionate Software Developer, always eager to explore new technologies and drive innovation." />
 </svelte:head>
 
 <script lang="ts">
@@ -62,13 +63,19 @@
 					<br><br>
 					Feel free to explore my work and reach out if you have any inquiries or questions about a project.
 					<br><br>
-					Your Linus
+					Yours Linus
 				" />
 			</div>
 		</pre>
 	</Intersector>
 
-	<Intersector classAdditional="carousel w-4/6 my-20"
+	<Intersector classAdditional="text-[1.5rem] sm:text-xl lg:text-2xl xl:text-3xl mt-20"
+		classOnDefault="translate-y-full opacity-20" 
+		classOnIntersect="opacity-100" 
+		transition="all ease 1s"
+	><a href="/projects"><h1 class="cursor-pointer link link-hover font-bold">Explore my Projects</h1></a></Intersector>
+
+	<Intersector classAdditional="carousel w-5/6 xl:w-4/6  my-20"
 		classOnDefault="scale-90" 
 		classOnIntersect="scale-100" 
 		transition="all ease .5s"

@@ -24,6 +24,12 @@
     }
 </script>
 
+<svelte:head>
+	<title>Projects</title>
+	<meta name="description" 
+	content="Immerse yourself in my software projects and get a little insight into my work" />
+</svelte:head>
+
 <div class="w-full flex flex-col items-center">
 {#each slicedList[currentPage] as item}
     <Intersector 

@@ -24,6 +24,7 @@
 			<div class="grid grid-flow-col gap-4">
 			<a href="https://github.com/Megakuul" class="btn btn-square btn-ghost"><Icon icon="line-md:github-loop" height="32" width="32"></Icon></a>
 			<a href="https://www.youtube.com/channel/UCCtqqVSCIEt50F4aNKE7KZQ" class="btn btn-square btn-ghost"><Icon icon="mdi:youtube" height="32" width="32"></Icon></a>
+			<a href="https://twitter.com/Megakuulr" class="btn btn-square btn-ghost"><Icon icon="mdi:twitter" height="32" width="32"></Icon></a>
 			<a href="https://www.linkedin.com/in/linus-moser-8897a527b" class="btn btn-square btn-ghost"><Icon icon="mdi:linkedin" height="32" width="32"></Icon></a>
 			</div>
 		</div>
