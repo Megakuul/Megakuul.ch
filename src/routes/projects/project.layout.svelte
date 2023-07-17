@@ -14,6 +14,11 @@
   /**
 	 * @type {any}
 	 */
+   export let githublnk;
+
+  /**
+	 * @type {any}
+	 */
    export let published;
 
   /**
@@ -26,6 +31,12 @@
 	 */
    export let techstack;
 </script>
+
+<svelte:head>
+	<title>{title}</title>
+	<meta name="description" 
+	content="{subtitle}" />
+</svelte:head>
   
 <div class="hero">
   <div class="hero-content flex-col-reverse lg:flex-row w-full">
@@ -48,7 +59,12 @@
     <img alt="projectimage" src="/images/{mainimage}" class="max-w-xs rounded-lg shadow-2xl" />
     <div>
       <p>{published}</p>
-      <h1 class="text-4xl lg:text-5xl font-bold">{title}</h1>
+      <div class="flex flex-row items-center">
+        <h1 class="text-4xl lg:text-5xl font-bold">{title}</h1>
+        {#if githublnk}
+        <a href="{githublnk}" class="btn btn-ghost ml-2"><Icon icon="mingcute:link-line" width=32 height=32></Icon></a>
+        {/if}
+      </div>
       <p class="py-6 ">{subtitle}</p>
     </div>
   </div>
@@ -66,7 +82,7 @@
 -->
 <style>
   .markdown :global(h1) {
-    @apply text-3xl font-bold;
+    @apply text-3xl font-bold mb-8 mt-14;
 
     @screen lg {
       @apply text-5xl;
@@ -74,7 +90,7 @@
   }
 
   .markdown :global(h2) {
-    @apply text-2xl font-bold;
+    @apply text-2xl font-bold mb-7 mt-12;
 
     @screen lg {
       @apply text-4xl;
@@ -82,7 +98,7 @@
   }
 
   .markdown :global(h3) {
-    @apply text-xl font-bold;
+    @apply text-xl font-bold mb-5 mt-10;
 
     @screen lg {
       @apply text-3xl;
@@ -90,7 +106,7 @@
   }
 
   .markdown :global(h4) {
-    @apply text-sm font-bold;
+    @apply text-sm font-bold mb-4 mt-8;
 
     @screen lg {
       @apply text-2xl;
@@ -98,7 +114,19 @@
   }
 
   .markdown :global(p) {
-    @apply text-xs;
+    @apply text-xs my-4;
+
+    @screen lg {
+      @apply text-xl;
+    }
+  }
+
+  .markdown :global(ul) {
+    @apply list-disc list-inside my-3;
+  }
+
+  .markdown :global(li) {
+    @apply text-xs my-1 font-semibold;
 
     @screen lg {
       @apply text-xl;

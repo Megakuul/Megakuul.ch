@@ -69,7 +69,7 @@
 		</pre>
 	</Intersector>
 
-	<Intersector classAdditional="text-[1.5rem] sm:text-xl lg:text-2xl xl:text-3xl mt-20"
+	<Intersector classAdditional="text-[1.5rem] sm:text-xl lg:text-2xl xl:text-3xl mt-10 sm:mt-18"
 		classOnDefault="translate-y-full opacity-20" 
 		classOnIntersect="opacity-100" 
 		transition="all ease 1s"
