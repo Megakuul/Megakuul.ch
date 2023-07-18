@@ -25,9 +25,21 @@
 		} else {
 			welcomeCommand = "cat welcome.txt | grep welcome"
 		}
+		
+		projectList = shuffleList(list);
 	});
 
+	function shuffleList(array: object[]) {
+		let tempList: object[] = array;
+		for (let i = array.length - 1; i >= 0; i--) {
+			const j = Math.floor(Math.random() * (i + 1));
+			[tempList[i], tempList[j]] = [tempList[j], tempList[i]];
+		}
+		return tempList;
+	}
+
 	let scroll: number;
+	let projectList: any[] = [];
 </script>
 
 <div class="w-full flex flex-col items-center justify-center mt-10 sm:mt-20">
@@ -75,15 +87,20 @@
 		transition="all ease 1s"
 	><a href="/projects"><h1 class="cursor-pointer link link-hover font-bold">Explore my Projects</h1></a></Intersector>
 
-	<Intersector classAdditional="carousel w-5/6 xl:w-4/6 my-24"
+	<Intersector classAdditional="carousel w-5/6 xl:w-4/6 my-16"
 		classOnDefault="scale-90" 
 		classOnIntersect="scale-100" 
 		transition="all ease .5s"
 	>
-		<CarouselPage id="project1" nextid="project2" previousid="project4" project={list[Math.floor(Math.random() * list.length)]} />
-		<CarouselPage id="project2" nextid="project3" previousid="project1" project={list[Math.floor(Math.random() * list.length)]} />
-		<CarouselPage id="project3" nextid="project4" previousid="project2" project={list[Math.floor(Math.random() * list.length)]} />
-		<CarouselPage id="project4" nextid="project1" previousid="project3" project={list[Math.floor(Math.random() * list.length)]} />
+		{#each projectList as project, index}
+			<CarouselPage 
+				id="project{index}" 
+				nextid="project{index+1 > projectList.length-1 ? 0 : index+1}" 
+				previousid="project{index-1 < 0 ? projectList.length-1 : index-1}" 
+				project={project} 
+			/>
+		{/each}
+		
 	</Intersector>
 </div>
 
