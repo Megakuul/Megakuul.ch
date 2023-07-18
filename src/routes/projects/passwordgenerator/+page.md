@@ -1,27 +1,34 @@
 ---
-title: Gorbit
-subtitle: A blazingly fast and easy to use TCP Network Loadbalancer
-githublnk: https://github.com/Megakuul/gorbit
-published: "17.06.2023"
-mainimage: "gorbit.svg"
+title: Password Generator
+subtitle: The only Password Generator that actually looks good
+githublnk: https://github.com/Megakuul/passwordgenerator
+published: "05.09.2022"
+mainimage: "generator.png"
 techstack: [
     {
-        icon: vscode-icons:file-type-go,
-        name: GO
+        icon: devicon:dart,
+        name: Dart
+    },
+    {
+        icon: logos:flutter,
+        name: Flutter
     }
 ]
 ---
 
-## Project thinkings
+Simple Password Generator, with a good-looking UI.
 
-Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.   
+## Purpose
 
-Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi. Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.   
+Before this project, I was only programming some small PowerShell Scripts. As I heard of Flutter, I was genuinely interested in trying it out. 
+And my first idea was to just create a password generator.
 
-Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi.   
+## Implementation
 
-Nam liber tempor cum soluta nobis eleifend option congue nihil imperdiet doming id quod mazim placerat facer possim assum. Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat.   
+In this project, I just tried out some widgets of Flutter and played around with it, so it was not really planned or thought through.
 
-Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis.   
+I deployed it on a nginx web server by simply exporting the Flutter Web project.
 
-At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur
+## Lessons Learned
+
+I had a hard time with this project because I hadn't learned how to program before, but it was interesting and very helpful.

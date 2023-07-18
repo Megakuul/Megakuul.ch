@@ -69,13 +69,13 @@
 		</pre>
 	</Intersector>
 
-	<Intersector classAdditional="text-[1.5rem] sm:text-xl lg:text-2xl xl:text-3xl mt-10 sm:mt-18"
+	<Intersector classAdditional="text-[1.5rem] sm:text-xl lg:text-2xl xl:text-3xl mt-10 sm:mt-20"
 		classOnDefault="translate-y-full opacity-20" 
 		classOnIntersect="opacity-100" 
 		transition="all ease 1s"
 	><a href="/projects"><h1 class="cursor-pointer link link-hover font-bold">Explore my Projects</h1></a></Intersector>
 
-	<Intersector classAdditional="carousel w-5/6 xl:w-4/6  my-20"
+	<Intersector classAdditional="carousel w-5/6 xl:w-4/6 my-24"
 		classOnDefault="scale-90" 
 		classOnIntersect="scale-100" 
 		transition="all ease .5s"

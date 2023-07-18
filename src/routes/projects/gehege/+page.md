@@ -1,27 +1,59 @@
 ---
-title: Gorbit
-subtitle: A blazingly fast and easy to use TCP Network Loadbalancer
-githublnk: https://github.com/Megakuul/gorbit
-published: "17.06.2023"
-mainimage: "gorbit.svg"
+title: Gehege
+subtitle: Example Application to host on Docker
+githublnk: https://github.com/Megakuul/gehege
+published: "19.03.2023"
+mainimage: "gehege.png"
 techstack: [
     {
-        icon: vscode-icons:file-type-go,
-        name: GO
+        icon: devicon:dart,
+        name: Dart
+    },
+    {
+        icon: logos:flutter,
+        name: Flutter
+    },
+    {
+        icon: logos:nodejs-icon-alt,
+        name: NodeJS
+    },
+    {
+        icon: skill-icons:expressjs-light,
+        name: ExpressJS
+    },
+    {
+        icon: skill-icons:mongodb,
+        name: MongoDB
+    },
+    {
+        icon: devicon:docker,
+        name: Docker
     }
 ]
 ---
 
-## Project thinkings
+Gehege is a Webapplication where you can list multiple cages with creatures in it. Every account can then spend his cash to different cages.
 
-Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.   
+## Purpose
 
-Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi. Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.   
+The goal was to create an example application that can be deployed with Docker.
 
-Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi.   
+## Implementation
 
-Nam liber tempor cum soluta nobis eleifend option congue nihil imperdiet doming id quod mazim placerat facer possim assum. Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat.   
+For the project, I used **Dart** along with **Flutter** for the frontend. 
 
-Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis.   
+To implement the backend, I used **ExpressJS** on **Nodejs**. I've created a basic RESTful API that can be accessed from the frontend.
 
-At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur
+As database I once again used **MongoDB**, as I just feel comfortable with it.
+
+The Webauthentication is handled with cookies, I basically save a token generated on the server to the cookie.
+
+On the API I disabled **CORS** policies, so that the frontend can access the API.
+
+## Lessons Learned
+
+This was my first project where I used an authentication system from scratch. This went really well in my opinion, even if a more secure way to handle Webauthentication would be to use **JSON Webtokens**.
+
+I also struggled a lot with the **CORS** policies that produced weird bugs. In the future, I need to check if the source, destination and potential middleware all allow requests related to the application. 
+
+Another way to solve the **CORS** problem would be to just use a metaframework that has the API and the frontend running on the same server (e.g. domain).

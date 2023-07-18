@@ -56,7 +56,7 @@
         {/each}
       </ul>
     </div>
-    <img alt="projectimage" src="/images/{mainimage}" class="max-w-xs rounded-lg shadow-2xl" />
+    <img alt="projectimage" src="/images/{mainimage}" class="max-w-xs w-full rounded-lg shadow-2xl" />
     <div>
       <p>{published}</p>
       <div class="flex flex-row items-center">

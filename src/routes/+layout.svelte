@@ -27,6 +27,8 @@
 			<a href="https://twitter.com/Megakuulr" class="btn btn-square btn-ghost"><Icon icon="mdi:twitter" height="32" width="32"></Icon></a>
 			<a href="https://www.linkedin.com/in/linus-moser-8897a527b" class="btn btn-square btn-ghost"><Icon icon="mdi:linkedin" height="32" width="32"></Icon></a>
 			</div>
+			<span class="footer-title">Legal</span> 
+			<a href="/impressum" class="link link-hover text-center font-bold">Impressum</a>
 		</div>
 	</footer>
 </div>

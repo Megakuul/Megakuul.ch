@@ -1,27 +1,43 @@
 ---
-title: Gorbit
-subtitle: A blazingly fast and easy to use TCP Network Loadbalancer
-githublnk: https://github.com/Megakuul/gorbit
-published: "17.06.2023"
-mainimage: "gorbit.svg"
+title: Linosteffen.ch
+subtitle: Website for Lino Steffen
+githublnk: https://github.com/Megakuul/linosteffen.ch
+published: "15.05.2023"
+mainimage: "linosteffen.png"
 techstack: [
     {
-        icon: vscode-icons:file-type-go,
-        name: GO
+        icon: devicon:svelte,
+        name: Svelte
+    },
+    {
+        icon: vscode-icons:file-type-light-netlify,
+        name: Netlify
     }
 ]
 ---
 
-## Project thinkings
+Linosteffen.ch is the website for the photographer Lino Steffen.
 
-Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.   
+## Purpose
 
-Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi. Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.   
+Lino Steffen had a simple **Webflow.io** website befor this, so I thought that I'm going to build a Website for him.
 
-Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi.   
+The goal was to host the website for free.
 
-Nam liber tempor cum soluta nobis eleifend option congue nihil imperdiet doming id quod mazim placerat facer possim assum. Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat.   
+## Implementation
 
-Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis.   
+Both of us knew that you can host static content on Netlify for free, so thats why I looked for a solution that can build static content.
 
-At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur
+Because HTML, CSS and Javascript sucks (what I experienced in my previous project **Statistic Calculator**), in this project I looked for a UI Framework.
+
+As the UI will be client side rendered (because we want to host it for free on **Netlify**), I needed something that goes fast. I decided to try out **Svelte**, as it is very fast compared to frameworks like **React**, and I also like the way how **Svelte** handles certain things.
+
+For the project I've implemented my own page router that operates with parameters like **/?Page**. This allowed me to share components like the footer and the navbar over multiple pages.
+
+## Lessons Learned
+
+In this project I learned fundamental concepts of UI Frameworks, I got basic knowledge about how **Svelte** works and could also improve my overall frontend development skills.
+
+After building projects with metaframeworks like **SvelteKit**, I would 
+definitely go with one of them, especially for **SEO** it is significant to use server-side rendering.
+A platform like **Vercel** now also offers a free plan that can run server-side rendered frameworks like **SvelteKit** or **Next.js**.

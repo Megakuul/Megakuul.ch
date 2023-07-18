@@ -1,27 +1,55 @@
 ---
-title: Gorbit
-subtitle: A blazingly fast and easy to use TCP Network Loadbalancer
-githublnk: https://github.com/Megakuul/gorbit
-published: "17.06.2023"
-mainimage: "gorbit.svg"
+title: GradeManager
+subtitle: Modern Cross-Plattform Grade-Manager
+githublnk: https://github.com/GradeManager
+published: "18.05.2023"
+mainimage: "grademanager.png"
 techstack: [
     {
-        icon: vscode-icons:file-type-go,
-        name: GO
+        icon: devicon:dart,
+        name: Dart
+    },
+    {
+        icon: logos:flutter,
+        name: Flutter
+    },
+    {
+        icon: devicon:csharp,
+        name: C#
+    }, 
+    {
+        icon: logos:dotnet,
+        name: .Net
     }
 ]
 ---
 
-## Project thinkings
+**GradeManager** is an software that should help people manage their school grades.
 
-Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.   
+## Purpose
 
-Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi. Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.   
+The **GradeManager** project started when I created the **Legacy GradeManager** with the **.Net Framework**, just for a friend of mine.
 
-Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi.   
+After seeing the demand for applications like **Pluspoints**, I thought it is time to create an Opensource Cross-Platform application that can handle these things.
 
-Nam liber tempor cum soluta nobis eleifend option congue nihil imperdiet doming id quod mazim placerat facer possim assum. Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat.   
+## Implementation
 
-Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis.   
+How already said, the first version of the **GradeManager** (now called **Legacy GradeManager**) was created with **Windows Forms**, a UI Framework from **.Net**. It is really simple and only compatible with Windows.
 
-At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur
+The new version of the **GradeManager** was built using **Dart** with **Flutter** as the UI framework, as I wanted the application to be cross-platform, and I already had some experience with **Flutter**.
+
+Over the whole project I tried to stick to the **Flutter standard library**, by that I kept most forms and fields a bit  standardized.
+And I also made the configuration human-readable so that anyone can easily make their own changes to the config. Furthermore, I built functions to export the configuration and to import configurations from the **Legacy GradeManager** and **Pluspoints**.
+
+Additionally, I've created a **GitHub Workflow** that builds the **GradeManager** for Windows, Linux, Android and macOS and then adds them to the **GradeManager Website**. The Windows **GradeManager** also gets automatically shipped with an automated **Inno Setup** Installer.
+
+Since I'm not 18 years old right now, I had not the chance to  get an Apple/Google Developer account, this is why until now, the App is neither in the **App Store** nor the **Google Play Store**.
+
+## Lessons Learned
+
+While building the **GradeManager** I've learned many concepts used by UI-Frameworks and how they are solved (e.g. widget-tree, state-management). 
+It has definitely helped me strengthen my skills in Flutter.
+
+In the application there are a lot of weird/confusing patterns, for somehow I did not separate the UI from the actual logic too good.
+
+I suppose it's not terrible, but that's the main thing I'd like to improve on, the rest of the application is, in my opinion, pretty well done.

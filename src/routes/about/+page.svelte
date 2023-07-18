@@ -117,7 +117,7 @@ function getAge(birthday: string) {
 		classOnDefault="scale-90 opacity-60" 
 		classOnIntersect="scale-100 opacity-100" 
 		transition="all ease .5s"
-	>
+	  >
     <pre class="bg-base-100 text-[0.7rem] sm:text-sm lg:text-lg xl:text-xl xl:pl-12 sm:pl-8 pl-2 overflow-hidden">{
         @html Highlight(code, syntaxMap)
     }</pre>

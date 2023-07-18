@@ -2,7 +2,7 @@
 title: Gorbit
 subtitle: A blazingly fast and easy to use TCP Network Loadbalancer
 githublnk: https://github.com/Megakuul/gorbit
-published: "17.06.2023"
+published: "28.05.2023"
 mainimage: "gorbit.svg"
 techstack: [
     {
@@ -12,16 +12,36 @@ techstack: [
 ]
 ---
 
-## Project thinkings
+Gorbit is a fast and simple loadbalancer that operates based on **TCP** network streams.
 
-Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.   
+## Purpose
 
-Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi. Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.   
+The majority of load balancers have numerous functions, which makes them quite difficult to use. Gorbit should only do one job, loadbalance, without too many extra features.
 
-Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi.   
+## Implementation
 
-Nam liber tempor cum soluta nobis eleifend option congue nihil imperdiet doming id quod mazim placerat facer possim assum. Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat.   
+For the main implementation of the application, I used **GOs** standard library. To retrieve the configuration from the configuration file, I utilized the **Viper library**, as it effectively removes a significant amount of boilerplate code.
 
-Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis.   
+I tried to split up the program into 4 separate parts:
 
-At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur
+- Configuration Handler
+- Traffic Handler
+- Traffic Controller
+- Listener
+- Logger
+
+Where the **Configuration Handler** reads the configuration from either the environment variables or a **.yaml** file. 
+
+The **Traffic Handler** manages the redirection of the traffic, while the **Listener** opens a **TCP** listener to listen for incoming connections, it does this by using the **net** library from the **GO standard library**.
+
+**Traffic Handler** is operating with a custom implementation of a buffered IO copy.
+
+The **Traffic Controller** does regular checks, to make sure all targets are up and running, if a target goes down, the target is removed from the list of targets, and there will be no more redirections to this target until it is up again.
+
+The **Logger** is basically just handling logging of events. The **Logger** operates with three distinct logging levels, named "ERROR, WARNING, and INFORMATION". The required logs can be selected through the configuration as well.
+
+## Lessons Learned
+
+This project taught me how to work with the **Viper** library, it is a very convenient way to handle configuration files in **GO**.
+
+Since this is a simple project, I think the implementation went very well. I learned a lot about networking in **GO**, and also got a more profound understanding of how loadbalancing works.

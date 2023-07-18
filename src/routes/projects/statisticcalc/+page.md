@@ -1,27 +1,39 @@
 ---
-title: Gorbit
-subtitle: A blazingly fast and easy to use TCP Network Loadbalancer
-githublnk: https://github.com/Megakuul/gorbit
-published: "17.06.2023"
-mainimage: "gorbit.svg"
+title: Statistic Calculator
+subtitle: Simple statistics calculator to display some statistical relationships in bulk
+githublnk: https://github.com/Megakuul/statisticcalc_web
+published: "25.11.2022"
+mainimage: "statisticcalc.png"
 techstack: [
     {
-        icon: vscode-icons:file-type-go,
-        name: GO
+        icon: vscode-icons:file-type-html,
+        name: HTML
+    }, 
+    {
+        icon: vscode-icons:file-type-css,
+        name: CSS
+    },
+    {
+        icon: skill-icons:typescript,
+        name: Typescript
     }
 ]
 ---
 
-## Project thinkings
+The Statistic Calculator is a very simple web app that displays some statistical relationships in bulk.
 
-Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.   
+## Purpose
 
-Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi. Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.   
+In Mathematical classes, we covered the topic of stochastic. Since I needed to master it in preparation for the forthcoming examination, I decided to implement it using code.
 
-Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi.   
+## Implementation
 
-Nam liber tempor cum soluta nobis eleifend option congue nihil imperdiet doming id quod mazim placerat facer possim assum. Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat.   
+For the project I wanted to use **HTML**, **CSS** and **JavaScript**. 
+After implementing some functionalities, I also brought in **Typescript**, as **JavaScript** misses plenty of functions that I knew from **C#**.
 
-Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis.   
+The project is quite straightforward, I created the user interface primarily using **HTML** and **CSS**, and then used **Typescript** to implement the mathematical functions.
+To display the results in a Chart, I also used the **Chart.js** library from a **CDN** source.
 
-At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur
+## Lessons Learned
+
+This project gave me a first insights in the Web-development world. I learned why **HTML**, **CSS** and **JavaScript** absolutely suck. 

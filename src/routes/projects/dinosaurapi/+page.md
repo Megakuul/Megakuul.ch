@@ -1,27 +1,63 @@
 ---
-title: Gorbit
-subtitle: A blazingly fast and easy to use TCP Network Loadbalancer
-githublnk: https://github.com/Megakuul/gorbit
-published: "17.06.2023"
-mainimage: "gorbit.svg"
+title: Dinosaur API
+subtitle: Example API meant to be hosted on Googles Cloud Platform
+githublnk: https://github.com/Megakuul/dinosaur-api-example
+published: "03.12.2022"
+mainimage: "noimage.svg"
 techstack: [
     {
-        icon: vscode-icons:file-type-go,
-        name: GO
-    }
+        icon: devicon:dart,
+        name: Dart
+    },
+    {
+        icon: logos:flutter,
+        name: Flutter
+    },
+    {
+        icon: logos:nodejs-icon-alt,
+        name: NodeJS
+    },
+    {
+        icon: skill-icons:expressjs-light,
+        name: ExpressJS
+    },
+    {
+        icon: devicon:prisma,
+        name: Prisma
+    },
+    {
+        icon: devicon:mysql-wordmark,
+        name: Cloud SQL (MySQL)
+    },
+    {
+        icon: devicon:googlecloud,
+        name: Google Cloud
+    },
 ]
 ---
 
-## Project thinkings
+Dinosaur API is a project made just as an example for a cloud application on Google Cloud.
 
-Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.   
+## Purpose
 
-Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi. Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.   
+We had to create a presentation about an IT topic in our english classes.
 
-Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi.   
+The topic I chose was Cloud Computing, so I wanted to create an application for example purposes.
 
-Nam liber tempor cum soluta nobis eleifend option congue nihil imperdiet doming id quod mazim placerat facer possim assum. Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat.   
+## Implementation
 
-Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis.   
+For the project, I used **Dart** along with **Flutter** for the frontend. 
 
-At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur
+To implement the backend, I used **ExpressJS** on **Nodejs**. I've created a basic RESTful API that can be accessed from the frontend.
+
+The API was connected via the **Prisma ORM**. I used **Prisma** because it's used in many well-known projects so far and it seems really easy to use.
+
+The only thing that the API does is read and write dinosaur records to the database, they are then displayed in a column on the frontend.
+
+For the deployment I used the **Cloud Run** service along with a database connector that connects the **Cloud SQL** storage to the service.
+
+## Lessons Learned
+
+In this project I have the first points of contact with APIs and general full stack applications. 
+
+I also learned some fundamental things about cloud computing specifically in **Google Cloud**.

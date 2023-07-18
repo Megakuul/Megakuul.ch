@@ -1,27 +1,64 @@
 ---
-title: Gorbit
-subtitle: A blazingly fast and easy to use TCP Network Loadbalancer
-githublnk: https://github.com/Megakuul/gorbit
-published: "17.06.2023"
-mainimage: "gorbit.svg"
+title: Chatapp
+subtitle: Super simple Chatapp, example to host on AWS
+githublnk: https://github.com/Megakuul/chatapp
+published: "27.01.2023"
+mainimage: "noimage.svg"
 techstack: [
     {
-        icon: vscode-icons:file-type-go,
-        name: GO
+        icon: devicon:dart,
+        name: Dart
+    },
+    {
+        icon: logos:flutter,
+        name: Flutter
+    },
+    {
+        icon: logos:nodejs-icon-alt,
+        name: NodeJS
+    },
+    {
+        icon: skill-icons:expressjs-light,
+        name: ExpressJS
+    },
+    {
+        icon: logos:aws-rds,
+        name: RDS MySQL
+    },
+    {
+        icon: logos:terraform-icon,
+        name: Terraform
+    },
+    {
+        icon: logos:kubernetes,
+        name: Kubernetes
+    },
+    {
+        icon: logos:aws,
+        name: AWS
     }
 ]
 ---
 
-## Project thinkings
+The Chatapp is a simple example to deploy on AWS with Terraform.
 
-Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.   
+## Purpose
 
-Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi. Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.   
+The goal was to create an example application that can be deployed on AWS with Infrastructur as Code.
 
-Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis at vero eros et accumsan et iusto odio dignissim qui blandit praesent luptatum zzril delenit augue duis dolore te feugait nulla facilisi.   
+## Implementation
 
-Nam liber tempor cum soluta nobis eleifend option congue nihil imperdiet doming id quod mazim placerat facer possim assum. Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat.   
+I implemented this project by creating a easy to use **ExpressJS** REST API with **NodeJS**.
 
-Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse molestie consequat, vel illum dolore eu feugiat nulla facilisis.   
+The **Node API** accesses the **RDS MySQL** database, where it just works with to simple tables, one for the chatrooms and one for the messages.
+The messages are always tight to a chatroom, that can be accessed through a code.
 
-At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur
+The frontend is as simple as the API, I wrote it with **Dart** and the **Flutter** Framework. I chose this, simply because I am able to complete the task quickly with it.
+
+For deploying the application, I've created a **Terraform** script with a friend of mine. The **Terraform** script creates a **EKS** cluster alogn with a **RDS** database. To deploy the application on **EKS** I also created some **Kubernetes** manifests.
+
+## Lessons Learned
+
+I gained a lot of knowledge about **AWS** services, especially about the **EKS** service and **Kubernetes** itself.
+
+I'd prefer a key-value database for such straightforward endeavors, as it's both less-complex and costly.

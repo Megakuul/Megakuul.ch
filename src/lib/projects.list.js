@@ -45,12 +45,6 @@ export default [
         route: "linosteffen",
         published: "15.05.2023",
         mainimage: "linosteffen.png"
-    },  {
-        title: "Statistic Calculator",
-        subtitle: "Simple statistics calculator to display some statistical relationships in bulk",
-        route: "statisticcalc",
-        published: "25.11.2022",
-        mainimage: "statisticcalc.png"
     }, {
         title: "Gehege",
         subtitle: "Example Application to host on Docker",
@@ -63,6 +57,12 @@ export default [
         route: "chatapp",
         published: "27.01.2023",
         mainimage: "noimage.svg"
+    }, {
+        title: "Statistic Calculator",
+        subtitle: "Simple statistics calculator to display some statistical relationships in bulk",
+        route: "statisticcalc",
+        published: "25.11.2022",
+        mainimage: "statisticcalc.png"
     }, {
         title: "Dinosaur API",
         subtitle: "Example API meant to be hosted on Googles Cloud Platform",
