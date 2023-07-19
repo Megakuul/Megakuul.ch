@@ -30,8 +30,8 @@
 	});
 
 	function shuffleList(array: object[]) {
-		let tempList: object[] = array;
-		for (let i = array.length - 1; i >= 0; i--) {
+		let tempList: object[] = JSON.parse(JSON.stringify(array));
+		for (let i = tempList.length - 1; i >= 0; i--) {
 			const j = Math.floor(Math.random() * (i + 1));
 			[tempList[i], tempList[j]] = [tempList[j], tempList[i]];
 		}
