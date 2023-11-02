@@ -81,7 +81,7 @@ function getAge(birthday: string) {
     let age = now_date.getFullYear() - birthday_date.getFullYear();
     let monthDiff = now_date.getMonth() - birthday_date.getMonth();
 
-    if (monthDiff < 0 || now_date.getDate() < birthday_date.getDate()) {
+    if (monthDiff<=0) {
         age--;
     }
 
