@@ -1,7 +1,7 @@
 <svelte:window bind:scrollY={scroll} />
 
 <svelte:head>
-	<title>Home</title>
+	<title>Megakuul</title>
 	<meta name="description" 
 	content="Welcome to Megakuul.ch! I'm Linus, a dedicated Platform Engineer and passionate Software Developer, always eager to explore new technologies and drive innovation." />
 </svelte:head>

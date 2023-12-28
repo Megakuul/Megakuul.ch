@@ -2,7 +2,6 @@
     import Intersector from "$lib/components/Intersector.svelte";
     import { Highlight } from "$lib/components/SyntaxHighlighter";
     import portrait from "$lib/assets/portrait.jpg";
-	import { now } from "svelte/internal";
 
 const code = `
 class Linus : public Earth::Human {
@@ -12,7 +11,7 @@ public:
 
   std::string first_name = "Linus";
   std::string last_name = "Moser";
-  std::string email_addr = "megakuul@gmx.ch";
+  std::string email_addr = "megakuulr@gmail.com";
   struct Date {
     int year;
     int month;
@@ -41,10 +40,10 @@ public:
     TECHNOLOGY::TYPESCRIPT,
     TECHNOLOGY::NODEJS,
     TECHNOLOGY::CSHARP,
+    TECHNOLOGY::C,
     TECHNOLOGY::CPP,
     TECHNOLOGY::GO,
     TECHNOLOGY::FLUTTER,
-    TECHNOLOGY::TERRAFORM,
     TECHNOLOGY::KUBERNETES,
     TECHNOLOGY::AWS
   };

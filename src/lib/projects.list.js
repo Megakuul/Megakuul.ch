@@ -10,6 +10,12 @@
  */
 export default [
     {
+        title: "Orbstrike",
+        subtitle: "Simple game using a stateful auto-scaler infrastructure",
+        route: "orbstrike",
+        published: "11.11.2023",
+        mainimage: "orbstrike.png"
+    }, {
         title: "Megakuul Commander",
         subtitle: "Convenient, dashing two-column file manager for Linux",
         route: "mkc",

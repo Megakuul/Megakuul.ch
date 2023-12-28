@@ -50,3 +50,9 @@ Currently, the project does not have too many features. The main difficulties I 
 As I have not previously used **C++**, it was a significant challenge in determining the appropriate patterns, as a significant number of libraries and principles in **C++** operate in a fundamentally different way from those of programming languages I used previously.
 
 In the whole application, there are many variables that are named in a perplexing way. This is also something I need to keep an eye on while building such a software.
+
+**Update 16.12.2023**:
+
+I was able to refactor the code to make conventions more consistent and streamline the operations more through this fsutil-bridge-ui model. It's still not perfect, but it's going in the right direction, I think.
+
+This month, I also created a CI/CD Pipeline to upload the MKC package to a Launchpad PPA. Although I encountered numerous challanges in making this process work, it also allowed me to delve into the world of packaging systems (especially for Ubuntu and Arch). This experience helped me understand the key points of various packaging solutions.
