@@ -10,11 +10,29 @@
  */
 export default [
     {
+        title: "Gitbackup as a Service",
+        subtitle: "Service construct to backup github-repositories to AWS S3 bucket at a low cost",
+        route: "gbaas",
+        published: "30.12.2023",
+        mainimage: "gbaas.svg"
+    }, {
         title: "Orbstrike",
         subtitle: "Simple game using a stateful auto-scaler infrastructure",
         route: "orbstrike",
         published: "11.11.2023",
         mainimage: "orbstrike.png"
+    }, {
+        title: "Backup Analyzer",
+        subtitle: "Backup strategy and retention analysis tool",
+        route: "backup-analyzer",
+        published: "26.09.2023",
+        mainimage: "backup-analyzer.svg"
+    }, {
+        title: "Kerberos Simulator",
+        subtitle: "Kerberos simulator on steroids",
+        route: "kerberos-sim",
+        published: "13.09.2023",
+        mainimage: "kerberos-sim.svg"
     }, {
         title: "Megakuul Commander",
         subtitle: "Convenient, dashing two-column file manager for Linux",

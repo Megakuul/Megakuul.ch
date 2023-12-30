@@ -10,6 +10,7 @@ public:
   ~virtual Linus();
 
   std::string first_name = "Linus";
+  std::string middle_name = "Ilian";
   std::string last_name = "Moser";
   std::string email_addr = "megakuulr@gmail.com";
   struct Date {
