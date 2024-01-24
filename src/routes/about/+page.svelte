@@ -12,7 +12,7 @@ public:
   std::string first_name = "Linus";
   std::string middle_name = "Ilian";
   std::string last_name = "Moser";
-  std::string email_addr = "megakuulr@gmail.com";
+  std::string email_addr = "linus.moser@megakuul.ch";
   struct Date {
     int year;
     int month;
@@ -40,7 +40,6 @@ public:
     TECHNOLOGY::SVELTE,
     TECHNOLOGY::TYPESCRIPT,
     TECHNOLOGY::NODEJS,
-    TECHNOLOGY::CSHARP,
     TECHNOLOGY::C,
     TECHNOLOGY::CPP,
     TECHNOLOGY::GO,
@@ -101,7 +100,7 @@ function getAge(birthday: string) {
 		classOnIntersect="scale-100 opacity-100" 
 		transition="all ease .5s"
     >
-        <div class="w-40 sm:w-48 xl:w-56 mask mask-squircle">
+        <div class="h-40 w-96 sm:h-48 xl:h-56 rounded-2xl shadow-inner brightness-50 hover:brightness-75 transition-all duration-500">
           <img alt="Portrait" src={portrait} />
         </div>
     </Intersector>
@@ -110,7 +109,7 @@ function getAge(birthday: string) {
 		classOnIntersect="scale-100 opacity-100" 
 		transition="all ease .5s"
     >
-        My name is Linus, and I'm an enthusiastic Platform Engineer and devoted Software Developer.
+        My name is Linus Ilian Moser, and I'm an enthusiastic Platform Engineer and devoted Software Developer.
         <br>Residing in Switzerland and currently {getAge("2006-02-13")} years old.
     </Intersector>
     <Intersector classAdditional="mockup-code bg-base-300 w-11/12 sm:w-5/6 mt-10 sm:mt-20" 
