@@ -22,10 +22,18 @@
 		<div>
 			<span class="footer-title">Socials</span> 
 			<div class="grid grid-flow-col gap-4">
-			<a href="https://github.com/Megakuul" class="btn btn-square btn-ghost"><Icon icon="line-md:github-loop" height="32" width="32"></Icon></a>
-			<a href="https://www.youtube.com/channel/UCCtqqVSCIEt50F4aNKE7KZQ" class="btn btn-square btn-ghost"><Icon icon="mdi:youtube" height="32" width="32"></Icon></a>
-			<a href="https://twitter.com/Megakuulr" class="btn btn-square btn-ghost"><Icon icon="mdi:twitter" height="32" width="32"></Icon></a>
-			<a href="https://www.linkedin.com/in/linus-moser-8897a527b" class="btn btn-square btn-ghost"><Icon icon="mdi:linkedin" height="32" width="32"></Icon></a>
+			<a href="https://github.com/Megakuul" aria-label="Megakuul's Github Account" class="btn btn-square btn-ghost">
+				<Icon icon="line-md:github-loop" height="32" width="32"></Icon>
+			</a>
+			<a href="https://www.youtube.com/channel/UCCtqqVSCIEt50F4aNKE7KZQ" aria-label="Megakuul's Youtube Channel" class="btn btn-square btn-ghost">
+				<Icon icon="mdi:youtube" height="32" width="32"></Icon>
+			</a>
+			<a href="https://twitter.com/Megakuulr" aria-label="Megakuul's Twitter Account" class="btn btn-square btn-ghost">
+				<Icon icon="mdi:twitter" height="32" width="32"></Icon>
+			</a>
+			<a href="https://www.linkedin.com/in/linus-moser-8897a527b" aria-label="Megakuul's LinkedIn" class="btn btn-square btn-ghost">
+				<Icon icon="mdi:linkedin" height="32" width="32"></Icon>
+			</a>
 			</div>
 			<span class="footer-title">Legal</span> 
 			<a href="/impressum" class="link link-hover text-center font-bold">Impressum</a>

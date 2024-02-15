@@ -75,12 +75,12 @@ const syntaxMap = new Map([
 
 function getAge(birthday: string) {
     const birthday_date = new Date(birthday);
-    const now_date = new Date();
+    const today = new Date();
 
-    let age = now_date.getFullYear() - birthday_date.getFullYear();
-    let monthDiff = now_date.getMonth() - birthday_date.getMonth();
+    let age = today.getFullYear() - birthday_date.getFullYear();
 
-    if (monthDiff<=0) {
+    if (today.getMonth() < birthday_date.getMonth() || 
+        (today.getMonth() == birthday_date.getMonth() && today.getDate() < birthday_date.getDate())) {
         age--;
     }
 
@@ -100,7 +100,7 @@ function getAge(birthday: string) {
 		classOnIntersect="scale-100 opacity-100" 
 		transition="all ease .5s"
     >
-        <div class="h-40 w-96 sm:h-48 xl:h-56 rounded-2xl shadow-inner brightness-50 hover:brightness-75 transition-all duration-500">
+        <div class="h-40 w-72 sm:w-96 sm:h-48 xl:h-56 rounded-2xl shadow-inner brightness-50 hover:brightness-75 transition-all duration-500">
           <img alt="Portrait" src={portrait} />
         </div>
     </Intersector>
