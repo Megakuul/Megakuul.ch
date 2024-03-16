@@ -13,6 +13,7 @@
 	import { onMount } from "svelte";
 	import list from "$lib/projects.list.js";
 	import CarouselPage from "$lib/components/CarouselPage.svelte";
+	import Citation from "$lib/components/Citation.svelte";
 
 	let welcomeCommand: string;
 
@@ -102,6 +103,12 @@
 		{/each}
 		
 	</Intersector>
+
+	<Intersector classAdditional="text-[1.5rem] sm:text-xl lg:text-2xl xl:text-3xl my-12 sm:my-25"
+	classOnDefault="translate-y-full opacity-20" 
+	classOnIntersect="opacity-100" 
+	transition="all ease 1s"
+	><Citation author="Terry A. Davis" content="An idiot admires complexity, a genius admires simplicity"></Citation></Intersector>
 </div>
 
 <style>
