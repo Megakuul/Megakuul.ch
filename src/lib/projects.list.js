@@ -10,6 +10,24 @@
  */
 export default [
     {
+        title: "Screensaver",
+        subtitle: "Windows screensaver application based on gdi32",
+        route: "screensaver",
+        published: "11.05.2024",
+        mainimage: "screensaver.png"
+    }, {
+        title: "SimpleHTTP",
+        subtitle: "A minimalistic HTTP server library, complying with basic HTTP/1.1 standards",
+        route: "simplehttp",
+        published: "28.04.2024",
+        mainimage: "simplehttp.svg"
+    }, {
+        title: "JuPa Website",
+        subtitle: "Full rebuild of jupa-thun website with sveltekit and svelte-parallax",
+        route: "jupa",
+        published: "19.04.2024",
+        mainimage: "jupa.svg"
+    }, {
         title: "Gitbackup as a Service",
         subtitle: "Service construct to backup github-repositories to AWS S3 bucket at a low cost",
         route: "gbaas",
@@ -99,5 +117,11 @@ export default [
         route: "passwordgenerator",
         published: "05.09.2022",
         mainimage: "generator.png"
+    }, {
+        title: "Wizard Game",
+        subtitle: "Simple single player python game",
+        route: "wizard-game",
+        published: "01.06.2022",
+        mainimage: "wizard-game.png"
     }
 ]
