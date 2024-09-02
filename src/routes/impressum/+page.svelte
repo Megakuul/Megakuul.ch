@@ -13,7 +13,7 @@
 
     <p class="xl:text-2xl lg:text-xl sm:text-lg text-sm">Linus Moser</p>
     <p class="xl:text-2xl lg:text-xl sm:text-lg text-sm">Schweiz, Thun BE</p>
-    <p class="xl:text-2xl lg:text-xl sm:text-lg text-sm">E-Mail: megakuul@gmx.ch</p>
+    <p class="xl:text-2xl lg:text-xl sm:text-lg text-sm">E-Mail: linus.moser@megakuul.ch</p>
 
     <h2 class="xl:text-4xl lg:text-3xl sm:text-2xl text-xl my-8">
         Urheberrechtshinweise

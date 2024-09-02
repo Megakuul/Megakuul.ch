@@ -28,5 +28,5 @@
 </script>
 
 <div bind:this="{element}" style="transition: {transition}" class="{css_class} {classAdditional}">
-    <slot></slot>
+  <slot></slot>
 </div>

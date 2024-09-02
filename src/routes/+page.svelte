@@ -20,23 +20,23 @@
     onMount(() => {
 		let userAgent = navigator.userAgent;
 		if (userAgent.search("Windows")!==-1) {
-            welcomeCommand = "Get-Content welcome.txt | Select-String welcome"
+      welcomeCommand = "Get-Content welcome.txt | Select-String welcome"
 		} else if (userAgent.search("Mac")!==-1) {
-            welcomeCommand = "more welcome.txt | grep welcome"
+      welcomeCommand = "more welcome.txt | grep welcome"
 		} else {
 			welcomeCommand = "cat welcome.txt | grep welcome"
 		}
 		
-		projectList = shuffleList(list);
+		projectList = shuffleList(list, 10);
 	});
 
-	function shuffleList(array: object[]) {
+	function shuffleList(array: object[], count: number) {
 		let tempList: object[] = JSON.parse(JSON.stringify(array));
 		for (let i = tempList.length - 1; i >= 0; i--) {
 			const j = Math.floor(Math.random() * (i + 1));
 			[tempList[i], tempList[j]] = [tempList[j], tempList[i]];
 		}
-		return tempList;
+		return tempList.splice(0, count);
 	}
 
 	let scroll: number;
@@ -82,7 +82,7 @@
 		</pre>
 	</Intersector>
 
-	<Intersector classAdditional="text-[1.5rem] sm:text-xl lg:text-2xl xl:text-3xl mt-10 sm:mt-20"
+	<Intersector classAdditional="text-[1.5rem] sm:text-xl lg:text-2xl xl:text-3xl mt-10 sm:mt-24"
 		classOnDefault="translate-y-full opacity-20" 
 		classOnIntersect="opacity-100" 
 		transition="all ease 1s"
@@ -94,20 +94,15 @@
 		transition="all ease .5s"
 	>
 		{#each projectList as project, index}
-			<CarouselPage 
-				id="project{index}" 
-				nextid="project{index+1 > projectList.length-1 ? 0 : index+1}" 
-				previousid="project{index-1 < 0 ? projectList.length-1 : index-1}" 
-				project={project} 
-			/>
+			<CarouselPage project={project} />
 		{/each}
 		
 	</Intersector>
 
-	<Intersector classAdditional="text-[1.5rem] sm:text-xl lg:text-2xl xl:text-3xl my-12 sm:my-25"
-	classOnDefault="translate-y-full opacity-20" 
-	classOnIntersect="opacity-100" 
-	transition="all ease 1s"
+	<Intersector classAdditional="text-[1.5rem] sm:text-xl lg:text-2xl xl:text-3xl my-12 sm:my-32"
+		classOnDefault="translate-y-full opacity-20" 
+		classOnIntersect="opacity-100" 
+		transition="all ease 1s"
 	><Citation author="Terry A. Davis" content="An idiot admires complexity, a genius admires simplicity"></Citation></Intersector>
 </div>
 

@@ -4,7 +4,7 @@
 </script>
 
 <div class="flex items-center justify-around my-28">
-    <blockquote class="relative w-7/12 animate-pulse">
+    <blockquote class="relative w-7/12 xl:w-full animate-pulse">
         <p class="bg-gradient-to-tr from-slate-500 to-slate-200 bg-clip-text text-transparent sm:text-4xl text-xl">{content}</p>
         
         <footer class="relative sm:text-lg text-sm mt-4 ml-2">{author}</footer>
