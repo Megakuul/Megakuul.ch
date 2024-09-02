@@ -10,6 +10,18 @@
  */
 export default [
     {
+        title: "ADB-Proxy",
+        subtitle: "Minimalistic central-managed android adb proxy",
+        route: "adb-proxy",
+        published: "17.08.2024",
+        mainimage: "adb-proxy.png"
+    }, {
+        title: "Leaderboard",
+        subtitle: "Simple leaderboard system constructed on lowcost aws serverless infrastructure",
+        route: "leaderboard",
+        published: "29.07.2024",
+        mainimage: "leaderboard.svg"
+    }, {
         title: "Screensaver",
         subtitle: "Windows screensaver application based on gdi32",
         route: "screensaver",

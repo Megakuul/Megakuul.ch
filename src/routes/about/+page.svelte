@@ -18,6 +18,8 @@ public:
     int month;
     int day;
   } birthday = {2006, 06, 13};
+   
+  CULTURE::RELIGION religion = CULTURE::RELIGION::CHURCH_OF_EMACS;
 
   std::vector<SKILL::SOFT> soft_skills = {
     SKILL::SOFT::PROBLEM_SOLVING,
@@ -32,26 +34,25 @@ public:
     SKILL::HARD::BACKEND_PROGRAMMING,
     SKILL::HARD::SYSTEM_PROGRAMMING,
     SKILL::HARD::CLOUD_COMPUTING,
-    SKILL::HARD::CONTAINER_ORCHESTRATION,
-    SKILL::HARD::BASIC_NETWORKING
+    SKILL::HARD::CONTAINER_ORCHESTRATION
   };
 
   std::vector<TECHNOLOGY> tech_fundamentals = {
-    TECHNOLOGY::SVELTE,
-    TECHNOLOGY::TYPESCRIPT,
-    TECHNOLOGY::NODEJS,
+    TECHNOLOGY::GO,
     TECHNOLOGY::C,
     TECHNOLOGY::CPP,
-    TECHNOLOGY::GO,
+    TECHNOLOGY::SVELTE,
+    TECHNOLOGY::TYPESCRIPT,
     TECHNOLOGY::FLUTTER,
+    TECHNOLOGY::BAZEL,
     TECHNOLOGY::KUBERNETES,
     TECHNOLOGY::AWS
   };
 
-  std::vector<std::any> weaknesses = {
-    SKILL::SOFT::PUBLIC_SPEAKING,
+  std::vector<std::any> skill_issues = {
     SKILL::SOFT::CLIENT_COMMUNICATION,
-    TECHNOLOGY::THINKING_TO_ACTUALLY_KNOW_CPP
+    SKILL::SOFT::CONCENTRATION,
+    BODY::HAND::EMACS_PINKY,
   };
 };
 
@@ -66,10 +67,14 @@ const syntaxMap = new Map([
    ["string", "color: rgba(22, 94, 8, 0.8);"],
    ["vector", "color: rgba(22, 94, 8, 0.8);"],
    ["struct", "color: rgba(27, 91, 187, 0.7);"],
+   ["CULTURE", "color: rgba(22, 94, 8, 0.8);"],
+   ["RELIGION", "color: rgba(22, 94, 8, 0.8);"],
    ["SKILL", "color: rgba(22, 94, 8, 0.8);"],
    ["SOFT", "color: rgba(22, 94, 8, 0.8);"],
    ["HARD", "color: rgba(22, 94, 8, 0.8);"],
    ["TECHNOLOGY", "color: rgba(22, 94, 8, 0.8);"],
+   ["BODY", "color: rgba(22, 94, 8, 0.8);"],
+   ["HAND", "color: rgba(22, 94, 8, 0.8);"],
    ["EARTH", "color: rgba(22, 94, 8, 0.8);"],
 ]);
 
@@ -109,8 +114,8 @@ function getAge(birthday: string) {
 		classOnIntersect="scale-100 opacity-100" 
 		transition="all ease .5s"
     >
-        My name is Linus Ilian Moser, and I'm an enthusiastic Platform Engineer and devoted Software Developer.
-        <br>Residing in Switzerland and currently {getAge("2006-02-13")} years old.
+      My name is Linus Ilian Moser, and I'm an enthusiastic platform engineer and devoted software developer, 
+      <br>residing in Switzerland and currently {getAge("2006-02-13")} years old.
     </Intersector>
     <Intersector classAdditional="mockup-code bg-base-300 w-11/12 sm:w-5/6 mt-10 sm:mt-20" 
 		classOnDefault="scale-90 opacity-60" 
