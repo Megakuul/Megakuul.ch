@@ -25,9 +25,12 @@
 </script>
 
 <svelte:head>
-	<title>Projects</title>
-	<meta name="description" 
-	content="Immerse yourself in my software projects and get a little insight into my work" />
+	<title>Projects | Megakuul</title>
+  <meta name="description" content="Immerse yourself in my software projects and get a little insight into my work" />
+  <link rel="canonical" href="https://megakuul.ch/projects" />
+  <meta property="og:title" content="Projects - Megakuul" />
+  <meta property="og:type" content="website" />
+	<meta property="og:image" content="https://megakuul.ch/favicon.png" />
 </svelte:head>
 
 <div class="w-full flex flex-col items-center">

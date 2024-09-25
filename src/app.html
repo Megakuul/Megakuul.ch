@@ -6,6 +6,32 @@
 		<link rel="icon" href="%sveltekit.assets%/favicon.png" />
 		<meta name="viewport" content="width=device-width" />
 		%sveltekit.head%
+		<script type="application/ld+json">
+			{
+				"@context": "https://schema.org",
+				"@type": "WebSite",
+				"name": "Megakuul",
+				"url": "https://megakuul.ch",
+				"alternateName": "Website of Linus Moser"
+			}
+		</script>
+		<script type="application/ld+json">
+			{
+				"@context": "https://schema.org",
+				"@type": "Person",
+				"name": "Linus Ilian Moser",
+				"url": "https://megakuul.ch",
+				"sameAs": [
+					"https://github.com/Megakuul",
+					"https://www.youtube.com/@Megakuul"
+				],
+				"jobTitle": "DevOps Engineer",
+				"worksFor": {
+					"@type": "Organization",
+					"name": "Informaticon AG"
+				},
+			}
+			</script>
 	</head>
 	<body data-sveltekit-preload-data="hover">
 		<div style="display: contents">%sveltekit.body%</div>

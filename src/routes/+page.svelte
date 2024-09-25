@@ -1,11 +1,5 @@
 <svelte:window bind:scrollY={scroll} />
 
-<svelte:head>
-	<title>Megakuul</title>
-	<meta name="description" 
-	content="Welcome to Megakuul.ch! I'm Linus, a dedicated Platform Engineer and passionate Software Developer, always eager to explore new technologies and drive innovation." />
-</svelte:head>
-
 <script lang="ts">
 	import Intersector from "$lib/components/Intersector.svelte";
 	import MegakuulAsciiLogo from "$lib/components/MegakuulAsciiLogo.svelte";
@@ -42,6 +36,15 @@
 	let scroll: number;
 	let projectList: any[] = [];
 </script>
+
+<svelte:head>
+	<title>Home | Megakuul</title>
+	<meta name="description" content="My name is Linus Moser, I'm a passionate DevOps platform architect and software developer from Switzerland." />
+	<link rel="canonical" href="https://megakuul.ch" />
+	<meta property="og:title" content="Home - Megakuul" />
+  <meta property="og:type" content="website" />
+	<meta property="og:image" content="https://megakuul.ch/favicon.png" />
+</svelte:head>
 
 <div class="w-full flex flex-col items-center justify-center mt-10 sm:mt-20">
 	<Intersector classAdditional="mockup-code bg-base-300 w-5/6 mt-10 sm:mt-20" 
