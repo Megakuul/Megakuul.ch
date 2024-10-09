@@ -26,7 +26,8 @@
 
 <svelte:head>
 	<title>Projects | Megakuul</title>
-  <meta name="description" content="Immerse yourself in my software projects and get a little insight into my work" />
+  <meta name="description" content="Immerse yourself in my software projects and get a little insight into my work." />
+  <meta property="og:description" content="Immerse yourself in my software projects and get a little insight into my work." />
   <link rel="canonical" href="https://megakuul.ch/projects" />
   <meta property="og:title" content="Projects - Megakuul" />
   <meta property="og:type" content="website" />

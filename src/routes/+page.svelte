@@ -40,6 +40,7 @@
 <svelte:head>
 	<title>Home | Megakuul</title>
 	<meta name="description" content="My name is Linus Moser, I'm a passionate DevOps platform architect and software developer from Switzerland." />
+	<meta property="og:description" content="My name is Linus Moser, I'm a passionate DevOps platform architect and software developer from Switzerland." />
 	<link rel="canonical" href="https://megakuul.ch" />
 	<meta property="og:title" content="Home - Megakuul" />
   <meta property="og:type" content="website" />

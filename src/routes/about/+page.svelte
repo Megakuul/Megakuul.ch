@@ -95,7 +95,8 @@ function getAge(birthday: string) {
 
 <svelte:head>
 	<title>About</title>
-	<meta name="description" content="Learn about my background, experiences and passion for technology" />
+	<meta name="description" content="Learn about my background, experiences and passion for technology." />
+  <meta property="og:description" content="Learn about my background, experiences and passion for technology." />
   <link rel="canonical" href="https://megakuul.ch/about" />
   <meta property="og:title" content="About - Megakuul" />
   <meta property="og:type" content="website" />

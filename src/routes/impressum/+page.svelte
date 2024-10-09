@@ -1,6 +1,4 @@
-<script lang="ts">
-    import Intersector from "$lib/components/Intersector.svelte";
-</script>
+<meta name="robots" content="noindex" />
 
 <div class="w-full flex flex-col items-center justify-center my-10 sm:my-20">
     <h1 class=" xl:text-7xl lg:text-5xl sm:text-4xl text-2xl">

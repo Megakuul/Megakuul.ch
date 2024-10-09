@@ -10,6 +10,12 @@
  */
 export default [
     {
+        title: "Battleshiper",
+        subtitle: "Serverless SvelteKit deployment platform backed by AWS",
+        route: "battleshiper",
+        published: "04.10.2024",
+        mainimage: "battleshiper.svg"
+    }, {
         title: "ADB-Proxy",
         subtitle: "Minimalistic central-managed android adb proxy",
         route: "adb-proxy",
