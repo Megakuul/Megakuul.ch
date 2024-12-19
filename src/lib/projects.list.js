@@ -10,6 +10,12 @@
  */
 export default [
     {
+        title: "Opensail",
+        subtitle: "Sophisticated Regatta Rating System",
+        route: "opensail",
+        published: "18.12.2024",
+        mainimage: "opensail.png"
+    }, {
         title: "Battleshiper",
         subtitle: "Serverless SvelteKit deployment platform backed by AWS",
         route: "battleshiper",
