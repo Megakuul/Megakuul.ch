@@ -49,7 +49,8 @@
 
 				<li class="mk-nav-i1" class:checked><a href="/" on:click={checkNav}>Home</a></li>
 				<li class="mk-nav-i2" class:checked><a href="/projects" on:click={checkNav}>Projects</a></li>
-				<li class="mk-nav-i3" class:checked><a href="/about" on:click={checkNav}>About</a></li>
+				<li class="mk-nav-i3" class:checked><a href="/concepts" on:click={checkNav}>Concepts</a></li>
+				<li class="mk-nav-i4" class:checked><a href="/about" on:click={checkNav}>About</a></li>
 
 				<div class="self-center mt-28 mb-5"><AnimatedLogo bind:this={animatedLogo} width=200></AnimatedLogo></div>
 			</ul>
@@ -64,15 +65,18 @@
 
 	.mk-nav-i1,
 	.mk-nav-i2,
-	.mk-nav-i3 {
+	.mk-nav-i3,
+	.mk-nav-i4 {
 		@apply mt-2;
 	}
 
 	.mk-nav-i1.checked,
 	.mk-nav-i2.checked,
-	.mk-nav-i3.checked {
+	.mk-nav-i3.checked,
+	.mk-nav-i4.checked {
 		animation: insertItem;
-		animation-duration: 1s;
+		animation-timing-function: ease-in;
+		animation-duration: .7s;
 		animation-fill-mode: forwards;
 		transform: translateX(50px);
 		opacity: 0;
@@ -83,11 +87,15 @@
 	}
 
 	.mk-nav-i2.checked {
-		animation-delay: .5s;
+		animation-delay: .3s;
 	}
 
 	.mk-nav-i3.checked {
-		animation-delay: 1s;
+		animation-delay: .6s;
+	}
+
+	.mk-nav-i4.checked {
+		animation-delay: .9s;
 	}
 
 	@keyframes insertItem {
