@@ -14,9 +14,9 @@
     onMount(() => {
 		let userAgent = navigator.userAgent;
 		if (userAgent.search("Windows")!==-1) {
-      welcomeCommand = "Get-Content welcome.txt | Select-String welcome"
+      		welcomeCommand = "Get-Content welcome.txt | Select-String welcome"
 		} else if (userAgent.search("Mac")!==-1) {
-      welcomeCommand = "more welcome.txt | grep welcome"
+      		welcomeCommand = "more welcome.txt | grep welcome"
 		} else {
 			welcomeCommand = "cat welcome.txt | grep welcome"
 		}
@@ -43,7 +43,7 @@
 	<meta property="og:description" content="My name is Linus Moser, I'm a passionate DevOps platform architect and software developer from Switzerland." />
 	<link rel="canonical" href="https://megakuul.ch" />
 	<meta property="og:title" content="Home - Megakuul" />
-  <meta property="og:type" content="website" />
+  	<meta property="og:type" content="website" />
 	<meta property="og:image" content="https://megakuul.ch/favicon.png" />
 </svelte:head>
 
@@ -69,8 +69,7 @@
 					<br>
 					<b>Welcome to Megakuul.ch</b>
 					<br><br><br>
-					My name is Linus,
-					and I am currently pursuing an apprenticeship as a Platform Engineer at Informaticon AG.
+					My name is Linus, I'm a software developer at Informaticon AG.
 					<br><br>
 					During my free time, I love diving into various technologies and crafting cool stuff.
 					I'm trying to build the software and systems <b>reliable</b> and obviously <b>super mega blazingly</b> fast. 
