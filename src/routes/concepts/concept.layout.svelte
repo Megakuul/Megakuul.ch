@@ -26,7 +26,7 @@
 </svelte:head>
 
 <div class="bg-base-200 flex justify-center w-full">
-  <article class="markdown max-w-5xl p-6 lg:p-10">
+  <article class="markdown max-w-5xl p-6 lg:p-10 w-full break-words">
     <div class="flex flex-col items-center w-full">
       <img alt="projectimage" src="/images/{mainimage}" class="max-w-96 max-h-96" />
     </div>
@@ -40,7 +40,7 @@
 -->
 <style>
   .markdown :global(h1) {
-    @apply text-3xl font-bold mb-8 mt-14;
+    @apply text-2xl font-bold mb-8 mt-14;
 
     @screen lg {
       @apply text-5xl;

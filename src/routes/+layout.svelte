@@ -28,9 +28,6 @@
 			<a href="https://www.youtube.com/channel/UCCtqqVSCIEt50F4aNKE7KZQ" aria-label="Megakuul's Youtube Channel" class="btn btn-square btn-ghost">
 				<Icon icon="mdi:youtube" height="32" width="32"></Icon>
 			</a>
-			<a href="https://twitter.com/Megakuulr" aria-label="Megakuul's Twitter Account" class="btn btn-square btn-ghost">
-				<Icon icon="mdi:twitter" height="32" width="32"></Icon>
-			</a>
 			<a href="https://www.linkedin.com/in/linus-moser-8897a527b" aria-label="Megakuul's LinkedIn" class="btn btn-square btn-ghost">
 				<Icon icon="mdi:linkedin" height="32" width="32"></Icon>
 			</a>

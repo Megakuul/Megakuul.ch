@@ -5,7 +5,7 @@ published: "15.09.2025"
 mainimage: "auth-standard-matrjoschka.svg"
 ---
 
-# OpenID, impressive very nice, but how do I do authentication/authorization now?
+# OpenID, impressive very nice, but how do I do authentication / authorization now?
 
 Maybe I'm the only one who is highly confused by page-long so-called "standards" that allow so much divergence that every implementation still requires a custom SDK for integration, but hey, what do I know...
 

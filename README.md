@@ -23,6 +23,3 @@ The Layout for the Blogposts is contained in the `routes/projects/project.layout
 Styling of the pages is handled with tailwindcss (+daisyUI).
 
 The styling for the markdown blogposts is handled in the mdsvex template (`project.layout.svelte`)
-
-Custom CSS classes are **ALWAYS** prefixed with `mk-`. 
-E.g. `mk-nav-item` this helps understanding whether the class is a tailwind function class or a custom css class.
