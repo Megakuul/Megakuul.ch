@@ -13,7 +13,7 @@
 		<slot />
 	</main>
 
-	<footer class="footer p-10 bg-neutral text-neutral-content">
+	<footer class="p-10 footer bg-neutral text-neutral-content">
 		<div>
 			<img alt="Megakuul Icon" src="{mk_logo_black}" width="120" height="120">
 			<img alt="Megakuul Title Icon" src="{mk_title}" width="120" class="invert">
@@ -33,7 +33,7 @@
 			</a>
 			</div>
 			<span class="footer-title">Legal</span> 
-			<a href="/impressum" class="link link-hover text-center font-bold">Impressum</a>
+			<a href="/impressum" class="font-bold text-center link link-hover">Impressum</a>
 		</div>
 	</footer>
 </div>

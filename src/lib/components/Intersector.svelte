@@ -1,20 +1,31 @@
-<script lang="ts">
+<script>
+	import { cn } from '$lib/utils/cn';
   import { onMount } from 'svelte';
   
-  export let classOnIntersect: any;
-  export let classOnDefault: any;
-  export let transition: any;
-  export let classAdditional: any;
-
-  let element: any;
-  let css_class = classOnDefault;
+  /** @type {{
+    class: string
+    classOnIntersect: string
+    classOnDefault: string
+    transition: string
+    children: any
+  }} */
+  let {
+    class: classNames,
+    classOnIntersect,
+    classOnDefault,
+    transition,
+    children
+  } = $props()
+  
+  let element = $state();
+  let classes = $derived(classOnDefault);
   onMount(() => {
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
-          css_class = classOnIntersect;
+          classes = classOnIntersect;
         } else {
-          css_class = classOnDefault;
+          classes = classOnDefault;
         }
       });
     }, {
@@ -27,6 +38,8 @@
   });
 </script>
 
-<div bind:this="{element}" style="transition: {transition}" class="{css_class} {classAdditional}">
-  <slot></slot>
+<div bind:this={element} style="transition: {transition}" class="{cn(classes, classNames)}">
+  {@render children()}
 </div>
+
+

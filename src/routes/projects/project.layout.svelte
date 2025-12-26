@@ -39,8 +39,8 @@
 </svelte:head>
   
 <div class="hero">
-  <div class="hero-content flex-col-reverse lg:flex-row w-full">
-    <div class="lg:w-56 w-full">
+  <div class="flex-col-reverse w-full lg:flex-row hero-content">
+    <div class="w-full lg:w-56">
       <p><b>Techstack</b></p>
       <br>
       <ul>
@@ -56,22 +56,22 @@
         {/each}
       </ul>
     </div>
-    <img alt="projectimage" src="/images/{mainimage}" class="max-w-xs w-full rounded-lg shadow-2xl" />
+    <img alt="projectimage" src="/images/{mainimage}" class="w-full max-w-xs rounded-lg shadow-2xl" />
     <div>
       <p>{published}</p>
       <div class="flex flex-row items-center">
-        <h1 class="text-4xl lg:text-5xl font-bold">{title}</h1>
+        <h1 class="text-4xl font-bold lg:text-5xl">{title}</h1>
         {#if githublnk}
-        <a href="{githublnk}" class="btn btn-ghost ml-2"><Icon icon="mingcute:link-line" width=32 height=32></Icon></a>
+        <a href="{githublnk}" class="ml-2 btn btn-ghost"><Icon icon="mingcute:link-line" width=32 height=32></Icon></a>
         {/if}
       </div>
-      <p class="py-6 ">{subtitle}</p>
+      <p class="py-6">{subtitle}</p>
     </div>
   </div>
 </div>
 
-<div class="bg-base-200 flex justify-center w-full">
-  <article class="markdown max-w-5xl p-6 lg:p-10">
+<div class="flex justify-center w-full bg-base-200">
+  <article class="p-6 max-w-5xl lg:p-10 markdown">
     <slot />
   </article>
 </div>

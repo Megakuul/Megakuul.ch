@@ -1,8 +1,4 @@
-<script lang="ts">
-  export let classes: string;
-</script>
-
-<pre class="text-center text-base-content shadow-none font-extrabold 2xl:text-sm lg:text-[10px] sm:text-[6px] text-[3px] overflow-hidden {classes}">
+<pre class="overflow-hidden font-extrabold text-center shadow-none select-none 2xl:text-lg text-[3px] sm:text-[6px] lg:text-[10px]">
   {`
   MMMMMMMM               MMMMMMMM                                                         kkkkkkkk                                               lllllll 
   M:::::::M             M:::::::M                                                         k::::::k                                               l:::::l 
@@ -29,3 +25,9 @@
                                                             gggggg                                                                                       
   `}
 </pre>
+
+<style>
+  pre {
+    font-family: monospace;
+  }
+</style>

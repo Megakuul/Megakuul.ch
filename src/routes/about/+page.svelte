@@ -104,13 +104,13 @@ function getAge(birthday: string) {
 	<meta property="og:image" content="https://megakuul.ch/favicon.png" />
 </svelte:head>
 
-<div class="w-full flex flex-col items-center justify-center my-10 sm:my-20">
+<div class="flex flex-col justify-center items-center my-10 w-full sm:my-20">
     <Intersector classAdditional="avatar"
         classOnDefault="scale-90 opacity-60" 
 		classOnIntersect="scale-100 opacity-100" 
 		transition="all ease .5s"
     >
-        <div class="h-40 w-72 sm:w-96 sm:h-48 xl:h-56 rounded-2xl shadow-inner brightness-50 hover:brightness-75 transition-all duration-500">
+        <div class="w-72 h-40 rounded-2xl shadow-inner transition-all duration-500 sm:w-96 sm:h-48 xl:h-56 brightness-50 hover:brightness-75">
           <img alt="Portrait" src={portrait} />
         </div>
     </Intersector>
@@ -127,7 +127,7 @@ function getAge(birthday: string) {
 		classOnIntersect="scale-100 opacity-100" 
 		transition="all ease .5s"
 	  >
-    <pre class="bg-base-100 text-[0.7rem] sm:text-sm lg:text-lg xl:text-xl xl:pl-12 sm:pl-8 pl-2 overflow-hidden">{
+    <pre class="overflow-hidden pl-2 sm:pl-8 sm:text-sm lg:text-lg xl:pl-12 xl:text-xl bg-base-100 text-[0.7rem]">{
         @html Highlight(code, syntaxMap)
     }</pre>
 	</Intersector>

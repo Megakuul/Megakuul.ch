@@ -1,15 +1,14 @@
 <svelte:window bind:scrollY={scroll} />
 
-<script lang="ts">
+<script>
+  import "../app.css"
 	import Intersector from "$lib/components/Intersector.svelte";
 	import MegakuulAsciiLogo from "$lib/components/MegakuulAsciiLogo.svelte";
 	import WriteOnScroll from "$lib/components/WriteOnScroll.svelte";
 	import { onMount } from "svelte";
-	import list from "$lib/projects.list.js";
-	import CarouselPage from "$lib/components/CarouselPage.svelte";
 	import Citation from "$lib/components/Citation.svelte";
 
-	let welcomeCommand: string;
+	let welcomeCommand = $state("");
 
     onMount(() => {
 		let userAgent = navigator.userAgent;
@@ -20,21 +19,9 @@
 		} else {
 			welcomeCommand = "cat welcome.txt | grep welcome"
 		}
-		
-		projectList = shuffleList(list, 10);
 	});
 
-	function shuffleList(array: object[], count: number) {
-		let tempList: object[] = JSON.parse(JSON.stringify(array));
-		for (let i = tempList.length - 1; i >= 0; i--) {
-			const j = Math.floor(Math.random() * (i + 1));
-			[tempList[i], tempList[j]] = [tempList[j], tempList[i]];
-		}
-		return tempList.splice(0, count);
-	}
-
-	let scroll: number;
-	let projectList: any[] = [];
+	let scroll = $state(0);
 </script>
 
 <svelte:head>
@@ -47,22 +34,25 @@
 	<meta property="og:image" content="https://megakuul.ch/favicon.png" />
 </svelte:head>
 
-<div class="w-full flex flex-col items-center justify-center mt-10 sm:mt-20">
-	<Intersector classAdditional="mockup-code bg-base-300 w-5/6 mt-10 sm:mt-20" 
+<div class="flex flex-col justify-center items-center mt-10 w-full sm:mt-20">
+	<Intersector class="py-40 px-10 mt-10 w-5/6 sm:mt-20 apple-glass glass brightness-90 hover:brightness-100" 
 		classOnDefault="scale-90" 
 		classOnIntersect="scale-100" 
 		transition="all ease .5s"
 	>
-		<MegakuulAsciiLogo classes="bg-base-100" />
+		<MegakuulAsciiLogo />
 	</Intersector>
 
-	<Intersector classAdditional="mockup-code bg-base-300 w-5/6 my-20 min-h-[640px] xl:h-[600px]" 
+  <!-- prettier-ignore -->
+  <svg class="mt-8 w-24 h-24 sm:mt-64 slow-arrow text-slate-50/30" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="m12 20l6-6m-6 6l-6-6m6 6V9.5M12 4v2.5"/></svg>
+
+	<Intersector class="my-20 w-5/6 apple-glass mockup-code bg-base-300 min-h-[640px] xl:h-[600px]" 
 		classOnDefault="scale-90" 
 		classOnIntersect="scale-100" 
 		transition="all ease .5s"
 	>
-		<pre data-prefix="$" class="text-[0.8rem] sm:text-sm lg:text-lg xl:text-xl"><code>{welcomeCommand}</code></pre>
-		<pre data-prefix=">" class="whitespace-normal text-[0.8rem] sm:text-sm lg:text-lg xl:text-xl">
+		<pre data-prefix="$" class="sm:text-sm lg:text-lg xl:text-xl text-[0.8rem]"><code>{welcomeCommand}</code></pre>
+		<pre data-prefix=">" class="whitespace-normal sm:text-sm lg:text-lg xl:text-xl text-[0.8rem]">
 			<br>
 			<div class="pl-6">
 				<WriteOnScroll scrollY={scroll} offset={-20} blinkingIntervall={400} text = "
@@ -85,33 +75,15 @@
 		</pre>
 	</Intersector>
 
-	<Intersector classAdditional="text-[1.5rem] sm:text-xl lg:text-2xl xl:text-3xl mt-10 sm:mt-24"
+	<Intersector class="mt-10 sm:mt-24 sm:text-xl lg:text-2xl xl:text-3xl text-[1.5rem]"
 		classOnDefault="translate-y-full opacity-20" 
 		classOnIntersect="opacity-100" 
 		transition="all ease 1s"
-	><a href="/projects"><h1 class="cursor-pointer link link-hover font-bold">Explore my Projects</h1></a></Intersector>
+	><a href="/projects"><h1 class="font-bold cursor-pointer link link-hover">Explore my Projects</h1></a></Intersector>
 
-	<Intersector classAdditional="carousel w-5/6 xl:w-4/6 my-16"
-		classOnDefault="scale-90" 
-		classOnIntersect="scale-100" 
-		transition="all ease .5s"
-	>
-		{#each projectList as project, index}
-			<CarouselPage project={project} />
-		{/each}
-		
-	</Intersector>
-
-	<Intersector classAdditional="text-[1.5rem] sm:text-xl lg:text-2xl xl:text-3xl my-12 sm:my-32"
+	<Intersector class="my-12 sm:my-32 sm:text-xl lg:text-2xl xl:text-3xl text-[1.5rem]"
 		classOnDefault="translate-y-full opacity-20" 
 		classOnIntersect="opacity-100" 
 		transition="all ease 1s"
 	><Citation author="Terry A. Davis" content="An idiot admires complexity, a genius admires simplicity"></Citation></Intersector>
 </div>
-
-<style>
-	pre {
-		@apply shadow-none bg-transparent text-base-content overflow-hidden;
-	}
-</style>
-

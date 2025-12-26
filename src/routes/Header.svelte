@@ -1,5 +1,4 @@
 <script lang="ts">
-	import Icon from '@iconify/svelte';
 	import AnimatedLogo from '$lib/components/AnimatedLogo.svelte';
 
 	let checked: boolean = false;
@@ -20,14 +19,14 @@
 </script>
 
 <header>
-	<div class="navbar h-20">
+	<div class="h-20 navbar">
 		
 		<div class="navbar-start">
 			
 		</div>
 
 		<div class="navbar-center">
-			<a class="btn btn-ghost text-xl" href="/">Megakuul</a>
+			<a class="text-xl btn btn-ghost" href="/">Megakuul</a>
 		</div>
 		<div class="navbar-end">
 			<label for="main-drawer" class="btn btn-square btn-ghost drawer-button">
@@ -38,12 +37,12 @@
 
 	<div class="drawer drawer-end drawer-mobile">
 		<input id="main-drawer" type="checkbox" bind:checked={checked} class="drawer-toggle"/>
-		<div class="drawer-side z-30">
+		<div class="z-30 drawer-side">
 			<label for="main-drawer" class="drawer-overlay"></label>
 
-			<ul class="menu w-80 p-4 text-xl bg-base-200 text-base-content rounded-bl-xl">
+			<ul class="p-4 w-80 text-xl rounded-bl-xl menu bg-base-200">
 				
-				<label for="main-drawer" class="btn btn-square drawer-button hover:scale-75 mk-close-btn" class:checked>
+				<label for="main-drawer" class="hover:scale-75 btn btn-square drawer-button mk-close-btn" class:checked>
 					<Icon icon="material-symbols:close-rounded" height="32" width="32" />
 				</label>
 

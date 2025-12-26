@@ -1,5 +1,5 @@
 <script lang="ts">
-  import list from "$lib/concepts.list"
+  import list from "./concepts.list"
   import Intersector from "$lib/components/Intersector.svelte";
 
   const slicedList: typeof list[] = splitList(list, 5);
@@ -34,7 +34,7 @@
 	<meta property="og:image" content="https://megakuul.ch/favicon.png" />
 </svelte:head>
 
-<div class="w-full flex flex-col items-center">
+<div class="flex flex-col items-center w-full">
   {#each slicedList[currentPage] as item}
     <Intersector 
       classAdditional="hero bg-base-200 hover:bg-base-100 hover:shadow-2xl
@@ -46,14 +46,14 @@
       classOnIntersect="translate-x-0 shadow-xl opacity-100"
       transition="all ease .5s">
       <div class="mr-1">
-        <p class="text-xs lg:text-lg py-2">{item.published}</p>
-        <a href="/concepts/{item.route}"><h1 class="cursor-pointer link link-hover text-sm lg:text-xl font-bold">{item.title}</h1></a>
-        <p class="text-xs lg:text-lg py-2">{item.subtitle}</p>
+        <p class="py-2 text-xs lg:text-lg">{item.published}</p>
+        <a href="/concepts/{item.route}"><h1 class="text-sm font-bold cursor-pointer lg:text-xl link link-hover">{item.title}</h1></a>
+        <p class="py-2 text-xs lg:text-lg">{item.subtitle}</p>
       </div>
-      <img alt="projectimage" src="/images/{item.mainimage}" class="rounded-lg h-2/4 lg:h-3/4" />
+      <img alt="projectimage" src="/images/{item.mainimage}" class="h-2/4 rounded-lg lg:h-3/4" />
     </Intersector>
   {/each}
-  <div class="join my-12">
+  <div class="my-12 join">
     {#each slicedList as _, index}
       <button class="join-item btn active" class:btn-active={currentPage===index} on:click={() => changePage(index)}>
         {(index+1).toString()}
