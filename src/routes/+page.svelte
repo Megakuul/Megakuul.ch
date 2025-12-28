@@ -40,7 +40,7 @@
   <meta property="og:image" content="https://megakuul.ch/favicon.png" />
 </svelte:head>
 
-<div class="flex flex-col justify-center items-center mt-10 w-full sm:mt-20">
+<div class="flex flex-col justify-center items-center w-full">
   <Intersector
     class="py-10 px-10 mt-10 w-5/6 sm:py-40 sm:mt-20 apple-glass glass brightness-90 hover:brightness-100"
     classOnDefault="scale-90"

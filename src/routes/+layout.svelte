@@ -1,8 +1,8 @@
 <script>
   import Header from './Header.svelte';
   import Icon from '@iconify/svelte';
-  import mk_logo_black from '$lib/assets/mk_logo_white.svg';
-  import mk_title from '$lib/assets/mk_title.png';
+  import dino from '$lib/assets/dino.svg';
+  import title from '$lib/assets/title.png';
 
   let { children } = $props();
 </script>
@@ -11,10 +11,10 @@
 
 {@render children()}
 
-<footer class="p-10 footer apple-glass text-neutral-content">
+<footer class="p-10 footer apple-glass text-neutral-content sm:footer-horizontal">
   <div>
-    <img alt="Megakuul Icon" src={mk_logo_black} width="120" height="120" />
-    <img alt="Megakuul Title Icon" src={mk_title} width="120" class="invert" />
+    <img alt="Dinosaur" src={dino} width="120" class="invert" />
+    <img alt="Megakuul title icon" src={title} width="120" class="invert" />
     <p>Designing software is Art</p>
   </div>
   <div>
@@ -43,6 +43,6 @@
       </a>
     </div>
     <span class="footer-title">Legal</span>
-    <a href="/impressum" class="font-bold text-center link link-hover">Impressum</a>
+    <a href="/imprint" class="font-bold text-center link link-hover">Imprint</a>
   </div>
 </footer>

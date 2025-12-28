@@ -1,9 +1,9 @@
-<script lang="ts">
-    import Intersector from "$lib/components/Intersector.svelte";
-    import { Highlight } from "$lib/components/SyntaxHighlighter";
-    import portrait from "$lib/assets/portrait.jpg";
+<script>
+  import Intersector from '$lib/components/Intersector.svelte';
+  import { Highlight } from '$lib/components/SyntaxHighlighter';
+  import portrait from '$lib/assets/portrait.jpg';
 
-const code = `
+  const code = `
 class Linus : public Earth::Human {
 public:
   Linus() = default;
@@ -59,76 +59,93 @@ public:
 
 `;
 
-const syntaxMap = new Map([
-   ["class", "color: rgba(43, 105, 199, 0.7);"],
-   ["public", "color: rgba(43, 105, 199, 0.7);"],
-   ["virtual", "color: rgba(43, 105, 199, 0.7);"],
-   ["int", "color: rgba(7, 64, 148, 0.7);"],
-   ["std", "color: rgba(22, 94, 8, 0.8);"],
-   ["string", "color: rgba(22, 94, 8, 0.8);"],
-   ["vector", "color: rgba(22, 94, 8, 0.8);"],
-   ["struct", "color: rgba(27, 91, 187, 0.7);"],
-   ["CULTURE", "color: rgba(22, 94, 8, 0.8);"],
-   ["RELIGION", "color: rgba(22, 94, 8, 0.8);"],
-   ["SKILL", "color: rgba(22, 94, 8, 0.8);"],
-   ["SOFT", "color: rgba(22, 94, 8, 0.8);"],
-   ["HARD", "color: rgba(22, 94, 8, 0.8);"],
-   ["TECHNOLOGY", "color: rgba(22, 94, 8, 0.8);"],
-   ["BODY", "color: rgba(22, 94, 8, 0.8);"],
-   ["HAND", "color: rgba(22, 94, 8, 0.8);"],
-   ["EARTH", "color: rgba(22, 94, 8, 0.8);"],
-]);
+  const syntaxMap = new Map([
+    ['class', 'color: rgba(43, 105, 199, 0.7);'],
+    ['public', 'color: rgba(43, 105, 199, 0.7);'],
+    ['virtual', 'color: rgba(43, 105, 199, 0.7);'],
+    ['int', 'color: rgba(7, 64, 148, 0.7);'],
+    ['std', 'color: rgba(22, 94, 8, 0.8);'],
+    ['string', 'color: rgba(22, 94, 8, 0.8);'],
+    ['vector', 'color: rgba(22, 94, 8, 0.8);'],
+    ['struct', 'color: rgba(27, 91, 187, 0.7);'],
+    ['CULTURE', 'color: rgba(22, 94, 8, 0.8);'],
+    ['RELIGION', 'color: rgba(22, 94, 8, 0.8);'],
+    ['SKILL', 'color: rgba(22, 94, 8, 0.8);'],
+    ['SOFT', 'color: rgba(22, 94, 8, 0.8);'],
+    ['HARD', 'color: rgba(22, 94, 8, 0.8);'],
+    ['TECHNOLOGY', 'color: rgba(22, 94, 8, 0.8);'],
+    ['BODY', 'color: rgba(22, 94, 8, 0.8);'],
+    ['HAND', 'color: rgba(22, 94, 8, 0.8);'],
+    ['EARTH', 'color: rgba(22, 94, 8, 0.8);'],
+  ]);
 
-function getAge(birthday: string) {
+  /** @param {string} birthday @returns {number}  */
+  function getAge(birthday) {
     const birthday_date = new Date(birthday);
     const today = new Date();
 
     let age = today.getFullYear() - birthday_date.getFullYear();
 
-    if (today.getMonth() < birthday_date.getMonth() || 
-        (today.getMonth() == birthday_date.getMonth() && today.getDate() < birthday_date.getDate())) {
-        age--;
+    if (
+      today.getMonth() < birthday_date.getMonth() ||
+      (today.getMonth() == birthday_date.getMonth() && today.getDate() < birthday_date.getDate())
+    ) {
+      age--;
     }
 
     return age;
-}
+  }
 </script>
 
 <svelte:head>
-	<title>About</title>
-	<meta name="description" content="Learn about my background, experiences and passion for technology." />
-  <meta property="og:description" content="Learn about my background, experiences and passion for technology." />
+  <title>About</title>
+  <meta
+    name="description"
+    content="Learn about my background, experiences and passion for technology."
+  />
+  <meta
+    property="og:description"
+    content="Learn about my background, experiences and passion for technology."
+  />
   <link rel="canonical" href="https://megakuul.ch/about" />
   <meta property="og:title" content="About - Megakuul" />
   <meta property="og:type" content="website" />
-	<meta property="og:image" content="https://megakuul.ch/favicon.png" />
+  <meta property="og:image" content="https://megakuul.ch/favicon.png" />
 </svelte:head>
 
 <div class="flex flex-col justify-center items-center my-10 w-full sm:my-20">
-    <Intersector classAdditional="avatar"
-        classOnDefault="scale-90 opacity-60" 
-		classOnIntersect="scale-100 opacity-100" 
-		transition="all ease .5s"
+  <Intersector
+    class="avatar"
+    classOnDefault="scale-90 opacity-60"
+    classOnIntersect="scale-100 opacity-100"
+    transition="all ease .5s"
+  >
+    <div
+      class="w-72 h-40 rounded-2xl shadow-inner transition-all duration-500 sm:w-96 sm:h-48 xl:h-56 brightness-50 hover:brightness-75"
     >
-        <div class="w-72 h-40 rounded-2xl shadow-inner transition-all duration-500 sm:w-96 sm:h-48 xl:h-56 brightness-50 hover:brightness-75">
-          <img alt="Portrait" src={portrait} />
-        </div>
-    </Intersector>
-    <Intersector classAdditional="mt-10 xl:text-2xl lg:text-xl sm:text-lg text-sm text-center w-5/6"
-        classOnDefault="scale-90 opacity-60" 
-		classOnIntersect="scale-100 opacity-100" 
-		transition="all ease .5s"
-    >
-      My name is Linus Ilian Moser, and I'm an enthusiastic platform engineer and devoted software developer, 
-      <br>residing in Switzerland and currently {getAge("2006-02-13")} years old.
-    </Intersector>
-    <Intersector classAdditional="mockup-code bg-base-300 w-11/12 sm:w-5/6 mt-10 sm:mt-20" 
-		classOnDefault="scale-90 opacity-60" 
-		classOnIntersect="scale-100 opacity-100" 
-		transition="all ease .5s"
-	  >
-    <pre class="overflow-hidden pl-2 sm:pl-8 sm:text-sm lg:text-lg xl:pl-12 xl:text-xl bg-base-100 text-[0.7rem]">{
-        @html Highlight(code, syntaxMap)
-    }</pre>
-	</Intersector>
+      <img alt="Portrait" src={portrait} />
+    </div>
+  </Intersector>
+  <Intersector
+    class="mt-10 w-5/6 text-sm text-center sm:text-lg lg:text-xl xl:text-2xl"
+    classOnDefault="scale-90 opacity-60"
+    classOnIntersect="scale-100 opacity-100"
+    transition="all ease .5s"
+  >
+    My name is Linus Ilian Moser, and I'm an enthusiastic platform engineer and devoted software
+    developer,
+    <br />residing in Switzerland and currently {getAge('2006-02-13')} years old.
+  </Intersector>
+  <Intersector
+    class="mt-10 w-11/12 sm:mt-20 sm:w-5/6 mockup-code apple-glass"
+    classOnDefault="scale-90 opacity-60"
+    classOnIntersect="scale-100 opacity-100"
+    transition="all ease .5s"
+  >
+    <pre
+      class="overflow-hidden pl-2 sm:pl-8 sm:text-sm lg:text-lg xl:pl-12 xl:text-xl text-[0.7rem]">{@html Highlight(
+        code,
+        syntaxMap,
+      )}</pre>
+  </Intersector>
 </div>
