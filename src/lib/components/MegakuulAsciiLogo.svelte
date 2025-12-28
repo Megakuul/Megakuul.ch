@@ -1,4 +1,5 @@
-<pre class="overflow-hidden font-extrabold text-center shadow-none select-none 2xl:text-lg text-[3px] sm:text-[6px] lg:text-[10px]">
+<pre
+  class="hidden overflow-hidden font-extrabold text-center shadow-none select-none sm:block text-[.8cqi]">
   {`
   MMMMMMMM               MMMMMMMM                                                         kkkkkkkk                                               lllllll 
   M:::::::M             M:::::::M                                                         k::::::k                                               l:::::l 
@@ -24,6 +25,28 @@
                                                          ggg::::::ggg                                                                                    
                                                             gggggg                                                                                       
   `}
+</pre>
+
+<pre
+  class="block overflow-hidden font-extrabold text-center shadow-none select-none sm:hidden text-[2.5cqi]">
+{`
+  MMMMMMMM               MMMMMMMM
+  M:::::::M             M:::::::M
+  M::::::::M           M::::::::M
+  M:::::::::M         M:::::::::M
+  M::::::::::M       M::::::::::M
+  M:::::::::::M     M:::::::::::M
+  M:::::::M::::M   M::::M:::::::M
+  M::::::M M::::M M::::M M::::::M
+  M::::::M  M::::M::::M  M::::::M
+  M::::::M   M:::::::M   M::::::M
+  M::::::M    M:::::M    M::::::M
+  M::::::M     MMMMM     M::::::M
+  M::::::M               M::::::M
+  M::::::M               M::::::M
+  M::::::M               M::::::M
+  MMMMMMMM               MMMMMMMM
+`}
 </pre>
 
 <style>

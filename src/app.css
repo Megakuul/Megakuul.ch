@@ -1,5 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@300..700&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cabin+Sketch:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap');
 @import 'tailwindcss';
 @plugin "daisyui";
 
@@ -11,7 +11,8 @@ body {
 html {
   position: relative;
   background-color: rgb(17, 16, 16);
-  font-family: 'Ubuntu', sans-serif;
+  font-family: 'Rubik', 'Ubuntu', sans-serif;
+  font-optical-sizing: auto;
   color: rgba(255, 255, 255, 0.8);
   min-height: 100%;
   overflow-x: hidden;
