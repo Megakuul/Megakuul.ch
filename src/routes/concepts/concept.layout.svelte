@@ -1,34 +1,34 @@
 <script>
   /**
-	 * @type {any}
-	 */
-   export let title;
+   * @type {any}
+   */
+  export let title;
 
   /**
-	 * @type {any}
-	 */
-   export let description;
+   * @type {any}
+   */
+  export let description;
 
   /**
-	 * @type {any}
-	 */
-   export let published;
+   * @type {any}
+   */
+  export let published;
 
   /**
-	 * @type {any}
-	 */
-   export let mainimage;
+   * @type {any}
+   */
+  export let mainimage;
 </script>
 
 <svelte:head>
-	<title>{title}</title>
-	<meta name="description" content="{description}" />
+  <title>{title}</title>
+  <meta name="description" content={description} />
 </svelte:head>
 
-<div class="bg-base-200 flex justify-center w-full">
-  <article class="markdown max-w-5xl p-6 lg:p-10 w-full break-words">
+<div class="flex justify-center w-full bg-base-200">
+  <article class="p-6 w-full max-w-5xl break-words lg:p-10 markdown">
     <div class="flex flex-col items-center w-full">
-      <img alt="projectimage" src="/images/{mainimage}" class="max-w-96 max-h-96" />
+      <img alt="projectimage" src="/images/{mainimage}" class="max-h-96 max-w-96" />
     </div>
     <slot />
   </article>
@@ -107,3 +107,4 @@
     }
   }
 </style>
+

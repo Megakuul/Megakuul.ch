@@ -1,5 +1,4 @@
 <script>
-  import Intersector from '$lib/components/Intersector.svelte';
   import { Highlight } from '$lib/components/SyntaxHighlighter';
   import portrait from '$lib/assets/portrait.jpg';
 
@@ -17,10 +16,10 @@ public:
     int year;
     int month;
     int day;
-  } birthday = {2006, 06, 13};
+  } birthday = {2006, 02, 12};
    
-  CULTURE::RELIGION religion = CULTURE::RELIGION::CHURCH_OF_EMACS;
   WORKSPACE::EDITOR editor = WORKSPACE::EDITOR::NVIM;
+  WORKSPACE::OS os = WORKSPACE::OS::NIXOS; // also referred to as goat
 
   std::vector<SKILL::SOFT> soft_skills = {
     SKILL::SOFT::PROBLEM_SOLVING,
@@ -45,7 +44,8 @@ public:
     TECHNOLOGY::CPP,
     TECHNOLOGY::SVELTE,
     TECHNOLOGY::FLUTTER,
-    TECHNOLOGY::INCOMPLETED_AUTH_STANDARDS_LIKE_OPENID_CONNECT,
+    TECHNOLOGY::OPENID,
+    TECHNOLOGY::TAILWINDCSS_WITHOUT_EVER_CAUSING_ANY_OVERFLOW,
     TECHNOLOGY::KUBERNETES,
     TECHNOLOGY::AWS
   };
@@ -56,7 +56,6 @@ public:
     BODY::HAND::EMACS_PINKY,
   };
 };
-
 `;
 
   const syntaxMap = new Map([
@@ -74,6 +73,9 @@ public:
     ['SOFT', 'color: rgba(22, 94, 8, 0.8);'],
     ['HARD', 'color: rgba(22, 94, 8, 0.8);'],
     ['TECHNOLOGY', 'color: rgba(22, 94, 8, 0.8);'],
+    ['WORKSPACE', 'color: rgba(22, 94, 8, 0.8);'],
+    ['EDITOR', 'color: rgba(22, 94, 8, 0.8);'],
+    ['OS', 'color: rgba(22, 94, 8, 0.8);'],
     ['BODY', 'color: rgba(22, 94, 8, 0.8);'],
     ['HAND', 'color: rgba(22, 94, 8, 0.8);'],
     ['EARTH', 'color: rgba(22, 94, 8, 0.8);'],
@@ -114,38 +116,36 @@ public:
 </svelte:head>
 
 <div class="flex flex-col justify-center items-center my-10 w-full sm:my-20">
-  <Intersector
-    class="avatar"
-    classOnDefault="scale-90 opacity-60"
-    classOnIntersect="scale-100 opacity-100"
-    transition="all ease .5s"
+  <div
+    class="2xl:fixed 2xl:left-1/8 2xl:top-1/2 2xl:translate-y-[-50%] flex flex-col items-center 2xl:items-start"
   >
-    <div
-      class="w-72 h-40 rounded-2xl shadow-inner transition-all duration-500 sm:w-96 sm:h-48 xl:h-56 brightness-50 hover:brightness-75"
-    >
-      <img alt="Portrait" src={portrait} />
+    <div class="w-10/12 sm:w-8/12 2xl:w-1/3 hover-3d">
+      <div class="p-4 rounded-2xl">
+        <figure>
+          <img alt="Portrait" src={portrait} />
+        </figure>
+
+        <p class="text-xs text-center sm:text-lg lg:text-xl xl:text-2xl">
+          My name is Linus Ilian Moser, and I'm an enthusiastic platform engineer and devoted
+          software developer,
+          <br />residing in Switzerland and currently {getAge('2006-02-13')} years old.
+        </p>
+      </div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
     </div>
-  </Intersector>
-  <Intersector
-    class="mt-10 w-5/6 text-sm text-center sm:text-lg lg:text-xl xl:text-2xl"
-    classOnDefault="scale-90 opacity-60"
-    classOnIntersect="scale-100 opacity-100"
-    transition="all ease .5s"
-  >
-    My name is Linus Ilian Moser, and I'm an enthusiastic platform engineer and devoted software
-    developer,
-    <br />residing in Switzerland and currently {getAge('2006-02-13')} years old.
-  </Intersector>
-  <Intersector
-    class="mt-10 w-11/12 sm:mt-20 sm:w-5/6 mockup-code apple-glass"
-    classOnDefault="scale-90 opacity-60"
-    classOnIntersect="scale-100 opacity-100"
-    transition="all ease .5s"
-  >
+  </div>
+  <div class="mt-20 w-11/12 2xl:mr-6 2xl:ml-auto 2xl:w-1/2 mockup-code apple-glass">
     <pre
       class="overflow-hidden pl-2 sm:pl-8 sm:text-sm lg:text-lg xl:pl-12 xl:text-xl text-[0.7rem]">{@html Highlight(
         code,
         syntaxMap,
       )}</pre>
-  </Intersector>
+  </div>
 </div>

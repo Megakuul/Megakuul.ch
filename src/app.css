@@ -9,6 +9,10 @@ body {
 }
 
 html {
+  scroll-behavior: smooth;
+}
+
+html {
   position: relative;
   background-color: rgb(17, 16, 16);
   font-family: 'Rubik', 'Ubuntu', sans-serif;

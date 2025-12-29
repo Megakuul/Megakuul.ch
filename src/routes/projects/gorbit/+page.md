@@ -22,7 +22,7 @@ The majority of load balancers have numerous functions, which makes them quite d
 
 For the main implementation of the application, I used **GOs** standard library. To retrieve the configuration from the configuration file, I utilized the **Viper library**, as it effectively removes a significant amount of boilerplate code.
 
-I tried to split up the program into 4 separate parts:
+I tried to split up the program into 5 separate parts:
 
 - Configuration Handler
 - Traffic Handler
