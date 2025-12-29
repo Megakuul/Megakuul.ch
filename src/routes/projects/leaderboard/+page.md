@@ -38,6 +38,8 @@ techstack: [
 
 The one and only civilization leaderboard.
 
+## Table of Contents
+
 ## Purpose
 
 To satisfy and further push my massive arrogance, what could be better than seeing myself on top of a leaderboard?

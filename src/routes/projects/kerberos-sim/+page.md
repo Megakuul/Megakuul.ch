@@ -22,6 +22,8 @@ techstack: [
 
 **Kerberos Simulator** is system to simulate the Kerberos authentication protocoll.
 
+## Table of Contents
+
 ## Purpose
 
 Although Kerberos is labeled as an "old" and "complex" protocol, it is actually a beautiful option for SSO authentication. 

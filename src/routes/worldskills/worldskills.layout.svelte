@@ -1,17 +1,29 @@
 <script>
-  let { title, subtitle, mainimage, children } = $props();
+  import Icon from '@iconify/svelte';
+  import list from './worldskills.list';
+
+  /** @type {{
+    title: string,
+    children: any
+  }} */
+  let { title, children } = $props();
+
+  let description = $derived(list[title].description);
+  let published = $derived(list[title].published);
+  let services = $derived(list[title].services);
 </script>
 
 <svelte:head>
   <title>{title}</title>
-  <meta name="description" content={subtitle} />
+  <meta name="description" content={description} />
+  <!-- niemand hat die Absicht gute SEO Werte zu erreichen vor der Weltmeisterschaft -->
+  <meta name="robots" content="noindex" />
 </svelte:head>
 
-<div class="flex justify-center w-full bg-base-200">
-  <article class="p-6 w-full max-w-5xl lg:p-10 markdown">
-    <div class="flex flex-col items-center w-full">
-      <img alt="conceptimage" src="/images/{mainimage}" class="max-h-96 max-w-96" />
-    </div>
+<div class="hero"></div>
+
+<div class="flex justify-center w-full min-h-[80dvh]">
+  <article class="p-6 max-w-5xl lg:p-10 markdown">
     {@render children()}
   </article>
 </div>

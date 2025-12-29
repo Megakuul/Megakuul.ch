@@ -111,6 +111,12 @@
     }
   }
 
+  .markdown :global(:is(h1, h2, h3, h4, h5, h6)) :global(span):before {
+    content: '#';
+    margin-right: 1px;
+    opacity: 0.4;
+  }
+
   .markdown :global(ul),
   .markdown :global(ol) {
     margin-bottom: 1.5rem;

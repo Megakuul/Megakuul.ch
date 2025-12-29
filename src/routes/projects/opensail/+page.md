@@ -21,6 +21,7 @@ techstack: [
 
 Sophisticated regatta rating system that is so transparent that, since it dropped, it has become pretty quiet around Ignotus Peverell's cloak.
 
+## Table of Contents
 
 ## Purpose
 

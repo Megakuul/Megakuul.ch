@@ -1,13 +1,28 @@
 <script>
-  import list from './concepts.list';
+  import list from './worldskills.list';
   import Intersector from '$lib/components/Intersector.svelte';
 
   const itemsPerPage = 7;
 
+  let search = $state('');
+
   let pagedList = $derived.by(() => {
+    let slice = undefined;
+    if (search.length > 0) {
+      const searchStr = search.toLowerCase();
+      slice = Object.entries(list).find(([key, value]) => {
+        if (key.toLowerCase().includes(searchStr)) {
+          return true;
+        } else if (JSON.stringify(value).toLowerCase().includes(searchStr)) {
+          return true;
+        }
+        return false;
+      });
+    } else slice = Object.entries(list);
+    if (!slice) return [];
     let slices = [];
-    for (let i = 0; i < list.length; i += itemsPerPage) {
-      slices.push(list.slice(i, i + itemsPerPage));
+    for (let i = 0; i < slice.length; i += itemsPerPage) {
+      slices.push(slice.slice(i, i + itemsPerPage));
     }
     return slices;
   });
@@ -24,26 +39,25 @@
 </script>
 
 <svelte:head>
-  <title>Concepts | Megakuul</title>
+  <title>Worldskills | Megakuul</title>
   <meta
     name="description"
-    content="Get some insights to my philosophical thoughts; drifting between random nonsense and useful ideas 🎨"
+    content="Master more AWS services than you will ever need (preparation for the Worldskills 2025) 🇨🇭"
   />
   <meta
     property="og:description"
-    content="Get some insights to my philosophical thoughts; drifting between random nonsense and useful ideas 🎨"
+    content="Master more AWS services than you will ever need (preparation for the Worldskills 2025) 🇨🇭"
   />
-  <link rel="canonical" href="https://megakuul.ch/concepts" />
-  <meta property="og:title" content="Concepts - Megakuul" />
+  <link rel="canonical" href="https://megakuul.ch/worldskills" />
+  <meta property="og:title" content="Worldskills - Megakuul" />
   <meta property="og:type" content="website" />
   <meta property="og:image" content="https://megakuul.ch/favicon.png" />
 </svelte:head>
 
 <div class="flex flex-col gap-8 items-center my-20">
-  <h1 class="text-3xl lg:text-5xl 2xl:text-7xl">Concepts</h1>
+  <h1 class="text-3xl lg:text-5xl 2xl:text-7xl">Worldskills</h1>
   <p class="text-sm text-center lg:text-xl 2xl:text-3xl text-slate-100/40 max-w-10/12">
-    Get some insights to my philosophical thoughts; drifting between random nonsense and useful
-    ideas 🎨
+    Master more AWS services than you will ever need (preparation for the Worldskills 2025) 🇨🇭
   </p>
 </div>
 
@@ -57,18 +71,13 @@
     >
       <div class="mr-1">
         <p class="py-2 text-xs lg:text-lg">{item.published}</p>
-        <a href="/concepts/{item.route}"
+        <a href="/worldskills/{item}"
           ><h1 class="text-sm font-bold cursor-pointer lg:text-xl link link-hover">
             {item.title}
           </h1></a
         >
         <p class="hidden py-2 text-xs sm:block lg:text-lg">{item.subtitle}</p>
       </div>
-      <img
-        alt="conceptimage"
-        src="/images/{item.mainimage}"
-        class="h-2/4 rounded-lg lg:h-3/4 max-w-1/3"
-      />
     </Intersector>
   {/each}
   <div class="my-12 mt-auto join">

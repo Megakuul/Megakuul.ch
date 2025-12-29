@@ -18,6 +18,7 @@ techstack: [
 
 Lightweight and simple http library implementation for building internal server endpoints.
 
+## Table of Contents
 
 ## Purpose
 

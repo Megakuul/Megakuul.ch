@@ -1,8 +1,8 @@
 import { mdsvex } from 'mdsvex';
 import adapter from '@sveltejs/adapter-static';
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
+import autoslug from 'rehype-slug';
 import autolink from 'rehype-autolink-headings';
-import autometa from 'rehype-meta';
 import autotoc from 'remark-toc';
 import { fileURLToPath } from 'node:url';
 import { dirname, resolve } from 'node:path';
@@ -14,13 +14,13 @@ const config = {
   preprocess: [
     vitePreprocess(),
     mdsvex({
-      remarkPlugins: [autotoc],
-      rehypePlugins: [autolink, autometa],
       extensions: ['.svx', '.md'],
       layout: {
         projects: `${projectRoot}/src/routes/projects/project.layout.svelte`,
         concepts: `${projectRoot}/src/routes/concepts/concept.layout.svelte`,
       },
+      remarkPlugins: [autotoc, { heading: 'Table of Contents', tight: true }],
+      rehypePlugins: [autoslug, autolink],
     }),
   ],
 

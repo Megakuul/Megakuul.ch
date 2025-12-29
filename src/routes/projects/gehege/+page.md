@@ -34,6 +34,8 @@ techstack: [
 
 Gehege is a Webapplication where you can list multiple cages with creatures in it. Every account can then spend his cash to different cages.
 
+## Table of Contents
+
 ## Purpose
 
 The goal was to create an example application that can be deployed with Docker.

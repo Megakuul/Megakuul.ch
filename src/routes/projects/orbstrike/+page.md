@@ -4,20 +4,33 @@ subtitle: Simple game using a auto-scaler infrastructure that can horizontally s
 githublnk: https://github.com/Megakuul/orbstrike
 published: "11.11.2023"
 mainimage: "orbstrike.png"
-techstack:
-    - icon: vscode-icons:file-type-go
-      name: Go
-    - icon: logos:flutter
-      name: Flutter
-    - icon: devicon:grpc
-      name: gRPC
-    - icon: logos:redis
-      name: Redis
-    - icon: logos:kubernetes
-      name: Kubernetes
+techstack: [
+    {
+        icon: vscode-icons:file-type-go,
+        name: Go
+    },
+    {
+        icon: logos:flutter,
+        name: Flutter
+    },
+    {
+        icon: devicon:grpc,
+        name: gRPC
+    },
+    {
+        icon: logos:redis,
+        name: Redis
+    },
+    {
+        icon: logos:kubernetes,
+        name: Kubernetes
+    },
+]
 ---
 
 **Orbstrike** should be a simple 2D multiplayer game running on a Flutter Flame frontend while streaming updates live over a gRPC stream. 
+
+## Table of Contents
 
 ## Purpose
 
