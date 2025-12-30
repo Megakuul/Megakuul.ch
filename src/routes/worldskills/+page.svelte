@@ -52,7 +52,14 @@
 <div class="flex flex-col gap-8 items-center my-20">
   <h1 class="text-3xl lg:text-5xl 2xl:text-7xl">Worldskills</h1>
   <p class="text-sm text-center lg:text-xl 2xl:text-3xl text-slate-100/40 max-w-10/12">
-    Master more AWS services than you will ever need (preparation for the Worldskills 2025) 🇨🇭
+    Master more AWS services than you will ever need (preparation for the
+    <a
+      class="underline"
+      href="https://www.ict-berufsbildung.ch/fuenf-schweizer-informatik-talente-an-den-worldskills-2026"
+    >
+      Worldskills 2025
+    </a>
+    ) 🇨🇭
   </p>
 </div>
 

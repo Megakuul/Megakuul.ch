@@ -1,5 +1,4 @@
 <script>
-  import '../app.css';
   import Intersector from '$lib/components/Intersector.svelte';
   import MegakuulAsciiLogo from '$lib/components/MegakuulAsciiLogo.svelte';
   import WriteOnScroll from '$lib/components/WriteOnScroll.svelte';
@@ -71,19 +70,20 @@
           blinkingIntervall={400}
           text="
 					<br>
-					<b>Welcome to Megakuul.ch</b>
+					<b>Welcome to Megakuul</b>
 					<br><br><br>
-					My name is Linus, I'm a software developer at Informaticon AG.
+					My name is Linus Moser, I'm a software developer at Informaticon AG and Swiss competitor at the WorldSkills 2025 Cloud Computing championship 🫕🇨🇭
 					<br><br>
-					During my free time, I love diving into various technologies and crafting cool stuff.
-					I'm trying to build the software and systems <b>reliable</b> and obviously <b>super mega blazingly</b> fast. 
+					During my free time, I love diving into various technologies and crafting cool things;
+          always chasing the most <b>simple</b>, <b>reliable</b> and <b>super mega blazingly fast</b> way to design software ⚡
 					<br><br>
-					On this portfolio, I try show you some insights of my most intriguing projects.
-					Besides, everything I do is also publicly available on my Github repository.
+          In this portfolio, I'll give you some insights about my works 🎨
+					Besides, everything I do is also publicly available on my <a class={'underline'} href={'https://github.com/Megakuul'}>GitHub</a> profile
 					<br><br>
-					Feel free to explore my work and reach out if you have any inquiries or questions about a project.
+					Feel free to explore my stuff and reach out if you have any inquiries or questions 👀
 					<br><br>
-					Yours Linus
+					- Linus
+					<br><br>
 				"
         />
 			</div>
