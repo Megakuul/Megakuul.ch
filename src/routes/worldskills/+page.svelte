@@ -2,15 +2,12 @@
   import list from './worldskills.list';
   import Intersector from '$lib/components/Intersector.svelte';
 
-  const itemsPerPage = 7;
-
   let search = $state('');
 
-  let pagedList = $derived.by(() => {
-    let slice = undefined;
+  let searchedList = $derived.by(() => {
     if (search.length > 0) {
       const searchStr = search.toLowerCase();
-      slice = Object.entries(list).find(([key, value]) => {
+      const result = Object.entries(list).find(([key, value]) => {
         if (key.toLowerCase().includes(searchStr)) {
           return true;
         } else if (JSON.stringify(value).toLowerCase().includes(searchStr)) {
@@ -18,14 +15,12 @@
         }
         return false;
       });
-    } else slice = Object.entries(list);
-    if (!slice) return [];
-    let slices = [];
-    for (let i = 0; i < slice.length; i += itemsPerPage) {
-      slices.push(slice.slice(i, i + itemsPerPage));
-    }
-    return slices;
+      if (result) result;
+      else [];
+    } else return Object.entries(list);
   });
+
+  const itemsPerPage = 7;
   let currentPage = $state(0);
 
   /** @param {number} newPage */
@@ -62,34 +57,37 @@
 </div>
 
 <div class="flex flex-col gap-4 items-center w-full min-h-dvh">
-  {#each pagedList[currentPage] as item}
-    <Intersector
-      class="flex overflow-hidden flex-row gap-1 justify-between p-6 w-5/6 h-40 rounded-2xl transition-all duration-700 apple-glass hero"
-      classOnDefault="translate-x-10 shadow-none opacity-0"
-      classOnIntersect="translate-x-0 shadow-xl opacity-100"
-      transition="all ease .5s"
-    >
-      <div class="mr-1">
-        <p class="py-2 text-xs lg:text-lg">{item.published}</p>
-        <a href="/worldskills/{item}"
-          ><h1 class="text-sm font-bold cursor-pointer lg:text-xl link link-hover">
-            {item.title}
-          </h1></a
+  {#each searchedList as [key, project], i}
+    {#if i >= currentPage && i < currentPage + 1 * itemsPerPage}
+      <Intersector
+        class="w-11/12 max-w-[1400px]"
+        classOnDefault="translate-x-10 shadow-none opacity-0"
+        classOnIntersect="translate-x-0 shadow-xl opacity-100"
+        transition="all ease .5s"
+      >
+        <a
+          href="/worldskills/{key}"
+          class="flex flex-col p-4 w-full rounded-2xl transition-all hover:scale-105 apple-glass"
         >
-        <p class="hidden py-2 text-xs sm:block lg:text-lg">{item.subtitle}</p>
-      </div>
-    </Intersector>
+          <h1 class="text-sm font-bold cursor-pointer lg:text-xl">
+            {project.title}
+          </h1>
+        </a>
+      </Intersector>
+    {/if}
   {/each}
   <div class="my-12 mt-auto join">
-    {#each pagedList as _, index}
-      <button
-        class="join-item btn apple-glass active"
-        class:btn-active={currentPage === index}
-        class:dense-apple-glass={currentPage === index}
-        onclick={() => changePage(index)}
-      >
-        {(index + 1).toString()}
-      </button>
-    {/each}
+    {#if searchedList}
+      {#each Array(Math.ceil(searchedList.length / itemsPerPage)) as _, index}
+        <button
+          class="join-item btn apple-glass active"
+          class:btn-active={currentPage === index}
+          class:dense-apple-glass={currentPage === index}
+          onclick={() => changePage(index)}
+        >
+          {(index + 1).toString()}
+        </button>
+      {/each}
+    {/if}
   </div>
 </div>

@@ -1,26 +1,30 @@
 <script>
   import Icon from '@iconify/svelte';
   import list from './worldskills.list';
+  import Intersector from '$lib/components/Intersector.svelte';
+  import { page } from '$app/state';
 
-  /** @type {{
-    title: string,
-    children: any
-  }} */
-  let { title, children } = $props();
+  let { children } = $props();
 
-  let description = $derived(list[title].description);
-  let published = $derived(list[title].published);
-  let services = $derived(list[title].services);
+  let key = $derived(page.route.id?.slice(page.route.id.lastIndexOf('/') + 1) || '');
+
+  let title = $derived(list[key].title);
+  let description = $derived(list[key].description);
+  let published = $derived(list[key].published);
+  let services = $derived(list[key].services);
 </script>
 
 <svelte:head>
   <title>{title}</title>
   <meta name="description" content={description} />
-  <!-- niemand hat die Absicht gute SEO Werte zu erreichen vor der Weltmeisterschaft -->
-  <meta name="robots" content="noindex" />
+  <meta property="og:description" content={description} />
+  <link rel="canonical" href="https://megakuul.ch/worldskills/{key}" />
+  <meta property="og:title" content={title} />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="https://megakuul.ch/favicon.png" />
 </svelte:head>
 
-<div class="hero"></div>
+<div class=""></div>
 
 <div class="flex justify-center w-full min-h-[80dvh]">
   <article class="p-6 max-w-5xl lg:p-10 markdown">

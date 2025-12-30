@@ -1,4 +1,5 @@
 <script>
+  import '../app.css';
   import Header from './Header.svelte';
   import Icon from '@iconify/svelte';
   import dino from '$lib/assets/dino.svg';

@@ -18,6 +18,7 @@ const config = {
       layout: {
         projects: `${projectRoot}/src/routes/projects/project.layout.svelte`,
         concepts: `${projectRoot}/src/routes/concepts/concept.layout.svelte`,
+        worldskills: `${projectRoot}/src/routes/worldskills/worldskills.layout.svelte`,
       },
       remarkPlugins: [autotoc, { heading: 'Table of Contents', tight: true }],
       rehypePlugins: [autoslug, autolink],
@@ -26,7 +27,6 @@ const config = {
 
   kit: {
     adapter: adapter({
-      fallback: 'fallback.html',
       precompress: false,
       strict: true,
     }),
