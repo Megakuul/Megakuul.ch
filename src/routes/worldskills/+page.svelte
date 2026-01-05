@@ -1,13 +1,25 @@
 <script>
   import list from './worldskills.list';
   import Intersector from '$lib/components/Intersector.svelte';
+  import ServiceIcon from '$lib/components/ServiceIcon.svelte';
 
   let search = $state('');
+  /** @type {Object.<string, boolean>} */
+  let searchServices = $state({});
 
   let searchedList = $derived.by(() => {
+    let filtered = Object.entries(list);
+    if (Object.keys(searchServices).length > 0) {
+      filtered = filtered.filter(([_, value]) => {
+        for (const service of value.services) {
+          if (searchServices[service]) return true;
+        }
+        return false;
+      });
+    }
     if (search.length > 0) {
       const searchStr = search.toLowerCase();
-      const result = Object.entries(list).find(([key, value]) => {
+      filtered = filtered.filter(([key, value]) => {
         if (key.toLowerCase().includes(searchStr)) {
           return true;
         } else if (JSON.stringify(value).toLowerCase().includes(searchStr)) {
@@ -15,9 +27,8 @@
         }
         return false;
       });
-      if (result) result;
-      else [];
-    } else return Object.entries(list);
+    }
+    return filtered;
   });
 
   const itemsPerPage = 7;
@@ -49,7 +60,7 @@
   <meta property="og:image" content="https://megakuul.ch/favicon.png" />
 </svelte:head>
 
-<div class="flex flex-col gap-8 items-center my-20">
+<div class="flex flex-col gap-8 items-center my-10">
   <h1 class="text-3xl lg:text-5xl 2xl:text-7xl">Worldskills</h1>
   <p class="text-sm text-center lg:text-xl 2xl:text-3xl text-slate-100/40 max-w-10/12">
     Master more AWS services than you will ever need (preparation for the
@@ -63,8 +74,35 @@
   </p>
 </div>
 
+<div class="flex flex-col gap-4 items-center my-10">
+  <input
+    bind:value={search}
+    placeholder="Search..."
+    class="p-3 w-11/12 text-lg rounded-2xl outline-none sm:p-4 sm:text-xl apple-glass max-w-[1400px]"
+  />
+  <div class="flex flex-wrap gap-2 justify-start items-start w-11/12 max-w-[1400px] min-h-12">
+    {#each Object.entries(searchServices) as [service, active] (service)}
+      {#if active}
+        <button
+          onclick={e => {
+            e.stopPropagation();
+            if (searchServices[service]) {
+              delete searchServices[service];
+              searchServices = searchServices;
+            } else searchServices[service] = true;
+          }}
+          class="flex flex-row gap-2 py-2 px-3 rounded-xl transition-all cursor-pointer hover:scale-105 apple-glass"
+        >
+          <ServiceIcon {service} class="w-6 h-6 rounded-sm" />
+          <span>{service}</span>
+        </button>
+      {/if}
+    {/each}
+  </div>
+</div>
+
 <div class="flex flex-col gap-4 items-center w-full min-h-dvh">
-  {#each searchedList as [key, project], i}
+  {#each searchedList as [key, project], i (key)}
     {#if i >= currentPage && i < currentPage + 1 * itemsPerPage}
       <Intersector
         class="w-11/12 max-w-[1400px]"
@@ -74,11 +112,34 @@
       >
         <a
           href="/worldskills/{key}"
-          class="flex flex-col p-4 w-full rounded-2xl transition-all hover:scale-105 apple-glass"
+          class="flex flex-col gap-2 p-4 w-full rounded-2xl transition-all apple-glass"
         >
-          <h1 class="text-sm font-bold cursor-pointer lg:text-xl">
+          <h1 class="text-lg font-bold cursor-pointer lg:text-xl hover:underline">
             {project.title}
           </h1>
+
+          <p class="flex flex-wrap gap-1 justify-start text-sm sm:text-lg">
+            <span class="text-slate-200/40">{project.published}</span>
+            <span>| {project.description}</span>
+          </p>
+
+          <div class="flex flex-wrap gap-2 items-start mt-1">
+            {#each project.services as service}
+              <button
+                onclick={e => {
+                  e.preventDefault();
+                  if (searchServices[service]) {
+                    delete searchServices[service];
+                    searchServices = searchServices;
+                  } else searchServices[service] = true;
+                }}
+                class="flex flex-row gap-2 py-2 px-3 rounded-xl transition-all cursor-pointer hover:scale-105 apple-glass"
+              >
+                <ServiceIcon {service} class="w-6 h-6 rounded-sm" />
+                <span>{service}</span>
+              </button>
+            {/each}
+          </div>
         </a>
       </Intersector>
     {/if}
