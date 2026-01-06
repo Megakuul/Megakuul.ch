@@ -1,1 +1,5 @@
 # Megakuul Website
+
+![badge](https://codebuild.eu-central-1.amazonaws.com/badges?uuid=eyJlbmNyeXB0ZWREYXRhIjoiNi9XWU11TEkyOWNwem5wSDhnQ1ZlNlBycXNSYnZsK0NUWnQwOEJvVTZSNmUxUDNqNU9qOVZET2lab21IT3R0RnFKdTlZSCtmZWloUEwvbTRPU0tTaVJBPSIsIml2UGFyYW1ldGVyU3BlYyI6IjVudys2ZE5qZSt3elhNRVgiLCJtYXRlcmlhbFNldFNlcmlhbCI6MX0%3D&branch=main)
+
+

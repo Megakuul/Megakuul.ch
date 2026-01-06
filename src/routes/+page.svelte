@@ -98,7 +98,7 @@
   >
     <blockquote class="flex flex-col gap-2 items-center w-full">
       <p
-        class="p-1 text-xl text-transparent bg-clip-text sm:text-4xl bg-linear-to-tr from-slate-300/80 to-slate-400/80"
+        class="p-1 text-xl text-center text-transparent bg-clip-text sm:text-4xl bg-linear-to-tr from-slate-300/80 to-slate-400/80"
       >
         «An idiot admires complexity, a genius admires simplicity»
       </p>

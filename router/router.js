@@ -2,13 +2,13 @@
 async function handler(event) {
   const request = event.request;
   // don't manipulate any assets
-  if (request.uri.startsWith("/_app/") || /\.[^\/.]+$/.test(request.uri)) {
+  if (request.uri.startsWith('/_app/') || /\.[^\/.]+$/.test(request.uri)) {
     return request;
   }
-  if (request.uri.endsWith("/")) {
-    request.uri += "index.html";
+  if (request.uri.endsWith('/')) {
+    request.uri += 'index.html';
   } else {
-    request.uri += "/index.html";
+    request.uri += '/index.html';
   }
   return request;
 }
