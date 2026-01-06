@@ -32,7 +32,9 @@
           install -Dm644 .sveltekit/output/ $out/share/${name}
         '';
 
-        npmDepsHash = "sha256-lQ8/CAPTDbsaF0PNevvQBO+896RbmevaFY8Ocy9+YA4=";
+        npmDepsHash = "sha256-OGyiyr/+cAax9kTdnJ8v+P6JoYwiqF4oUw8uLYDbfG0=";
+
+        npmFlags = ["--legacy-peer-deps"];
       };
     });
   };
