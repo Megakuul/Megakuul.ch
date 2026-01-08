@@ -14,6 +14,7 @@
     "lint": "prettier --check ."
   },
   "devDependencies": {
+    "@bitmachina/highlighter": "^1.0.0-alpha.5",
     "@iconify/svelte": "^5.1.0",
     "@sveltejs/adapter-static": "^3.0.10",
     "@sveltejs/kit": "^2.49.1",
@@ -26,6 +27,7 @@
     "prettier-plugin-svelte": "^3.4.0",
     "prettier-plugin-tailwindcss": "^0.7.2",
     "rehype-autolink-headings": "^7.1.0",
+    "rehype-pretty-code": "^0.14.1",
     "rehype-slug": "^6.0.0",
     "remark-toc": "^9.0.0",
     "svelte": "^5.45.6",

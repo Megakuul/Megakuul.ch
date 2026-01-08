@@ -4,6 +4,8 @@ import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
 import autoslug from 'rehype-slug';
 import autolink from 'rehype-autolink-headings';
 import autotoc from 'remark-toc';
+import { createHighlighter } from 'shiki';
+import dracula from 'shiki/themes/dracula.mjs';
 import { fileURLToPath } from 'node:url';
 import { dirname, resolve } from 'node:path';
 
@@ -15,6 +17,13 @@ const config = {
     vitePreprocess(),
     mdsvex({
       extensions: ['.svx', '.md'],
+      highlight: {
+        highlighter: async (code, lang) => {
+          const highlighter = await createHighlighter({ theme: dracula, langs: [lang] });
+          const html = highlighter.codeToHtml(code, { lang: lang, theme: dracula });
+          return '{@html `' + html + '`}';
+        },
+      },
       layout: {
         projects: `${projectRoot}/src/routes/projects/project.layout.svelte`,
         concepts: `${projectRoot}/src/routes/concepts/concept.layout.svelte`,

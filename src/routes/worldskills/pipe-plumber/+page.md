@@ -1,5 +1,5 @@
 <script>
-    import Quirk from "../Quick.svelte";
+    import Quirk from "../Quirk.svelte";
 </script>
 
 ## Table of Contents
@@ -116,5 +116,5 @@ Use `aws s3 cp --recursive ./ananas s3://bikinibottom/` instead of `aws s3 cp ./
 - Cloudfront does not support routing policies that go beyond behaviors, errors and default root object.
 
 <Quirk score={3.6}>
-Write a Cloudfront function
+Write a Cloudfront function that does the appropriate routing.
 </Quirk>

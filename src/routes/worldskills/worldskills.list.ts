@@ -10,7 +10,7 @@ const projects: Record<string, Project> = {
     title: 'Pipe Plumber 🪠',
     description: 'Building a CI/CD pipeline to deploy this website',
     published: '01.08.2026',
-    services: ['s3', 'acm', 'cloudfront', 'codebuild', 'codepipeline', 'lambda'],
+    services: ['s3', 'acm', 'cloudfront', 'codebuild', 'cli', 'codepipeline', 'lambda'],
   },
 };
 

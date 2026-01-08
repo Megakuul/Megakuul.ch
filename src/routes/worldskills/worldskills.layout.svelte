@@ -46,3 +46,10 @@
     {@render children()}
   </article>
 </div>
+
+<style>
+  :global(pre) {
+    width: 90vw;
+    max-width: 100%;
+  }
+</style>
