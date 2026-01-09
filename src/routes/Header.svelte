@@ -10,9 +10,9 @@
   onclick={() => (open = !open)}
 >
   {#if open}
-    <Icon icon="line-md:menu-to-close-transition" height="80" width="80" />
+    <Icon class="w-16 h-16 sm:w-20 sm:h-20" icon="line-md:menu-to-close-transition" />
   {:else}
-    <Icon icon="line-md:close-to-menu-transition" height="80" width="80" />
+    <Icon class="w-16 h-16 sm:w-20 sm:h-20" icon="line-md:close-to-menu-transition" />
   {/if}
 </button>
 

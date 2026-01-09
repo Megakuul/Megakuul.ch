@@ -3,7 +3,6 @@
   import MegakuulAsciiLogo from '$lib/components/MegakuulAsciiLogo.svelte';
   import WriteOnScroll from '$lib/components/WriteOnScroll.svelte';
   import { onMount } from 'svelte';
-  import Citation from '$lib/components/Citation.svelte';
 
   let welcomeCommand = $state('');
 
@@ -72,7 +71,7 @@
 					<br>
 					<b>Welcome to Megakuul</b>
 					<br><br><br>
-					My name is Linus Moser, I'm a software developer at Informaticon AG and Swiss competitor at the WorldSkills 2025 Cloud Computing championship 🫕🇨🇭
+					I'm a software developer at Informaticon AG and Swiss competitor at the WorldSkills 2025 championship 🫕🇨🇭
 					<br><br>
 					During my free time, I love diving into various technologies and crafting cool things;
           always chasing the most <b>simple</b>, <b>reliable</b> and <b>super mega blazingly fast</b> way to design software ⚡

@@ -48,8 +48,9 @@
 </div>
 
 <style>
-  :global(pre) {
+  :global(article) :global(pre) {
     width: 90vw;
     max-width: 100%;
+    overflow-x: scroll;
   }
 </style>
