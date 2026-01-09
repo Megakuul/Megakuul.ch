@@ -48,11 +48,11 @@
   <title>Worldskills | Megakuul</title>
   <meta
     name="description"
-    content="Master more AWS services than you will ever need (preparation for the Worldskills 2025) 🇨🇭"
+    content="Master more AWS services than you will ever need (preparation for the Worldskills 2026) 🇨🇭"
   />
   <meta
     property="og:description"
-    content="Master more AWS services than you will ever need (preparation for the Worldskills 2025) 🇨🇭"
+    content="Master more AWS services than you will ever need (preparation for the Worldskills 2026) 🇨🇭"
   />
   <link rel="canonical" href="https://megakuul.ch/worldskills" />
   <meta property="og:title" content="Worldskills - Megakuul" />
@@ -68,7 +68,7 @@
       class="underline"
       href="https://www.ict-berufsbildung.ch/fuenf-schweizer-informatik-talente-an-den-worldskills-2026"
     >
-      Worldskills 2025
+      Worldskills 2026
     </a>
     ) 🇨🇭
   </p>

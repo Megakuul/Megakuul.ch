@@ -12,6 +12,12 @@ const projects: Record<string, Project> = {
     published: '01.08.2026',
     services: ['s3', 'acm', 'cloudfront', 'codebuild', 'cli', 'codepipeline', 'lambda'],
   },
+  'open-the-fucking-door': {
+    title: 'Open the fucking door 🔒',
+    description: 'How to authenticate with aws cli',
+    published: '01.09.2026',
+    services: ['cli', 'iam', 'sts'],
+  },
 };
 
 export default projects;
