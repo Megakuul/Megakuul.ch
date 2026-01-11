@@ -86,6 +86,38 @@ async function handler(event) {
 }
 ```
 
+Ah, and before I forget it, please also use a bucket policy that restricts access to the EXACT Cloudfront distribution:
+```json
+{
+	"Version": "2012-10-17",
+	"Statement": [
+		{
+			"Effect": "Allow",
+			"Principal": {
+				"Service": "cloudfront.amazonaws.com"
+			},
+			"Action": "s3:GetObject",
+			"Resource": "arn:aws:s3:::megakuul/*"
+		},
+		{
+			"Effect": "Allow",
+			"Principal": {
+				"Service": "cloudfront.amazonaws.com"
+			},
+			"Action": "s3:GetObject",
+			"Resource": "arn:aws:s3:::megakuul/*",
+			"Condition": {
+				"ArnLike": {
+					"AWS:SourceArn": "arn:aws:cloudfront::111111111111:distribution/EEEEEEEEEEEEE"
+				}
+			}
+		}
+	]
+}
+```
+
+Not only does this protect your valuable public assets, but it also drastically lowers the heart-attack rate of AWS solution architects reviewing your infrastructure.
+
 
 ## Quirks
 

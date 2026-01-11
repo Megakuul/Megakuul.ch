@@ -157,3 +157,15 @@ The AWS CLI uses the AWS SDK (boto3) under the hood so this order is also valid 
 
 *If you want to see the concrete credentials use `aws configure export-credentials --format env`*
 
+
+*Try playing around with the mentioned permission jumps with [jumper](https://github.com/Megakuul/jumper)*
+
+
+## Quirks
+
+- IAM permissions are not instant (take several seconds - minutes)
+
+<Quirk score={0.1}>
+    Just wait a second, fucking tiktok brainfried cripple.
+</Quirk>
+
