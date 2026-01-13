@@ -164,6 +164,11 @@ Ah, and before I forget it, please also use a bucket policy that restricts acces
 Not only does this protect your valuable public assets, but it also drastically lowers the heart-attack rate of AWS solution architects reviewing your infrastructure.
 
 
+### Further information
+
+This article just scratches the surface of Codepipeline variables (by using the auto exported `CommitId` from `SourceVariables` namespace) further information about variable configuration can be found [here](https://docs.aws.amazon.com/codepipeline/latest/userguide/reference-variables.html).
+
+
 ## Quirks
 
 - Cross region artifact buckets and source connections can be selected in the ui but actually don't work... 
