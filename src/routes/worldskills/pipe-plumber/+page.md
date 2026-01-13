@@ -14,6 +14,7 @@ Building a process that transforms SvelteKit source code into the website you ar
 - fast
 - completely automated
 - deterministic
+- reliable 🪨
 
 ## How?
 
@@ -53,7 +54,9 @@ phases:
 # artifact writer is messy and has no post hook; prefer the cli as shown above...
 # artifacts:
 #   files:
-#     - 'build/**/*'
+#     - '**/*'
+#   base-directory: build 
+#   name: "#{SourceVariables.CommitId}" # for this to work enable semantic versioning
 ```
 
 However, this requires an image with `npm` AND `aws cli` installed; while the aws al2023 actually provides this, it lacks a recent nodejs version to compile my bleeding edge blog features 🩸
@@ -63,8 +66,9 @@ So let's conduct another simple sysadmin solution before we switch to the heavy 
 We can wrap the CodeBuild project in a CodePipeline that just executes TWO CodeBuild stages:
 
 1. Source Stage (read from github repo)
-2. Build+Upload Stage (execute our Codebuilder with recent nodejs image)
-3. Deploy Stage (execute an al2023 Codebuilder with aws cli)
+2. Build Stage (execute our Codebuilder with recent nodejs image)
+3. Upload Stage (execute via Pipeline S3 upload action)
+4. Deploy Stage (execute an al2023 Codebuilder with aws cli)
 
 For this process we just need to slightly update the build stage to look something like this:
 
@@ -80,10 +84,17 @@ artifacts:
   files:
     - '**/*'
   base-directory: build
-  name: "#{SourceVariables.CommitId}" # for this to work enable semantic versioning
 ```
 
-The deployment stage executes the following bash script which effectively updates the `OriginPath` pointer of the Cloudfront distribution.
+It's important to understand that Codepipeline effectively hijacks 🏴‍☠️ the artifact upload stage from Codebuild (bzw. the `buildspec.yaml`).
+Therefore, attributes like `artifacts.name` become useless and we must use a special **S3 Deploy** stage to decompress and upload our artifacts to a configurable location.
+
+Luckily you can use variables like `#{SourceVariables.CommitId}` in the `Deployment path` of the builtin Amazon S3 action provider.
+This allows us to store multiple website versions side-by-side in the bucket without overwriting previous versions. 
+
+
+
+Finally the deployment stage executes the following bash script which effectively updates the `OriginPath` pointer of the Cloudfront distribution.
 This ensures an atomic update and a clean rollover process that can be rolled back fairly simple (just point OriginPath back to the old VERSION).
 
 ```bash
