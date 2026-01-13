@@ -58,11 +58,45 @@ phases:
 
 However, this requires an image with `npm` AND `aws cli` installed; while the aws al2023 actually provides this, it lacks a recent nodejs version to compile my bleeding edge blog features 🩸
 
-So let's conduct the other overengineered solution: wrapping the CodeBuild project in a CodePipeline that triggers the following Lambda function that performs the deployment for me:
+So let's conduct another simple sysadmin solution before we switch to the heavy DoingEverythingWithLamda™ gears:
 
-```python
-# TODO
+We can wrap the CodeBuild project in a CodePipeline that just executes TWO CodeBuild stages:
+
+1. Source Stage (read from github repo)
+2. Build+Upload Stage (execute our Codebuilder with recent nodejs image)
+3. Deploy Stage (execute an al2023 Codebuilder with aws cli)
+
+For this process we just need to slightly update the build stage to look something like this:
+
+```yaml
+version: 0.2
+
+phases:
+  build:
+    commands:
+        - npm ci && npm run build
+
+artifacts:
+  files:
+    - '**/*'
+  base-directory: build
+  name: "#{SourceVariables.CommitId}" # for this to work enable semantic versioning
 ```
+
+The deployment stage executes the following bash script which effectively updates the `OriginPath` pointer of the Cloudfront distribution.
+This ensures an atomic update and a clean rollover process that can be rolled back fairly simple (just point OriginPath back to the old VERSION).
+
+```bash
+set -e
+RESP=$(aws cloudfront get-distribution --id=$DISTRIBUTION)
+ETAG=$(echo $RESP | jq -r .ETag)
+echo $(echo "$RESP" | jq .Distribution.DistributionConfig | jq '.Origins.Items[0].OriginPath = "/#{SourceVariables.CommitId}"') > config.json
+aws cloudfront update-distribution --id=$DISTRIBUTION --if-match=$ETAG --distribution-config=file://./config.json
+aws cloudfront create-invalidation --distribution-id=$DISTRIBUTION --path="/*"
+```
+**ATTENTION**: In the CodePipeline console you can enter `Commands`, however, you cannot specify multiline commands there! (because its just converted to a yaml list of commands)
+
+
 
 ### Cloudfront, S3 & ACM
 
@@ -139,10 +173,22 @@ Use image with aws cli, upload artifacts and then use `post_build` or attach Lam
 Use image with aws cli, upload artifacts and then use `post_build` or attach Lambda builder with CodePipeline wrapper  (don't forget IAM permissions).
 </Quirk>
 
-- AWS CLI returns weird errors on non-recursive cp (stream is not seekable)
+- The appealing "Allow AWS to modify this service role" button often actually doesn't work in CodeBuild and CodePipeline 
 
-<Quirk score={2.1}>
-Use `aws s3 cp --recursive ./ananas s3://bikinibottom/` instead of `aws s3 cp ./ananas s3://bikinibottom/`.
+<Quirk score={6.9}>
+Just keep this in mind and update the role manually as needed.
+</Quirk>
+
+- CodePipeline hides most of its features on initialization.
+
+<Quirk score={5.8}>
+Edit the pipeline to unleash true power.
+</Quirk>
+
+- CodePipeline/CodeBuild `Commands`-block doesn't support multiline commands (even if the ux strongly suggests otherwise).
+
+<Quirk score={8.2}>
+Just only use single line commands.
 </Quirk>
 
 - Cloudfront does not support routing policies that go beyond behaviors, errors and default root object.
