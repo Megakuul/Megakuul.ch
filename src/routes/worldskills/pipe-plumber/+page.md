@@ -183,13 +183,13 @@ Ensure region compatibility between build project and the connection / buckets (
 Use image with aws cli, upload artifacts and then use `post_build` or attach Lambda builder with CodePipeline wrapper (don't forget IAM permissions).
 </Quirk>
 
-- No post artifact writer stage in CodeBuild 
+- If a CodeBuild project specifies an artifact upload while inside a CodePipeline, artifacts are uploaded twice in both formats / paths
 
-<Quirk score={1.4}>
-Use image with aws cli, upload artifacts and then use `post_build` or attach Lambda builder with CodePipeline wrapper  (don't forget IAM permissions).
+<Quirk score={4.6}>
+Usually just avoid using the CodeBuild artifact upload feature while attached to a CodePipeline.
 </Quirk>
 
-- The appealing "Allow AWS to modify this service role" button often actually doesn't work in CodeBuild and CodePipeline 
+- The appealing "Allow AWS to modify this service role" button often actually doesn't work in CodeBuild and CodePipeline
 
 <Quirk score={6.9}>
 Just keep this in mind and update the role manually as needed.
