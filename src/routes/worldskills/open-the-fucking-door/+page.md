@@ -30,6 +30,9 @@ The aws IAM design is fairly clean tbh: almost all entities are of type `princip
 
 Aws knows the following types of principals:
 
+
+<div class="prose-table:prose">
+
 |Type |Credentials |Issuer |
 | --- | --- | --- |
 |Account |static |IAM |
@@ -39,6 +42,7 @@ Aws knows the following types of principals:
 |Federated session |oidc/saml access token |idp (keycloak, oneidp, ...) |
 |Service |aws internal |aws internal |
 
+</div>
 
 ### Static Credentials
 
@@ -98,21 +102,21 @@ I mentioned `Federated user sessions` in the [principals](#principals) section. 
 Let's not dive into the setup; instead I want to just visualize what is going on when you are using the `aws sso login` command (which uses the IAM identity center):
 
 1. User calls `aws configure sso` which adds the location of the IAM identity center to the `~/.aws/config` identified as profile:
-```ini
-[profile AdministratorAccess-111111111111]
-sso_start_url = https://megakuul.awsapps.com/start
-sso_account_id = 111111111111
-sso_role_name = AdministratorAccess
-region = eu-central-1
-```
+    ```ini
+    [profile AdministratorAccess-111111111111]
+    sso_start_url = https://megakuul.awsapps.com/start
+    sso_account_id = 111111111111
+    sso_role_name = AdministratorAccess
+    region = eu-central-1
+    ```
 2. User defines which profile he wants to log in 
-```bash
-export AWS_PROFILE=<previously configured profile name>
-```
+    ```bash
+    export AWS_PROFILE=<previously configured profile name>
+    ```
 3. User calls `aws sso login` which performs a SAML flow probably similar to the oidc pkce flow ending up with an access and refresh token stored in `~/.aws/sso/cache/...json`.
 4. User calls any aws service `aws s3 ls` which under the hood performs further steps (5-7):
 
-5. AWS SDK checks the profile `sso_role_name` and assumes it via `sts`. This works because the IAM identity center created an IAM provider in the account linking to the upstream SAML and an IAM role (called `AWSReservedSSO_AdministratorAccess_1111111111111111`) with a trust policy that looks like this:
+5. AWS SDK checks the profile `sso_role_name` and assumes it via `sts`. This works because the IAM identity center created an IAM provider in the account linking to the upstream SAML and an IAM role (called `AWSReservedSSO_...`) with a trust policy that looks like this:
     ```json 
     {
         "Version": "2012-10-17",
@@ -143,11 +147,15 @@ export AWS_PROFILE=<previously configured profile name>
 
 ### How can I now log in?
 
+<div class="prose-table:prose">
+
 | Method | Priority | What to do |
 | --- | --- | --- |
 | Env | 1 | `export AWS_ACCESS_KEY_ID="..."`<br>`export AWS_SECRET_ACCESS_KEY="..."`<br>`export AWS_SESSION_TOKEN="..."` |
 | Profile | 2 | `export AWS_PROFILE="myprofile"`<br>`aws configure` |
 | SSO Profile | 3 | `export AWS_PROFILE="myssoprofile"`<br>`aws configure sso`<br>`aws sso login` |
+
+<div>
 
 The AWS CLI uses the AWS SDK (boto3) under the hood so this order is also valid for applications.
 

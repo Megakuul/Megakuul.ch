@@ -1,5 +1,4 @@
 <script>
-  import Icon from '@iconify/svelte';
   import list from './worldskills.list';
   import { page } from '$app/state';
   import ServiceIcon from '$lib/components/ServiceIcon.svelte';
@@ -52,5 +51,14 @@
     width: 90vw;
     max-width: 100%;
     overflow-x: scroll;
+  }
+
+  :global(article) :global(table) {
+    width: 100%;
+    table-layout: auto;
+    margin-top: 2em;
+    margin-bottom: 2em;
+    font-size: 0.875em;
+    line-height: 1.7142857;
   }
 </style>
