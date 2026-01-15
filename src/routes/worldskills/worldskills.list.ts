@@ -18,6 +18,12 @@ const projects: Record<string, Project> = {
     published: '01.09.2026',
     services: ['cli', 'iam', 'sts'],
   },
+  'super-smart-manager': {
+    title: 'Super Smart Manager 🎩',
+    description: 'Some neat magictricks with aws ssm',
+    published: '01.15.2026',
+    services: ['ssm'],
+  },
 };
 
 export default projects;
