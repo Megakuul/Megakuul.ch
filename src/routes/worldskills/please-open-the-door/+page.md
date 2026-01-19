@@ -2,11 +2,12 @@
     import Quirk from "../Quirk.svelte";
 </script>
 
-## Table of Contents
-
-## What?
 
 How to login with aws cli.
+
+
+## Table of Contents
+
 
 ## How?
 

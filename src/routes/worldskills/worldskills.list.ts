@@ -12,7 +12,8 @@ const projects: Record<string, Project> = {
     published: '01.08.2026',
     services: ['s3', 'acm', 'cloudfront', 'codebuild', 'cli', 'codepipeline'],
   },
-  'open-the-fucking-door': {
+  // renamed for pascal's sake
+  'please-open-the-door': {
     title: 'Open the fucking door 🔒',
     description: 'How to authenticate with aws cli',
     published: '01.09.2026',
@@ -23,6 +24,12 @@ const projects: Record<string, Project> = {
     description: 'Some neat magictricks with aws ssm',
     published: '01.15.2026',
     services: ['ssm'],
+  },
+  'the-reason-aws-is-good': {
+    title: 'The reason AWS is good 🗿',
+    description: 'Why the AWS permission system is crazy good',
+    published: '01.18.2026',
+    services: ['iam', 'sts'],
   },
 };
 
