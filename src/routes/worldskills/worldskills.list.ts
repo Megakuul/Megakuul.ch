@@ -14,7 +14,7 @@ const projects: Record<string, Project> = {
   },
   // renamed for pascal's sake
   'please-open-the-door': {
-    title: 'Open the fucking door 🔒',
+    title: 'Please open the door 🔒',
     description: 'How to authenticate with aws cli',
     published: '01.09.2026',
     services: ['cli', 'iam', 'sts'],

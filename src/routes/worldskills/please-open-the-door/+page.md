@@ -3,8 +3,6 @@
 </script>
 
 
-How to login with aws cli.
-
 
 ## Table of Contents
 

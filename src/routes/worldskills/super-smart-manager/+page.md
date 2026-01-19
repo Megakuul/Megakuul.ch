@@ -2,8 +2,6 @@
     import Quirk from "../Quirk.svelte";
 </script>
 
-Neat magictricks on AWS System Manager.
-
 ## Table of Contents
 
 ## Tricks 
