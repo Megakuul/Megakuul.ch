@@ -47,10 +47,11 @@ Between those two entities there are different rules that can manage authorizati
 |--- |--- |
 |Identity-based policy | Egress access from *Client* (applies to users/roles)|
 |Session policies| Egress access from *Client* (applies to assumed-roles)|
-|Resource-based policy | Ingress access from *Server* (applies to services)|
-|S3 ACLs | Legacy ingress access from *Server* (only S3) |
-|Permission boundary | IAM boundary feature (applies to users/roles)|
-|Service control policy| IAM boundary feature (applies to accounts)|
+|Resource-based policy | Ingress access to *Server* (applies to services)|
+|S3 ACLs | Legacy ingress access to *Server* (only S3) |
+|Permission boundary | IAM egress boundary feature (applies to selected users/roles)|
+|Service control policy| IAM egress boundary feature (applies to account principals)|
+|Resource control policy| IAM ingress boundary feature (applies to account resources)|
 
 
 The basic mental model for those rules (except the boundaries) is that they are `OR` joined (with exception from `Deny` which always takes precedence).
@@ -60,6 +61,13 @@ More specifically those rules actually follow a pipeline that looks like this:
 ![iam_pipeline_normal](/images/iam_pipeline_normal.svg)
 
 *Notice that if you are using a resource policy on account/role principals permission boundaries are still evaluated!*
+
+
+
+Gemini yappin about boundaries:
+![gemini_yappin_about_iam](/images/gemini_yappin_about_iam.png)
+
+Once you understand what I've just explained, you will realize that AGI is still just "internal achieved" 💀
 
 
 #### Exceptions
@@ -76,7 +84,7 @@ This scenario is special as it strictly requires `AND` joined permissions (ident
 
 KMS and IAM trust access is also special; they don't require `AND` joined permissions BUT must be granted by the **resource policy**!
 
-*Notice that for both KMS and IAM trust you can also create a resource policy that grants access to your AWS account / service. This will effectively provide your IAM with the capability to issue identity-based policies to access those resources.*
+*Notice that for both KMS and IAM trust you can also create a resource policy that grants access to your AWS account principal. This will effectively provide your IAM with the capability to issue identity-based policies to access those resources.*
 
 
 ![iam_pipeline_trust](/images/iam_pipeline_trust.svg)
@@ -91,6 +99,7 @@ KMS and IAM trust access is also special; they don't require `AND` joined permis
 Here is a practical example of this authentication flow for S3 access from an EC2 instance.
 
 ![ec2-s3-example](/images/iam_ec2_s3_example.svg)
+
 
 ## Quirks
 
