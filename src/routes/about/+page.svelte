@@ -122,10 +122,10 @@ public:
     <div class="w-10/12 sm:w-8/12 2xl:w-1/3 hover-3d">
       <div class="p-4 rounded-2xl">
         <figure>
-          <img class="grayscale" alt="Portrait" src={portrait} />
+          <img class="rounded-xl opacity-80" alt="Portrait" src={portrait} />
         </figure>
 
-        <p class="text-xs text-center sm:text-lg lg:text-xl xl:text-2xl">
+        <p class="text-xs text-center sm:text-lg lg:text-xl">
           My name is Linus Ilian Moser, and I'm an enthusiastic platform engineer and devoted
           software developer.
           <br />Residing in Switzerland and currently {getAge('2006-02-13')} years old.

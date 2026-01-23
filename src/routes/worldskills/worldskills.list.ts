@@ -31,6 +31,12 @@ const projects: Record<string, Project> = {
     published: '01.18.2026',
     services: ['iam', 'sts'],
   },
+  wellarchitecter: {
+    title: 'Wellarchitecter 🧱',
+    description: 'AWS best practice buzzwords',
+    published: '01.23.2026',
+    services: ['iam', 'sts'],
+  },
 };
 
 export default projects;
