@@ -128,11 +128,16 @@ The attribute values can then be checked with one of the [comparison operators](
 
 You may ask yourself: Why does this statement even need an `AND` joined `Null` check? Is the condition evaluator not returning false by default if an attribute is `Null` and `IfExists` is not configured? Absolutely, BUT while `ForAnyValue` starts with a `FALSE` and flips if any list item matches, `ForAllValues` starts with `TRUE` and flips if any list item does not match (`ForAnyValue` is searching for match while `ForAllValues` searches for a mismatch).
 
-> 24.01.2026 5:25 PM: The executive WTF Score board is investigating this behavior due to serious allegations for violations of general logic.
+---
+**Official press statement about the `ForAllValue`/`ForAnyValue` situation:**
 
-> 24.01.2026 8:31 PM: The board suspended the investigation due to lacking evidence and potential brainlags on the victim.
+*24.01.2026 5:25 PM*: The executive WTF Score board is investigating this behavior due to serious allegations for violations of general logic.
 
-> 24.01.2026 8:41 PM: The board resumed investigation after the victim went completely crazy conducting serious crimes like creating malfunctioning SCP's that locked down important AWS accounts. 
+*24.01.2026 8:31 PM*: The board suspended the investigation due to lacking evidence and potential brainlags on the victim.
+
+*24.01.2026 8:41 PM*: The board resumed investigation after the victim went completely crazy conducting serious crimes like creating malfunctioning SCP's that locked down important AWS accounts. 
+
+---
 
 
 Besides the statement has another major flaw; it only applies for policies with at least one tag (otherwise `aws:TagKeys` is `Null`).
