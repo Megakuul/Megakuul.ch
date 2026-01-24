@@ -51,11 +51,12 @@
     width: 90vw;
     max-width: 100%;
     overflow-x: scroll;
+
     box-shadow:
       rgba(255, 255, 255, 0.05) 0px 6px 24px 0px,
       rgba(255, 255, 255, 0.08) 0px 0px 0px 1px;
-    background-color: rgba(255, 255, 255, 0.03);
-    backdrop-filter: blur(8px);
+    background-color: rgba(255, 255, 255, 0.01) !important;
+    backdrop-filter: blur(2px);
   }
 
   :global(article) :global(table) {
