@@ -35,7 +35,13 @@ const projects: Record<string, Project> = {
     title: 'Wellarchitecter 🧱',
     description: 'AWS best practice buzzwords',
     published: '01.23.2026',
-    services: ['iam', 'sts'],
+    services: ['iam', 'sts', 'vpc'],
+  },
+  'elastic-kvm-wrapper': {
+    title: 'Elastic KVM Wrapper ➰',
+    description: 'Exploring virtual machines with elastic pricing',
+    published: '01.25.2026',
+    services: ['ec2', 'vpc'],
   },
 };
 

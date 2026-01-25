@@ -124,16 +124,16 @@ The attribute values can then be checked with one of the [comparison operators](
     }]
 }
 ```
-*Notice that conditions are `AND` joined while operator matches are `OR` joined (for example in `"StringEquals"."ec2:InstanceType" = ["t3.medium", "t3.small"]` an instance can be t3.small `OR` t3.medium).
+*Notice that conditions are `AND` joined while operator matches are `OR` joined (for example in `"StringEquals"."ec2:InstanceType" = ["t3.medium", "t3.small"]` an instance can be t3.small `OR` t3.medium).*
 
 You may ask yourself: Why does this statement even need an `AND` joined `Null` check? Is the condition evaluator not returning false by default if an attribute is `Null` and `IfExists` is not configured? Absolutely, BUT while `ForAnyValue` starts with a `FALSE` and flips if any list item matches, `ForAllValues` starts with `TRUE` and flips if any list item does not match (`ForAnyValue` is searching for match while `ForAllValues` searches for a mismatch).
 
 ---
-**Official press statement about the `ForAllValue`/`ForAnyValue` situation:**
+**Official press statement about the `ForAllValues`/`ForAnyValue` situation:**
 
 *24.01.2026 5:25 PM*: The executive WTF Score board is investigating this behavior due to serious allegations for violations of general logic.
 
-*24.01.2026 8:31 PM*: The board suspended the investigation due to lacking evidence and potential brainlags on the victim.
+*24.01.2026 8:31 PM*: The board suspended the investigation due to lacking evidence and potential brainlags of the victim.
 
 *24.01.2026 8:41 PM*: The board resumed investigation after the victim went completely crazy conducting serious crimes like creating malfunctioning SCP's that locked down important AWS accounts. 
 
@@ -222,6 +222,12 @@ With Variables you can simply use [condition](#conditions) attributes directly i
 Here is a practical example of this authentication flow for S3 access from an EC2 instance.
 
 ![ec2-s3-example](/images/iam_ec2_s3_example.svg)
+
+
+## References
+
+- [This documentation](https://docs.aws.amazon.com/service-authorization/latest/reference/reference.html) lists the IAM operations, prefixes and condition attributes of every service.
+- [This page](https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements_condition_operators.html) describes all IAM condition operators.
 
 
 ## Quirks
