@@ -1,5 +1,6 @@
 <script>
     import Quirk from "../Quirk.svelte";
+    import Note from "../Note.svelte";
 </script>
 
 
@@ -97,6 +98,12 @@ KMS and IAM trust access is also special; they don't require `AND` joined permis
 
 Conditions are a logical construct in the pipeline that just determine if a policy statement applies.
 
+<Note type="caution">
+It's very important to understand that conditions are NOT row level security they just validate the request! Therefore, fine grained checks in <b>List</b> or <b>Describe</b> requests will fail because the resources are undetermined at request time (for operations like ResourceTag validation AWS basically performs metadata peek request before actually looking up the data).
+
+While this might seem like a counterintuitive quirk it probably comes down to a limitation of the underlying metadata database (likely dynamodb) which cannot index every single attribute.
+</Note>
+
 They operate on attributes which can be categorized into:
 
 1. `global`: dynamic attributes with information about the session, user or request (e.g. `aws:PrincipalTag`, `aws:TagKeys`, ...)
@@ -184,11 +191,12 @@ And even better combine it with a tagging policy (requires tagging policy featur
     }
 }
 ```
+*Notice that tagging policies apply only to tagged resources (only tag content is restricted).*
+
+
 Modern aws soydevs are apparently too cool for real wildcards, instead they add a dashboard button that just adds all services 💀
 
 ![wtf_where_they_smoking](/images/iam_tagging_policy_wildcard.png)
-
-*Notice that tagging policies apply only to tagged resources (only tag content is restricted).*
 
 ### Variables
 
@@ -228,6 +236,7 @@ Here is a practical example of this authentication flow for S3 access from an EC
 
 - [This documentation](https://docs.aws.amazon.com/service-authorization/latest/reference/reference.html) lists the IAM operations, prefixes and condition attributes of every service.
 - [This page](https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_elements_condition_operators.html) describes all IAM condition operators.
+- [This page](https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_condition-keys.html) describes all global condition attributes.
 
 
 ## Quirks
