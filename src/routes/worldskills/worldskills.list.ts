@@ -43,6 +43,12 @@ const projects: Record<string, Project> = {
     published: '01.25.2026',
     services: ['ec2', 'vpc'],
   },
+  paranoia: {
+    title: 'Paranoia 🛠️',
+    description: 'Parameterstore vs Secrets Manager ⚔️ FIGHT',
+    published: '01.27.2026',
+    services: ['ssm', 'secrets-manager'],
+  },
 };
 
 export default projects;
