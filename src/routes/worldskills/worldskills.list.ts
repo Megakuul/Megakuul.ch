@@ -49,6 +49,12 @@ const projects: Record<string, Project> = {
     published: '01.27.2026',
     services: ['ssm', 'secrets-manager'],
   },
+  teamevent: {
+    title: 'Teamevent 📅',
+    description: 'How to burn your money event driven',
+    published: '01.27.2026',
+    services: ['events'],
+  },
 };
 
 export default projects;

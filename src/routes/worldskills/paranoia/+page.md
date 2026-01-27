@@ -27,9 +27,39 @@ Besides some key-value lookups Secrets Manager provides the following features:
 
 ### Rotation
 
-TODO
+Besides the integrated database user rotations the Secrets Manager also allows credential rotation via Lambda.
 
-For an example of how to implement rotation, checkout the [lambda rotation templates](https://github.com/aws-samples/aws-secrets-manager-rotation-lambdas/tree/master)
+It supports this process with an internal state machine that is controlled by two internal labels `AWSCURRENT` and `AWSPENDING`.
+
+When calling `secretsmanager:RotateSecret` the state machine is started (or retriggered if already in process). The machine then sequentially invokes the defined lambda with the following steps:
+
+1. `createSecret`: Create the new secret version with `AWSPENDING` label.
+2. `setSecret`: Update the secret in your service (e.g. database).
+3. `testSecret`: Test the secret with your service.
+4. `finishSecret`: Update the secret version stage so that `AWSCURRENT` points to the new secret.
+
+If a step fails (lambda invocation returns a non-zero exit code) the state machine just retries with exponential backoff.
+Therefore, all lambda operations must be idempotent!
+
+
+In this whole process the idea is to set the `AWSPENDING` label to the new key version created in the first step.
+This ensures that the Secrets Manager does not allow other key version changes while rotating.
+
+
+As soon as the key got rotated successfully, the lambda should update the `AWSCURRENT` label to point to the `AWSPENDING` version. 
+This finalizes the process and unlocks the Secrets Manager blockade for creating new versions.
+
+*Notice that Secrets Manager aggressively erases old versions; after each rotation it labels the last version with `AWSPREVIOUS` and discards every other unlabeled version.*
+
+
+For examples of how to implement rotation checkout the [lambda rotation templates](https://github.com/aws-samples/aws-secrets-manager-rotation-lambdas/tree/master)
+
+<Note type="protip">
+To cancel an ongoing / failing rotation: call <b>CancelRotateSecret</b> and remove the AWSPENDING label with <b>UpdateSecretVersionStage</b>. 
+
+However, keep in mind that this disables automatic rotation!
+</Note>
+
 
 ## Parameter Store
 
@@ -47,10 +77,22 @@ To avoid enterprise usage AWS nerfed Parameterstore with the following debufs so
 
 *Note that higher throughput can be enabled per region (more expensive but throttles at ~10'000 ops/sec)*
 
+### Tick Tock Mr. Wick ⌛
+
+Advanced Parameters can be configured to expire at a certain point in time.
 
 ### Notifications
 
-TODO
+Advanced Parameters can also be configured to emit a notification shortly before the parameter expires or when the parameter is idle (not updated) for a certain time. 
+
+This is very cool as it allows you to scrape more than just the basic "update" events from Eventbridge (e.g. receive an event if your license key is about to expire).
+
+For my use case I've created an Eventrule that sends an SNS message every time the parameter is idle for over 5 hours to remind me of how cool I am:
+
+![paranoia_ssm_message](/images/paranoia_ssm_message.png)
+
+*Haters could argue that we just created an overly complex Eventbridge scheduler.*
+
 
 ### Secret Proxy
 
@@ -85,5 +127,10 @@ You just have to call `ssm:GetParameter` with the prefix `/aws/reference/secrets
 }
 ```
 
-## Quirks
+## Watch Out 👀
 
+<Note type="caution">
+For all operations with Secrets Manager or Parameterstore always keep in mind that you need <b>kms:GenerateDataKey</b> or <b>kms:Decrypt</b> access when using an underlying CMK KMS without resource policy grant!
+
+Due to the transitive access, this can often lead to vague permission errors.
+</Note>

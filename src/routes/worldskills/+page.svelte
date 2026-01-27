@@ -103,7 +103,7 @@
 
 <div class="flex flex-col gap-4 items-center w-full min-h-dvh">
   {#each searchedList as [key, project], i (key)}
-    {#if i >= currentPage && i < currentPage + 1 * itemsPerPage}
+    {#if i >= currentPage * itemsPerPage && i < currentPage + 1 * itemsPerPage}
       <Intersector
         class="w-11/12 max-w-[1400px]"
         classOnDefault="translate-x-10 shadow-none opacity-0"
