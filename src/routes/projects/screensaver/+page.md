@@ -1,25 +1,3 @@
----
-title: Screensaver
-subtitle: Windows screensaver application based on gdi32
-githublnk: https://github.com/Megakuul/screensaver
-published: "11.05.2024"
-mainimage: "screensaver.png"
-techstack: [
-    {
-        icon: devicon:c,
-        name: C
-    },
-    {
-        icon: devicon:visualstudio,
-        name: msbuild
-    },
-    {
-        icon: devicon:windows8,
-        name: gdi32
-    },
-]
----
-
 Drippin windows screensaver rendering on the CPU like a real gigachad (give me an award for this logo).
 
 ## Table of Contents

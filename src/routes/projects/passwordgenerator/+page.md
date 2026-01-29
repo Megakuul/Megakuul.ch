@@ -1,21 +1,3 @@
----
-title: Password Generator
-subtitle: The only Password Generator that actually looks good
-githublnk: https://github.com/Megakuul/passwordgenerator
-published: "05.09.2022"
-mainimage: "generator.png"
-techstack: [
-    {
-        icon: devicon:dart,
-        name: Dart
-    },
-    {
-        icon: logos:flutter,
-        name: Flutter
-    }
-]
----
-
 Simple Password Generator, with a good-looking UI.
 
 ## Table of Contents

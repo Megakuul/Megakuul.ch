@@ -65,7 +65,7 @@ However, keep in mind that this disables automatic rotation!
 
 SSM Parameterstore is a free alternative to Secrets Manager for Hetzner administrators that cannot afford 0.40$ per month.
 
-To avoid enterprise usage AWS nerfed Parameterstore with the following debufs so they can still recommend Secrets Manager:
+To avoid enterprise usage AWS nerfed Parameterstore with the following debufs so they can still recommend Secrets Manager for secrets:
 
 1. No database integration features
 2. No resource policy (access must be granted via Role)

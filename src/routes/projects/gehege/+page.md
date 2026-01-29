@@ -1,37 +1,3 @@
----
-title: Gehege
-subtitle: Example Application to host on Docker
-githublnk: https://github.com/Megakuul/gehege
-published: "19.03.2023"
-mainimage: "gehege.png"
-techstack: [
-    {
-        icon: devicon:dart,
-        name: Dart
-    },
-    {
-        icon: logos:flutter,
-        name: Flutter
-    },
-    {
-        icon: logos:nodejs-icon-alt,
-        name: NodeJS
-    },
-    {
-        icon: skill-icons:expressjs-light,
-        name: ExpressJS
-    },
-    {
-        icon: skill-icons:mongodb,
-        name: MongoDB
-    },
-    {
-        icon: devicon:docker,
-        name: Docker
-    }
-]
----
-
 Gehege is a Webapplication where you can list multiple cages with creatures in it. Every account can then spend his cash to different cages.
 
 ## Table of Contents

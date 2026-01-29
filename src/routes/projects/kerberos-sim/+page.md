@@ -1,25 +1,3 @@
----
-title: Kerberos Simulator
-subtitle: Kerberos simulator on steroids
-githublnk: https://github.com/Megakuul/kerberos-sim
-published: "13.09.2023"
-mainimage: "kerberos-sim.svg"
-techstack: [
-    {
-        icon: vscode-icons:file-type-go,
-        name: GO
-    },
-    {
-        icon: vscode-icons:file-type-bazel,
-        name: Bazel
-    },
-    {
-        icon: vscode-icons:file-type-protobuf,
-        name: Protobuf
-    }
-]
----
-
 **Kerberos Simulator** is system to simulate the Kerberos authentication protocoll.
 
 ## Table of Contents

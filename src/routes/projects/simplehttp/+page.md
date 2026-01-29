@@ -1,21 +1,3 @@
----
-title: SimpleHTTP
-subtitle: A minimalistic HTTP server library, complying with basic HTTP/1.1 standards
-githublnk: https://github.com/megakuul/simplehttp
-published: "28.04.2024"
-mainimage: "simplehttp.svg"
-techstack: [
-    {
-        icon: vscode-icons:file-type-cpp3,
-        name: C++
-    },
-    {
-        icon: vscode-icons:file-type-bazel,
-        name: Bazel
-    },
-]
----
-
 Lightweight and simple http library implementation for building internal server endpoints.
 
 ## Table of Contents

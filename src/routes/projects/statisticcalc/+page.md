@@ -1,25 +1,3 @@
----
-title: Statistic Calculator
-subtitle: Simple statistics calculator to display some statistical relationships in bulk
-githublnk: https://github.com/Megakuul/statisticcalc_web
-published: "25.11.2022"
-mainimage: "statisticcalc.png"
-techstack: [
-    {
-        icon: vscode-icons:file-type-html,
-        name: HTML
-    }, 
-    {
-        icon: vscode-icons:file-type-css,
-        name: CSS
-    },
-    {
-        icon: skill-icons:typescript,
-        name: Typescript
-    }
-]
----
-
 The Statistic Calculator is a very simple web app that displays some statistical relationships in bulk.
 
 ## Table of Contents

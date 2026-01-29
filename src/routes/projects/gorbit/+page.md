@@ -1,17 +1,3 @@
----
-title: Gorbit
-subtitle: A blazingly fast and easy to use TCP Network Loadbalancer
-githublnk: https://github.com/Megakuul/gorbit
-published: "28.05.2023"
-mainimage: "gorbit.svg"
-techstack: [
-    {
-        icon: vscode-icons:file-type-go,
-        name: GO
-    }
-]
----
-
 Gorbit is a fast and simple loadbalancer that operates based on **TCP** network streams.
 
 ## Table of Contents

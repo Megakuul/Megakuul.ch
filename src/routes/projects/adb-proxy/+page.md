@@ -1,21 +1,3 @@
----
-title: ADB-Proxy
-subtitle: Minimalistic central-managed android adb proxy
-githublnk: https://github.com/Megakuul/adb-proxy
-published: "17.08.2024"
-mainimage: "adb-proxy.png"
-techstack: [
-    {
-        icon: vscode-icons:file-type-go,
-        name: GO
-    },
-    {
-        icon: logos:flutter,
-        name: Flutter
-    },
-]
----
-
 Proof of concept proxy allowing central management of android devices via adb.
 
 ## Table of Contents

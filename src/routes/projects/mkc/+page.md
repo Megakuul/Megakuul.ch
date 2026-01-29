@@ -1,25 +1,3 @@
----
-title: Megakuul Commander
-subtitle: Convenient, dashing two-column file manager for Linux
-githublnk: https://github.com/Megakuul/mkc
-published: "17.07.2023"
-mainimage: "mkc.png"
-techstack: [
-    {
-        icon: vscode-icons:file-type-cpp3,
-        name: C++
-    },
-    {
-        icon: vscode-icons:file-type-cmake,
-        name: CMake
-    },
-    {
-        icon: skill-icons:gtk-dark,
-        name: GTK
-    }
-]
----
-
 The **Megakuul Commander** (short MKC) is a lightweight application for managing the filesystem, that got inspired by the **Total Commander**.  
 ## Table of Contents
 

@@ -1,18 +1,3 @@
----
-title: Wizard Game
-subtitle: Simple single player python game
-githublnk: https://github.com/Megakuul/wizard-game
-published: "01.06.2022"
-mainimage: "wizard-game.png"
-techstack: [
-    {
-        icon: logos:python,
-        name: Python
-    },
-]
----
-
-
 Rizzful python single player game letting the player fight against a vicious wizard.
 
 ## Table of Contents

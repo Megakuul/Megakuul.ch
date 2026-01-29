@@ -30,8 +30,8 @@
 
 <div class="flex flex-col gap-4 items-center mt-20 w-full sm:mt-40 min-h-dvh">
   <h1 class="mb-5 text-2xl font-bold text-center sm:text-5xl">{title}</h1>
-  <p class="text-lg text-center sm:text-2xl">{description}</p>
-  <div class="flex flex-wrap gap-2 justify-center items-center mt-1">
+  <p class="max-w-5xl text-lg text-center sm:text-2xl">{description}</p>
+  <div class="flex flex-wrap gap-2 justify-center items-center mt-1 max-w-5xl">
     {#each services as service}
       <div class="flex flex-row gap-2 py-2 px-3 rounded-xl select-none apple-glass">
         <ServiceIcon {service} class="w-6 h-6 rounded-sm" />

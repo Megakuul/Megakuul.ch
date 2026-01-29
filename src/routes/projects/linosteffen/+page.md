@@ -1,21 +1,3 @@
----
-title: Linosteffen.ch
-subtitle: Website for Lino Steffen
-githublnk: https://github.com/Megakuul/linosteffen.ch
-published: "15.05.2023"
-mainimage: "linosteffen.png"
-techstack: [
-    {
-        icon: devicon:svelte,
-        name: Svelte
-    },
-    {
-        icon: vscode-icons:file-type-light-netlify,
-        name: Netlify
-    }
-]
----
-
 Linosteffen.ch is the website for the photographer Lino Steffen.
 
 ## Table of Contents

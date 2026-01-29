@@ -1,139 +1,84 @@
 <script>
-  import Icon from '@iconify/svelte';
+  import list from './project.list';
+  import { page } from '$app/state';
+  import TechIcon from '$lib/components/TechIcon.svelte';
 
-  let { title, subtitle, techstack, mainimage, published, githublnk, children } = $props();
+  let { children } = $props();
+
+  let key = $derived(page.route.id?.slice(page.route.id.lastIndexOf('/') + 1) || '');
+
+  let title = $derived(list[key].title);
+  let description = $derived(list[key].description);
+  let published = $derived(list[key].published);
+  let link = $derived(list[key].link);
+  let image = $derived(list[key].image);
+  let techs = $derived(list[key].techs);
+  const publishedIso = $derived.by(() => {
+    const [day, month, year] = published.split('.');
+    return new Date(Number(year), Number(month) - 1, Number(day)).toISOString();
+  });
 </script>
 
 <svelte:head>
   <title>{title}</title>
-  <meta name="description" content={subtitle} />
+  <meta name="description" content={description} />
+  <meta property="og:description" content={description} />
+  <link rel="canonical" href="https://megakuul.ch/projects/{key}" />
+  <meta property="og:title" content={title} />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="https://megakuul.ch/favicon.png" />
+  <meta property="article:published_time" content={publishedIso} />
 </svelte:head>
 
-<div class="hero">
-  <div class="flex-col-reverse w-full lg:flex-row hero-content">
-    <div class="w-full lg:w-56">
-      <p><b>Techstack</b></p>
-      <br />
-      <ul>
-        {#each techstack as technologie}
-          <li class="flex flex-row items-center">
-            <div class="w-1/6">
-              <p class="overflow-hidden"><Icon icon={technologie.icon}></Icon></p>
-            </div>
-            <div class="w-5/6">
-              <p>{technologie.name}</p>
-            </div>
-          </li>
-        {/each}
-      </ul>
-    </div>
-    <img
-      alt="projectimage"
-      src="/images/{mainimage}"
-      class="w-full max-w-xs rounded-lg shadow-2xl"
-    />
-    <div>
-      <p>{published}</p>
-      <div class="flex flex-row items-center">
-        <h1 class="text-4xl font-bold lg:text-5xl">{title}</h1>
-        {#if githublnk}
-          <a href={githublnk} class="ml-2 btn btn-ghost"
-            ><Icon icon="mingcute:link-line" width="32" height="32"></Icon></a
-          >
-        {/if}
+<div class="flex flex-col gap-4 items-center mt-20 w-full sm:mt-40 min-h-dvh">
+  <h1 class="flex flex-row gap-4 items-center mb-5 text-2xl font-bold text-center sm:text-5xl">
+    {#if image}
+      <img class="h-16" src="/images/{image}" alt={image} />
+    {/if}
+    <span>{title}</span>
+    <a
+      href={link}
+      class="p-2 text-xl rounded-xl transition-all text-slate-200/80 hover:bg-slate-400/20"
+    >
+      <!-- prettier-ignore -->
+      <svg class="w-8 h-8" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-dasharray="28" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 6l2 -2c1 -1 3 -1 4 0l1 1c1 1 1 3 0 4l-5 5c-1 1 -3 1 -4 0M11 18l-2 2c-1 1 -3 1 -4 0l-1 -1c-1 -1 -1 -3 0 -4l5 -5c1 -1 3 -1 4 0"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.6s" values="28;0"/></path></svg>
+    </a>
+  </h1>
+  <p class="max-w-5xl text-lg text-center sm:text-2xl">{description}</p>
+  <div class="flex flex-wrap gap-2 justify-center items-center mt-1 max-w-5xl">
+    {#each techs as tech}
+      <div class="flex flex-row gap-2 py-2 px-3 rounded-xl select-none apple-glass">
+        <TechIcon {tech} class="w-6 h-6 rounded-sm" />
+        <span>{tech}</span>
       </div>
-      <p class="py-6">{subtitle}</p>
-    </div>
+    {/each}
   </div>
-</div>
+  <p class="text-xl text-slate-200/40">~{published}~</p>
 
-<div class="flex justify-center w-full min-h-[80dvh]">
-  <article class="p-6 max-w-5xl lg:p-10 markdown">
+  <article class="p-2 max-w-5xl sm:p-10 prose-sm sm:prose lg:prose-lg xl:prose-xl">
     {@render children()}
   </article>
 </div>
 
 <style>
-  .markdown :global(h1) {
-    font-size: 2rem;
-    line-height: 1.2;
-    margin-bottom: 1rem;
-    font-weight: bold;
+  :global(article) :global(pre) {
+    width: 90vw;
+    max-width: 100%;
+    overflow-x: scroll;
 
-    @media (min-width: 768px) {
-      font-size: 3rem;
-    }
+    box-shadow:
+      rgba(255, 255, 255, 0.05) 0px 6px 24px 0px,
+      rgba(255, 255, 255, 0.08) 0px 0px 0px 1px;
+    background-color: rgba(255, 255, 255, 0.01) !important;
+    backdrop-filter: blur(2px);
   }
 
-  .markdown :global(h2) {
-    font-size: 1.75rem;
-    line-height: 1.3;
-    margin-top: 2rem;
-    margin-bottom: 1rem;
-    font-weight: bold;
-
-    @media (min-width: 768px) {
-      font-size: 2.25rem;
-    }
-  }
-
-  .markdown :global(h3) {
-    font-size: 1.5rem;
-    line-height: 1.4;
-    margin-top: 1.5rem;
-    margin-bottom: 0.75rem;
-    font-weight: bold;
-
-    @media (min-width: 768px) {
-      font-size: 1.75rem;
-    }
-  }
-
-  .markdown :global(h4) {
-    font-size: 1.25rem;
-    line-height: 1.5;
-    margin-top: 1.5rem;
-    margin-bottom: 0.5rem;
-    font-weight: bold;
-
-    @media (min-width: 768px) {
-      font-size: 1.5rem;
-    }
-  }
-
-  .markdown :global(p) {
-    font-size: 1rem;
-    line-height: 1.6;
-    margin-bottom: 1.5rem;
-
-    @media (min-width: 768px) {
-      font-size: 1.125rem;
-    }
-  }
-
-  .markdown :global(:is(h1, h2, h3, h4, h5, h6)) :global(span):before {
-    content: '#';
-    margin-right: 1px;
-    opacity: 0.4;
-  }
-
-  .markdown :global(ul),
-  .markdown :global(ol) {
-    margin-bottom: 1.5rem;
-    padding-left: 1.5rem;
-  }
-
-  .markdown :global(li) {
-    font-size: 1rem;
-    line-height: 1.6;
-    margin-bottom: 0.5rem;
-    opacity: 0.8;
-
-    @media (min-width: 768px) {
-      font-size: 1.125rem;
-    }
-  }
-  .markdown :global(li):before {
-    content: '- ';
+  :global(article) :global(table) {
+    width: 100%;
+    table-layout: auto;
+    margin-top: 2em;
+    margin-bottom: 2em;
+    font-size: 0.875em;
+    line-height: 1.7142857;
   }
 </style>

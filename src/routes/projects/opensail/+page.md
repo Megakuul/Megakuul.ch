@@ -1,23 +1,3 @@
----
-title: Opensail
-subtitle: Transparent and refined Regatta Rating System
-githublnk: https://github.com/Megakuul/opensail
-published: "19.12.2024"
-mainimage: "opensail.png"
-techstack: [
-    {
-        icon: devicon:svelte,
-        name: Svelte
-    }, {
-        icon: vscode-icons:file-type-go,
-        name: GO
-    }, {
-        icon: devicon:githubactions,
-        name: Github Actions
-    }
-]
----
-
 Sophisticated regatta rating system that is so transparent, since it dropped, it has become pretty quiet around Ignotus Peverell's cloak.
 
 ## Table of Contents

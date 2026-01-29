@@ -3,6 +3,18 @@
   import Intersector from '$lib/components/Intersector.svelte';
   import ServiceIcon from '$lib/components/ServiceIcon.svelte';
 
+  const itemsPerPage = 7;
+  let currentPage = $state(0);
+
+  /** @param {number} newPage */
+  function changePage(newPage) {
+    currentPage = newPage;
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth',
+    });
+  }
+
   let search = $state('');
   /** @type {Object.<string, boolean>} */
   let searchServices = $state({});
@@ -30,18 +42,6 @@
     }
     return filtered;
   });
-
-  const itemsPerPage = 7;
-  let currentPage = $state(0);
-
-  /** @param {number} newPage */
-  function changePage(newPage) {
-    currentPage = newPage;
-    window.scrollTo({
-      top: 0,
-      behavior: 'smooth',
-    });
-  }
 </script>
 
 <svelte:head>
@@ -90,6 +90,7 @@
               delete searchServices[service];
               searchServices = searchServices;
             } else searchServices[service] = true;
+            changePage(0);
           }}
           class="flex flex-row gap-2 py-2 px-3 rounded-xl transition-all cursor-pointer hover:scale-105 apple-glass"
         >
@@ -103,7 +104,7 @@
 
 <div class="flex flex-col gap-4 items-center w-full min-h-dvh">
   {#each searchedList as [key, project], i (key)}
-    {#if i >= currentPage * itemsPerPage && i < currentPage + 1 * itemsPerPage}
+    {#if i >= currentPage * itemsPerPage && i < (currentPage + 1) * itemsPerPage}
       <Intersector
         class="w-11/12 max-w-[1400px]"
         classOnDefault="translate-x-10 shadow-none opacity-0"
@@ -132,6 +133,7 @@
                     delete searchServices[service];
                     searchServices = searchServices;
                   } else searchServices[service] = true;
+                  changePage(0);
                 }}
                 class="flex flex-row gap-2 py-2 px-3 rounded-xl transition-all cursor-pointer hover:scale-105 apple-glass"
               >

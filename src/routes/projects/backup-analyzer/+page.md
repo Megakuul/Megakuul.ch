@@ -1,33 +1,3 @@
----
-title: Backup Analyzer
-subtitle: Backup strategy and retention analysis tool, primarily designed for Veeam software
-githublnk: https://github.com/Megakuul/backup-analyzer
-published: "26.09.2023"
-mainimage: "backup-analyzer.svg"
-techstack: [
-    {
-        icon: devicon:svelte,
-        name: SvelteKit
-    },
-    {
-        icon: devicon:tailwindcss,
-        name: Tailwind CSS
-    },
-    {
-        icon: simple-icons:daisyui,
-        name: daisyUI
-    },
-    {
-        icon: logos:redis,
-        name: Redis
-    },
-    {
-        icon: skill-icons:vercel-dark,
-        name: Vercel
-    }
-]
----
-
 The **Backup Analyzer** is a simple web tool for the analysis of backup strategies and retentions.
 
 ## Table of Contents

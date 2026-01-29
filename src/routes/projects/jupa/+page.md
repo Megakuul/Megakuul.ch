@@ -1,33 +1,3 @@
----
-title: JuPa Website
-subtitle: Full rebuild of jupa-thun website with sveltekit and svelte-parallax
-githublnk: https://github.com/Megakuul/jupa
-published: "19.04.2024"
-mainimage: "jupa.svg"
-techstack: [
-    {
-        icon: devicon:svelte,
-        name: SvelteKit
-    },
-    {
-        icon: devicon:tailwindcss,
-        name: Tailwind CSS
-    },
-    {
-        icon: simple-icons:daisyui,
-        name: daisyUI
-    },
-    {
-        icon: bxs:layer,
-        name: svelte-parallax
-    },
-    {
-        icon: skill-icons:vercel-dark,
-        name: Vercel
-    }
-]
----
-
 Fresh rebuild of the original jupa-thun website with cool parallax effects.
 
 ## Table of Contents

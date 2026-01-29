@@ -1,29 +1,3 @@
----
-title: Megakuul.ch
-subtitle: The Website your currently looking at
-githublnk: https://github.com/Megakuul/Megakuul.ch
-published: "17.07.2023"
-mainimage: "megakuul.svg"
-techstack: [
-    {
-        icon: devicon:svelte,
-        name: SvelteKit
-    },
-    {
-        icon: devicon:tailwindcss,
-        name: Tailwind CSS
-    },
-    {
-        icon: simple-icons:daisyui,
-        name: daisyUI
-    },
-    {
-        icon: skill-icons:vercel-dark,
-        name: Vercel
-    }
-]
----
-
 Megakuul.ch is my personal website, where I show off some of my projects I've done in the past.  
 
 ## Table of Contents

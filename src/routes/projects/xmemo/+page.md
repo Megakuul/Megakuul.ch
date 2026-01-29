@@ -1,35 +1,3 @@
----
-title: XMemo
-subtitle: An interactive platform to play memory against other players
-githublnk: https://github.com/Megakuul/XMemo
-published: "17.06.2023"
-mainimage: "xmemo.svg"
-techstack: [
-    {
-        icon: vscode-icons:file-type-svelte,
-        name: SvelteKit
-    }, {
-        icon: skill-icons:mongodb,
-        name: MongoDB
-    }, {
-        icon: logos:nodejs,
-        name: NodeJS
-    }, {
-        icon: skill-icons:expressjs-light,
-        name: ExpressJS
-    }, {
-        icon: logos:websocket,
-        name: Socket.io
-    }, {
-        icon: logos:kubernetes,
-        name: Kubernetes
-    }, {
-        icon: devicon:traefikproxy,
-        name: Traefik
-    }
-]
----
-
 The XMemo platform is a full stack webapplication where you can play memory games against other players.
 
 ## Table of Contents

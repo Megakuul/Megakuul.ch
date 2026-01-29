@@ -1,29 +1,3 @@
----
-title: Gitbackup as a Service
-subtitle: Service construct to backup github-repositories to AWS S3 bucket at a low cost
-githublnk: https://github.com/Megakuul/Gitbackup-as-a-Service
-published: "30.12.2023"
-mainimage: "gbaas.svg"
-techstack: [
-    {
-        icon: vscode-icons:file-type-go,
-        name: GO
-    }, {
-        icon: vscode-icons:file-type-html,
-        name: HTML
-    }, {
-        icon: logos:aws-cloudformation,
-        name: AWS CloudFormation
-    }, {
-        icon: logos:aws-lambda,
-        name: AWS Lambda
-    }, {
-        icon: logos:aws-s3,
-        name: AWS S3
-    }
-]
----
-
 **Gitbackup-as-a-Service** is as the name suggests, a cloud-native solution to back up Github repositories.
 
 ## Table of Contents

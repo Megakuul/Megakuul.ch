@@ -1,12 +1,4 @@
----
-title: "Cooking Lock"
-description: "You need an simple, unfair and time-released lock that doesn't require an atomic swap? Use the cooking lock."
-published: "06.01.2025"
-mainimage: "cooking-lock.webp"
----
-
-
-# Let the lock cook
+## Let the lock cook
 
 To avoid confusion among the audience, I will henceforth use the term "chef" when I mean "process".
 

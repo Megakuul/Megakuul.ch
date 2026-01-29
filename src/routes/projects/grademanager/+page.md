@@ -1,29 +1,3 @@
----
-title: GradeManager
-subtitle: Modern Cross-Plattform Grade-Manager
-githublnk: https://github.com/GradeManager
-published: "18.05.2023"
-mainimage: "grademanager.png"
-techstack: [
-    {
-        icon: devicon:dart,
-        name: Dart
-    },
-    {
-        icon: logos:flutter,
-        name: Flutter
-    },
-    {
-        icon: devicon:csharp,
-        name: C#
-    }, 
-    {
-        icon: logos:dotnet,
-        name: .Net
-    }
-]
----
-
 **GradeManager** is an software that should help people manage their school grades.
 
 ## Table of Contents
