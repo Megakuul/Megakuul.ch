@@ -55,6 +55,12 @@ const projects: Record<string, Project> = {
     published: '01.27.2026',
     services: ['events'],
   },
+  networking: {
+    title: 'Networking 🌐',
+    description: 'VPC is not that hard',
+    published: '01.30.2026',
+    services: ['vpc'],
+  },
 };
 
 export default projects;

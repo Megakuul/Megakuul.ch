@@ -91,7 +91,7 @@ For my use case I've created an Eventrule that sends an SNS message every time t
 
 ![paranoia_ssm_message](/images/paranoia_ssm_message.png)
 
-*Haters could argue that we just created an overly complex Eventbridge scheduler.*
+*Note that the parameterstore only emits the idle message ONCE after editing, it does not emit an event every 5 hours!*
 
 
 ### Secret Proxy
