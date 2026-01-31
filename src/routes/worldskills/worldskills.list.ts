@@ -61,6 +61,12 @@ const projects: Record<string, Project> = {
     published: '01.30.2026',
     services: ['vpc'],
   },
+  'it-aws-dns': {
+    title: 'It aws DNS 🚨',
+    description: "Who would've guessed?",
+    published: '01.31.2026',
+    services: ['route53'],
+  },
 };
 
 export default projects;
