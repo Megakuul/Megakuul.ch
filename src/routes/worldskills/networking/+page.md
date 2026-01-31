@@ -163,24 +163,114 @@ Just always remember that NACLs rely on raw packets:
 
 ### Public Subnet 🌐
 
+"Public Subnet" is a semantic description for an AWS VPC Subnet that uses a simple network router without NAT (IGW) as default gateway, which means interfaces inside such a network are directly addressable via public IP address.
+
+#### IPv4
+
 **Required Skilltree Features**: 
 
-- 0.0.0.0/0 to <b class="text-indigo-500">IGW</b>
-- ::/0 to <b class="text-indigo-500">EIGW</b>
-- 
+- 0.0.0.0/0 to <b class="text-amber-600">IGW</b>
+
+#### IPv6
+
+**Required Skilltree Features**: 
+
+- ::/0 to <b class="text-amber-600">IGW</b>
+
+#### Dualstack
+
+**Required Skilltree Features**: 
+
+- 0.0.0.0/0 to <b class="text-amber-600">IGW</b>
+- ::/0 to <b class="text-amber-600">IGW</b>
+
 
 <Note type="info">
 VPC uses symmetric route locks; unless you have not explicitly configured a reverse path to the router via route table it does NOT route any packets to the destination.
 
-In practice this means that IGW and EIGWs do not route packets when assigned. They EXPLICITLY require a reverse 0.0.0.0/0 bzw. ::/0 route!
+In practice this means that IGW does not route packets when assigned. It must be EXPLICITLY configured with a reverse 0.0.0.0/0 bzw. ::/0 route!
 </Note>
 
-
 ### Private Subnet 🫡
+
+A "Private Subnet" is defined as a network space that uses an external network router with SNAT (NAT-Gateway or fck-nat) or egress only IPv6 routing (EIGW) as default gateway, which means interfaces inside such networks can communicate with the internet only via translated address.
+
+#### IPv4
+
+**Required Skilltree Features**: 
+
+- `0.0.0.0/0` to <b class="text-indigo-400">NAT-Gateway</b> or <b class="text-indigo-500">fck-nat</b>
+
+#### IPv6
+
+**Required Skilltree Features**: 
+
+- `::/0` to <b class="text-amber-500">EIGW</b> 
+- `64:ff9b::/96` to <b class="text-indigo-400">NAT-Gateway</b> or <b class="text-indigo-500">fck-nat</b> 
+- Enable `DNS64` option on route53 DNS.
+
+#### Dualstack
+
+**Required Skilltree Features**: 
+
+- `::/0` to <b class="text-amber-500">EIGW</b> 
+- `0.0.0.0/0` to <b class="text-indigo-400">NAT-Gateway</b> or <b class="text-indigo-500">fck-nat</b>
+- Disable `DNS64` option on route53 DNS.
+
+
+<Note type="caution">
+<b>Eyeball Crash:</b> EC2 instances usually implement the "Happy Eyeball" algorithm to determine whether IPv4 or IPv6 has more Rizz for the connection. This algorithm sends two DNS queries at the same time (A and AAAA). With DNS64 option enabled in Route53 the DNS does NOT fail on missing AAAA records that have an according A record; instead it responds with a well known IPv6 space that encodes the IPv4 address: <b class="underline">64:ff9b::selectedipv4</b>.
+
+On IPv6-only networks this is very practical because we can route those requests to a NAT64 capable router which performs a PROXY NAT (source (`2001:db8::1` -> `1.3.3.7`) and destination (`64:ff9b::0101:0101` -> `1.1.1.1`)) with the encoded IPv4 address.
+
+However, for Dualstack networks this can be very dangerous, because it creates a race condition: If the DNS responds to the AAAA request with an encoded DNS64 message faster then the A request, the NAT64 emulation layer will be used. 
+If this happens and the network does not have a `64:ff9b::/96` -> NAT64 route you will get a cryptic tcp timeout because the request is dropped by a border gateway. Arguably its even worse if you configured the route, because now your egress source is randomly either the instance IPv6 OR the NAT-Gateway IPv4 address. There is a saying that if you route IPv6 traffic via NAT-Gateway that could've gone directly IPv6-to-IPv6 your task in hell will be to migrate Github to IPv6.
+</Note>
 
 
 ### Isolated Subnet 🧻
 
+An "Isolated Subnet" is a network space that uses no default gateway at all, it only relies on the built in VPC router and can therefore only communicate with other subnets (there is no 0.0.0.0/0 route).
+
+#### IPv4
+
+**Required Skilltree Features**: 
+
+- None
+
+#### IPv6
+
+**Required Skilltree Features**: 
+
+- None
+
+#### Dualstack
+
+**Required Skilltree Features**: 
+
+- None
+
+### VPN-only Subnet 🛡️
+
+"VPN-only Subnet" is effectively just an "Isolated Subnet" that uses a VPN router (VGW or TGW) as default gateway.
+
+#### IPv4
+
+**Required Skilltree Features**: 
+
+- `0.0.0.0/0` to <b class="text-indigo-400">Virtual Private Gateway</b> or <b class="text-indigo-500">Transit Gateway</b>
+
+#### IPv6
+
+**Required Skilltree Features**: 
+
+- `::/0` to <b class="text-indigo-500">Transit Gateway</b>
+
+#### Dualstack
+
+**Required Skilltree Features**: 
+
+- `::/0` to <b class="text-indigo-500">Transit Gateway</b>
 
 
 ## Quirks
