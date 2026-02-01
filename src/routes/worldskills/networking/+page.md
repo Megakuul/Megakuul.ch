@@ -286,5 +286,37 @@ Every VPC subnet contains some extra addresses that must be considered when calc
 
 This means any AWS subnet must have a minimum size of `/29` (although they enforce `/28`).
 
+## Routing
+
+### Routing Table
+
+Every VPC contains one or more stateless layer 3 routing tables. One of them is always configured to be the "main route table" which applies to all unassociated subnets by default.
+
+If you want to configure routing it is highly recommended to create a separate route table and associate the corresponding subnets to it. 
+
+This prevents confusion and ambiguity when accidentally creating a new subnet without association (imagine creating a subnet and suddenly instances are directly reachable via internet because you your main table acts as public route table).
+
+### Gateway Routing Table
+
+Via the `Edge associations` configuration every routing table can be configured to act as `Gateway Routing Table`.
+
+While a `Routing Table` is applied to the VPC router, the `Gateway Routing Table` is associated with an edge router (IGW or VGW).
+
+<Note type="info">
+Notice that for private dualstack networks the behavior of the Gateway Routing Table can feel a bit undeterministic: While the EIGW edge router cannot be associated with a Gateway table, a NAT-Gatewy theoretically can because it uses an IGW as edge router.
+
+To conclude: Even if gateway routes are inherently designed for inbound access they are still enforced on outbound responses with NAT-Gateway but NOT on outbound responses for EIGW.
+</Note>
+
+### Inspector 🕵️
+
+You might ask yourself: why do I ever need `Gateway Routing Tables`?
+
+Their primary application is to route traffic over IDS appliances to inspect inbound network traffic.
+
+This system works by routing the ingress IGW traffic to a `Gateway Loadbalancer`. This "loadbalancer" encapsulates packets with the `GENEVE` protocol, sends them to a fleet of IDS appliances and returns the decapsulated IDS response back to the VPC router which processes them as usual. 
+
+![networking_gwlb_ids](/images/networking_gwlb_ids.svg)
+
 ## Quirks
 
