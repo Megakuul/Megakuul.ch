@@ -193,7 +193,7 @@ In practice this means that IGW does not route packets when assigned. It must be
 
 ### Private Subnet 🫡
 
-A "Private Subnet" is defined as a network space that uses an external network router with SNAT (NAT-Gateway or fck-nat) or egress only IPv6 routing (EIGW) as default gateway, which means interfaces inside such networks can communicate with the internet only via translated address.
+A "Private Subnet" is defined as a network space that uses an external network router with SNAT (NAT-Gateway or fck-nat) or egress only IPv6 routing (EIGW) as default gateway, which means interfaces inside such networks can communicate with the internet only via translated address (or with their real IP but only egress for IPv6).
 
 #### IPv4
 
@@ -270,8 +270,21 @@ An "Isolated Subnet" is a network space that uses no default gateway at all, it 
 
 **Required Skilltree Features**: 
 
+- `0.0.0.0/0` to <b class="text-indigo-500">Transit Gateway</b>
 - `::/0` to <b class="text-indigo-500">Transit Gateway</b>
 
+
+## VPC Extras
+
+Every VPC subnet contains some extra addresses that must be considered when calculating IPv4 network sizes (for IPv6 please always just use `/64` networks with a human readable numbering):
+
+- `.0`: Network address (kinda obvious)
+- `.1`: VPC Router
+- `.2`: Route53 Endpoint
+- `.3`: For future use
+- `.255`: Broadcast address (kinda obvious)
+
+This means any AWS subnet must have a minimum size of `/29` (although they enforce `/28`).
 
 ## Quirks
 
