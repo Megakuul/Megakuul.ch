@@ -152,7 +152,7 @@ Just always remember that Security Groups rely on `Conntracks`:
 Unlike Security Groups, NACLs operate completely stateless. 
 They provide a priority based `oneshot` filtering mechanism for VPC subnets. 
 
-Every layer 3 packet (no matter if it is ingress or egress) is processed against the lowest priority rule with matching source IP and destination port. It's a `oneshot` algorithm because it ignores subsequent rules that also match (even if they explicitly deny).
+Every layer 3 packet (no matter if it is ingress or egress) is processed against the lowest priority rule with matching source IP and destination port (yes this means that the outbound rule must permit all potential dynamic destination ports `1024-65535` to allow basic HTTP traffic). It's a `oneshot` algorithm because it ignores subsequent rules that also match (even if they explicitly deny).
 
 
 Just always remember that NACLs rely on raw packets: 
@@ -302,6 +302,9 @@ Via the `Edge associations` configuration every routing table can be configured 
 
 While a `Routing Table` is applied to the VPC router, the `Gateway Routing Table` is associated with an edge router (IGW or VGW).
 
+Besides, `Gateway Routing Tables` are also limited to routing traffic to eGWLB PrivateLink Endpoints and elastic network interfaces.
+
+
 <Note type="info">
 Notice that for private dualstack networks the behavior of the Gateway Routing Table can feel a bit undeterministic: While the EIGW edge router cannot be associated with a Gateway table, a NAT-Gatewy theoretically can because it uses an IGW as edge router.
 
@@ -320,3 +323,10 @@ This system works by routing the ingress IGW traffic to a `Gateway Loadbalancer`
 
 ## Quirks
 
+- Routing Tables and Gateway Routing Tables are weirdly merged into the same UI.
+
+<Quirk score={6.9}>
+    Just keep in mind that Routing Tables are from the VPC router perspective and Gateway Routing Tables are from the Edge router perspective.
+
+    Therefore, never associate subnets AND edge routers to a singleroute table and see this as a "switch" for the table mode.
+</Quirk>

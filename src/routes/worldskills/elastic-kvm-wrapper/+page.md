@@ -21,3 +21,12 @@ Add <b>"ec2:DescribeVpcs"</b> and <b>"ec2:DescribeSubnets"</b> access to the pri
 Accept it, use <b>"Resource": "*"</b> and don't take this as an example for a professional API design. 
 </Quirk>
 
+
+- The EC2 instance console does NOT display security groups of secondary ENI interfaces attached after instance launch.
+![ec2_eni_sg_missing](/images/ec2_eni_sg_missing.png)
+
+<Quirk score={10.5}>
+Use the ENI console section to configure security groups.
+</Quirk>
+
+
