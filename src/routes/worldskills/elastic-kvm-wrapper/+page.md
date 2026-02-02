@@ -5,6 +5,10 @@
 ## Table of Contents
 
 
+## Watch Out 👀
+
+- If you encounter `Failed to connect to your instance` with EC2 instance connect, ensure that a security group on the instance allows access from the EIC PrivateLink. Notice that for private connections the ec2-instance-connect prefix list does not work (kinda obviously as it is routed via PrivateLink).
+
 ## Quirks
 
 - Console does not accept security group if the VPCs got entered manually. *"Please select a security group that has EC2 scope."*
