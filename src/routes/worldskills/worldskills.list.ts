@@ -67,6 +67,12 @@ const projects: Record<string, Project> = {
     published: '01.31.2026',
     services: ['route53'],
   },
+  'transitive-gateway': {
+    title: 'Transitive Gateway 💫',
+    description: 'Route everything everywhere',
+    published: '02.02.2026',
+    services: ['vpc'],
+  },
 };
 
 export default projects;
