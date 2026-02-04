@@ -7,7 +7,7 @@
 
 > Transit Gateway is a centralized VPC peering with automatic internal route propagation that does not enforce the source/destination check like normal VPC routers. 
 
-- König Krösus der Erste
+~ König Krösus der Erste
 
 
 Furthermore, the TGW has some other differences:
@@ -17,6 +17,16 @@ Furthermore, the TGW has some other differences:
 - **Latency**: Due to the mentioned *ENI Trick* the latency is not comparable to a peered VPC as there are always 2 more hops.
 - **Cross-Region**: Due to the mentioned *ENI Trick* the latency is not comparable to a peered VPC as there are always 2 more hops.
 
+
+The following graphic explains the ENI trick:
+
+![tgw_eni_trick](/images/tgw_eni_trick.svg)
+
+
+In contrast this is how VPC Peering works:
+
+![peering_hyperplane_trick](/images/peering_hyperplane_trick.svg)
+
 ### Attachment
 
 VPCs must be attached to the TGW. This does not only peer them under the hood, but also auto propagates the VPCs routes to the TGW route table.
@@ -25,3 +35,18 @@ VPCs must be attached to the TGW. This does not only peer them under the hood, b
 - **Security Group Referencing support**: Enables cross VPC security group referencing (however only intra-region).
 - **IPv6 Support**: Configures the route propagation to allow external networks to route IPv6 traffic to your VPC. 
 - **Appliance Mode support**: Uses a partitioning algorithm based on `src/dst & src.port/dst.port` to route packets deterministically to either source AZ or destination AZ without conntrack (required for Palo Alto type shiii). This is required because otherwise VPCs would do this: `src(AZ.a) -> palo(AZ.a) -> dst(AZ.b) -> palo(AZ.b) -> src(AZ.a)`.
+
+### Association
+
+Every Attachment is associated with exactly one `Route Table`. This route table effectively determines the router view the ENI in the source VPC has; it tells the interface which other TGW ENIs exist and what routes they can route to.
+
+The default TGW `Route Table` adds an automatic propagation for every attachment to build a full mesh network. 
+
+You can create a custom `Route Table` that defines specific propagations and prefix routings via `Managed Prefixlists`.
+
+
+### Propagation
+
+The Transit Gateway primarily uses propagation for routing. A propagation effectively just adds a route table entry for the VPC CIDR to the VPC's TGW ENIs. 
+
+This means that the source TGW ENI knows to which destination TGW ENI it must route the request by just looking at the associated route table.
