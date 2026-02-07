@@ -5,6 +5,8 @@
 
 ## Table of Contents
 
+## Client VPN
+
 AWS Client VPN Endpoints were designed as a homage to this scene from the Dark Knight:
 
 ![joker_burning_meme](/images/joker_burning_meme.webp)
@@ -56,8 +58,9 @@ openssl req -x509 -newkey rsa:2048 -nodes -keyout key.pem -out cert.pem -sha256 
 <Quirk score={1.2}>
 Ensure that your imported client certificate has the clientAuth and the server certificate the serverAuth extension:
 
+<br>
 <b>-addext "extendedKeyUsage = clientAuth"</b>
-
+<br>
 <b>-addext "extendedKeyUsage = serverAuth"</b>
 
 While technically not AWS fault, it still feels kinda weird that they enforce specific Common Name formats while rubberstamping fully invalid mTLS certificates. 

@@ -5,6 +5,8 @@
 
 ## Table of Contents
 
+## Transit Gateway
+
 > Transit Gateway is a centralized VPC peering with automatic internal route propagation that does not enforce the source/destination check like normal VPC routers. 
 
 ~ König Krösus der Erste
