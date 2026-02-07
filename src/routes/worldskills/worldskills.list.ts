@@ -73,6 +73,12 @@ const projects: Record<string, Project> = {
     published: '02.02.2026',
     services: ['vpc'],
   },
+  'client-vpn': {
+    title: 'Client VPN 💸',
+    description: 'Make OpenVPN Expensive Again',
+    published: '02.07.2026',
+    services: ['vpc'],
+  },
 };
 
 export default projects;
