@@ -23,7 +23,7 @@ const projects: Record<string, Project> = {
     title: 'Super Smart Manager 🎩',
     description: 'Some neat magictricks with aws ssm',
     published: '01.15.2026',
-    services: ['ssm'],
+    services: ['ssm', 'todo'],
   },
   'the-reason-aws-is-good': {
     title: 'The reason AWS is good 🗿',
@@ -35,13 +35,13 @@ const projects: Record<string, Project> = {
     title: 'Wellarchitecter 🧱',
     description: 'AWS best practice buzzwords',
     published: '01.23.2026',
-    services: ['iam', 'sts', 'vpc'],
+    services: ['iam', 'sts', 'vpc', 'todo'],
   },
   'elastic-kvm-wrapper': {
     title: 'Elastic KVM Wrapper ➰',
     description: 'Exploring virtual machines with elastic pricing',
     published: '01.25.2026',
-    services: ['ec2', 'vpc'],
+    services: ['ec2', 'vpc', 'todo'],
   },
   paranoia: {
     title: 'Paranoia 🛠️',
@@ -53,7 +53,7 @@ const projects: Record<string, Project> = {
     title: 'Teamevent 📅',
     description: 'How to burn your money event driven',
     published: '01.27.2026',
-    services: ['events'],
+    services: ['events', 'todo'],
   },
   networking: {
     title: 'Networking 🌐',
@@ -65,7 +65,7 @@ const projects: Record<string, Project> = {
     title: 'It aws DNS 🚨',
     description: "Who would've guessed?",
     published: '01.31.2026',
-    services: ['route53'],
+    services: ['route53', 'todo'],
   },
   'transitive-gateway': {
     title: 'Transitive Gateway 💫',
