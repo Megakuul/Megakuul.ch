@@ -79,6 +79,12 @@ const projects: Record<string, Project> = {
     published: '02.07.2026',
     services: ['vpc'],
   },
+  'cloud-trailer': {
+    title: 'Cloud Trailer 🚛',
+    description: 'Wait, what did I just do?',
+    published: '02.16.2026',
+    services: ['cloudtrail'],
+  },
 };
 
 export default projects;
