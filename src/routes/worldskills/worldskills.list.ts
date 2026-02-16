@@ -84,7 +84,7 @@ const projects: Record<string, Project> = {
     description: 'Wait, what did I just do?',
     published: '02.16.2026',
     services: ['cloudtrail'],
-  },
+  }
 };
 
 export default projects;

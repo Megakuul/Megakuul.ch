@@ -4,6 +4,10 @@
 
 ## Table of Contents
 
+## Watch Out 👀
+
+- Events in CloudTrail are batched: It can take up to 5 minutes until events arrive in the trail.
+
 ## Quirks
 
 - When filtering for `Resource name` and `Resource type` I don't see all events.
