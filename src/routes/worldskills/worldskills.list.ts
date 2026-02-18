@@ -19,11 +19,11 @@ const projects: Record<string, Project> = {
     published: '01.09.2026',
     services: ['cli', 'iam', 'sts'],
   },
-  'super-smart-manager': {
-    title: 'Super Smart Manager 🎩',
-    description: 'Some neat magictricks with aws ssm',
+  'how-about-a-magic-trick': {
+    title: 'How about a magic trick 🎩',
+    description: 'Some neat magictricks for latenight debugging sessions',
     published: '01.15.2026',
-    services: ['ssm', 'todo'],
+    services: ['cli', 'ssm', 'todo'],
   },
   'the-reason-aws-is-good': {
     title: 'The reason AWS is good 🗿',
@@ -83,7 +83,13 @@ const projects: Record<string, Project> = {
     title: 'Cloud Trailer 🚛',
     description: 'Wait, what did I just do?',
     published: '02.16.2026',
-    services: ['cloudtrail'],
+    services: ['cloudtrail', 'todo'],
+  },
+  'edgy-functions': {
+    title: 'Edgy Functions 🎱',
+    description: 'Unleash the power of servers that are less',
+    published: '02.18.2026',
+    services: ['lambda', 'todo'],
   }
 };
 
