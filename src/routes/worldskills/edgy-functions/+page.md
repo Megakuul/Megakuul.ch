@@ -17,7 +17,7 @@ from json import dumps
 from cowsay import cowsay
 
 def handler(event, context):
-    if os.environ["TEXT"] == "":
+    if "TEXT" not in os.environ:
         raise Exception("TEXT env variable is not set")
     output = f"Wualla di Kuh hat gesagt: {os.environ["TEXT"]}"
     cowOutput = cowsay(output)
@@ -64,19 +64,39 @@ aws lambda publish-layer-version --layer-name Cowsay --zip-file fileb://./layer.
 
 7. Create a docker container to fix the mess:
 
-```docker
-FROM python:3.14-slim
+```dockerfile
+FROM public.ecr.aws/lambda/python:3.14
 
-COPY main.py main.py
+COPY main.py ${LAMBDA_TASK_ROOT}
 
 RUN pip install python-cowsay
 
-CMD ["python", "main.py"]
+# the injected RIC engine requires <filename>.<function> to understand what to execute.
+CMD ["main.handler"]
 ```
 
-8. Deploy to ECR and launch the lambda from this container image (you'll figure this one out, the ECR console actually documents it very well)
+<Note type="caution">
+You cannot use an arbitary docker image for RIC-less lambda runtimes.
+For example python just defines a handler function, in order to invoke, retrieve and respond to lambda events a bridge (RIC) must be injected via the <a class="underline" href="https://gallery.ecr.aws/lambda">ecr lambda image</a>.
 
-9. Switch to Go on AL2023 🗿
+<br>
+Compiled runtimes like go include this communication bridge natively (in aws-lambda-go). However, while you can technically use any image for those runtimes it is still a good practice to use the lambda/provided image (for compatibility reasons).
+</Note>
+
+8. Deploy to ECR
+
+```bash
+# build and upload versioned image (don't use / reference latest in production lambdas)
+docker build -t 111111111111.dkr.ecr.eu-central-1.amazonaws.com/<yournamespace>/<yourimage>:v0.0.1 .
+docker push 111111111111.dkr.ecr.eu-central-1.amazonaws.com/<yournamespace>/<yourimage>:v0.0.1
+# upload latest version (for development type shii)
+docker tag -t 111111111111.dkr.ecr.eu-central-1.amazonaws.com/<yournamespace>/<yourimage>:latest
+docker push 111111111111.dkr.ecr.eu-central-1.amazonaws.com/<yournamespace>/<yourimage>:latest
+```
+
+9. Create new lambda function that uses this image (ref by version plz)
+
+10. Switch to Go on AL2023 🗿
 
 ### Alias Pointers 👈
 
