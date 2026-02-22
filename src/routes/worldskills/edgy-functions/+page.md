@@ -1,5 +1,6 @@
 <script>
     import Quirk from "../Quirk.svelte";
+    import Note from "../Note.svelte";
 </script>
 
 ## Table of Contents
@@ -12,21 +13,32 @@ In the rare case you find yourself writing a python function (please immediately
 
 ```python
 import os
+from json import dumps
+from cowsay import cowsay
 
-def lambda_handler(event, context):
+def handler(event, context):
+    if os.environ["TEXT"] == "":
+        raise Exception("TEXT env variable is not set")
+    output = f"Wualla di Kuh hat gesagt: {os.environ["TEXT"]}"
+    cowOutput = cowsay(output)
     return {
         "statusCode": 200,
         "headers": {
             "Content-Type": "application/json"
+
         },
-        "body": json.dumps({"blub": os.environ["BLAB"]})
+        "body": dumps({
+            "what the cow said": cowOutput,
+            "what I said": "please add python lsp to the lambda monaco editor"
+        })
     }
 ```
 
 2. Package it and deploy it:
 
 ```bash
-
+zip function.zip main.py
+aws lambda update-function-code --function-name Cowsay --zip-file fileb://./function.zip
 ```
 
 3. Add some important third-party dependencies from the best package manager the world has ever seen:
@@ -44,7 +56,8 @@ pip install python-cowsay -t python/lib/python3.14/site-packages
 5. Zip the dependency as lambda layer and upload:
 
 ```bash
-TODO
+zip -r layer.zip python/
+aws lambda publish-layer-version --layer-name Cowsay --zip-file fileb://./layer.zip
 ```
 
 6. Deploy the function and notice how it will fail because it was the wrong python version, os or architecture.
@@ -52,16 +65,38 @@ TODO
 7. Create a docker container to fix the mess:
 
 ```docker
-TODO
+FROM python:3.14-slim
+
+COPY main.py main.py
+
+RUN pip install python-cowsay
+
+CMD ["python", "main.py"]
 ```
 
-8. Deploy to ECR and launch the lambda from this container image:
-
-```bash
-TODO
-```
+8. Deploy to ECR and launch the lambda from this container image (you'll figure this one out, the ECR console actually documents it very well)
 
 9. Switch to Go on AL2023 🗿
+
+### Alias Pointers 👈
+
+Lambda uses versions, but since the average edge-function-chad uses Arch Linux, rolling their updates on the bleeding edge 🩸, they added a `$LATEST` version.
+The `$LATEST` version is functionally equivalent to the container image `latest` tag.
+
+Generally it is not recommended to work with $LATEST in production. Instead, consider strictly versioning functions (which is done by snapshotting the current state via `lambda:PublishVersion`).
+
+To avoid updating all lambda triggers on every update, AWS implemented `Aliases` that can be used like pointers to the latest operational version.
+Unlike `$LATEST` aliases must be updated manually; however, this comes with a huge advantage: rollbacks.
+
+Instead of panicking and searching through your git history to reassemble the working lambda code on a Friday evening, you can just reset the alias to a previous version, immediately gaining +200 <b class="text-indigo-500">FridayBeerPoints</b> in the process.
+
+<Note type="info">
+Aliases have a very powerful routing feature (configurable via --routing-config).
+This feature allows you to shift a certain amount of requests to another version (e.g. an older or newer one).
+
+<br>
+Under the hood <b>CodeDeploy</b> heavily uses this feature, however because it is a native lambda feature you can also integrate it to custom cd pipelines.
+</Note>
 
 ### Invocation Types
 
@@ -82,15 +117,3 @@ Executes synchron and waits for the response; this effectively hijacks the retur
 
 **Exceptions**: If the function throws or returns a non-zero exit code it returns a `"FunctionError": "Unhandled"` with an error event type as response and does NOT retry.
 Notice that the sdk call still returns a 200 status code (because the AWS execution flow itself was successful).
-
-```
-
-```
-
-```
-
-```
-
-```
-
-```

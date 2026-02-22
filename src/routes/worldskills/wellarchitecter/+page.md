@@ -4,9 +4,7 @@
 
 ## Table of Contents
 
-## Facts 
-
-
+## Facts
 
 > Tag everything
 
@@ -20,7 +18,7 @@
 
 ---
 
-> Apply least privileges to IAM and SGs 
+> Apply least privileges to IAM and SGs
 
 ~ The creator of the matrix himself (Well Architected SEC03)
 
@@ -30,4 +28,8 @@
 
 ~ Beff Jezos (Well Architected SEC05)
 
+---
 
+> Avoid lambda $LATEST version for production
+
+~ A concerned citizen (Well Architected OPS06)

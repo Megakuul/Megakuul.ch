@@ -8,6 +8,31 @@
 
 ## Tricks
 
+### Abuse the aws cli as json api wrapper 📡
+
+Instead of executing long weird aws cli commands in pipelines or scripts (please generally never do this in production and just use the sdk) analyze the json interface of a function via:
+
+```bash
+aws lambda update-function-configuration --generate-cli-skeleton > skeleton.json
+```
+
+Remove all unused parameters from `input.json` and perform the operation:
+
+```bash
+aws lambda update-function-configuration --cli-input-json file://./skeleton.json
+```
+
+You can also automate this to modify the file in multiple steps with jq, e.g.:
+
+```bash
+# extract current configuration layers
+aws lambda get-function-configuration --function-name Cowsay --output json > current.json
+# append ananaslayer to the existing layers
+jq '{Layers} | .Layers = map(.[].Arn) | .Layers += ["arn:aws:lambda:eu-central-1:111111111111:layer:AnanasLayer:1"]' current.json > update.json
+# update configuration
+aws lambda update-function-configuration --function-name Cowsay --cli-input-json file://./update.json
+```
+
 ### Conquer massive aws cli output with jq ⛵
 
 ```bash
