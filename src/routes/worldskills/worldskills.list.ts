@@ -90,6 +90,18 @@ const projects: Record<string, Project> = {
     description: 'Unleash the power of servers that are less',
     published: '02.18.2026',
     services: ['lambda', 'todo'],
+  },
+  'the-big-s': {
+    title: 'The Big 💲',
+    description: 'Store your cat memes directly to a money printing machine',
+    published: '02.25.2026',
+    services: ['s3', 'todo'],
+  },
+  'api-gate': {
+    title: 'api-gate 🍝',
+    description: 'A service created with the dark power of spaghetti code',
+    published: '02.26.2026',
+    services: ['api-gateway', 'todo'],
   }
 };
 

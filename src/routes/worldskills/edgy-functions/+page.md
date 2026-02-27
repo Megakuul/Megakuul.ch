@@ -67,7 +67,7 @@ aws lambda publish-layer-version --layer-name Cowsay --zip-file fileb://./layer.
 ```dockerfile
 FROM public.ecr.aws/lambda/python:3.14
 
-COPY main.py ${LAMBDA_TASK_ROOT}
+COPY main.py \${LAMBDA_TASK_ROOT}
 
 RUN pip install python-cowsay
 
