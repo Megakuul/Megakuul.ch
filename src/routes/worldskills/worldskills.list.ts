@@ -102,7 +102,19 @@ const projects: Record<string, Project> = {
     description: 'A service created with the dark power of spaghetti code',
     published: '02.26.2026',
     services: ['api-gateway', 'todo'],
-  }
+  },
+  'red-feature-flag': {
+    title: 'Red Feature Flag 🚩',
+    description: 'Completely overcomplicate your deployment strategy with ease',
+    published: '04.03.2026',
+    services: ['ssm', 'todo'],
+  },
+  'scaler-swag': {
+    title: 'Scaler Swag 📈',
+    description: 'Kubernetes built by Java developers',
+    published: '06.03.2026',
+    services: ['ec2', 'autoscaler', 'todo'],
+  },
 };
 
 export default projects;

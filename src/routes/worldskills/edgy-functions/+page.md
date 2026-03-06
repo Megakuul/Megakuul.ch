@@ -136,4 +136,3 @@ Executes asynchron which returns 202 immediately and sends the lambda response t
 Executes synchron and waits for the response; this effectively hijacks the returned event which means it is _NOT_ forwarded to configured event destinations.
 
 **Exceptions**: If the function throws or returns a non-zero exit code it returns a `"FunctionError": "Unhandled"` with an error event type as response and does NOT retry.
-Notice that the sdk call still returns a 200 status code (because the AWS execution flow itself was successful).
