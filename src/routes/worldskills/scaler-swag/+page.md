@@ -41,6 +41,8 @@ Simple: locks down full scaler (cooldown)
 Step: allows defining per step
 Tracking: wraps step and simplifies it to autocreate in and outscaler
 
+TargetGroups have a deregister time which is often 5 minutes (which is how long it takes to scale in at least)
+
 ## Watch Out 👀
 
 - **Instance Type Requirements** allow you to define how many capacity unit an instance type consumes. Do not set this arbitrarily high; it will never scale xD

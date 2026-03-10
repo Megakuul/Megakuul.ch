@@ -61,3 +61,39 @@ API Gateways can be integrated into private VPCs in two ways:
 
 - **VPC Links**: Allows the gateway to connect to internal VPC resources by allocating ENIs inside its subnets.
 - **Domain name access association**: Allows a domain name to be associated with a private link to allow internal access to the gateway.
+
+### Proxy Format
+
+proxy integration format:
+
+```json
+
+```
+
+### Authorizers
+
+There are 5 major ways to integrate authorization in the method request phase:
+
+1. **NONE**: The default, it allows anonymous users to access the gateway depending on resource policy (has to be Principal: "\*" or completely empty to allow anonymous).
+2. **API Key**: Attach an API key to the Gateway and tick the box. Now the API only accepts requests with a matching `x-api-key` header. (attention API keys are more like to enforce user limits and not for authorization... they can also be used with the other options in conjunction)
+3. **AWS_IAM**: Reads SigV4 from Authorization header or query params (like every other SigV4 verifier). The signature must provide access either via resource policy or identity based policy to the **execute-api:Invoke** action.
+4. **Cognito**: Reads a specified header and validates the accesstoken against a Cognito userpool and verifies that it contains the according scope.
+5. **Lambda**: Executes a lambda function that returns an IAM policy which then must define the appropriate action like **execute-api:Invoke** to the gateway in order to proceed.
+
+### Cognito
+
+For federation access you have to configure your external IDP to redirect back to:
+
+```
+https://eu-central-1999999999.auth.eu-central-1.amazoncognito.com/oauth2/idpresponse
+```
+
+With your corresponding cognito domain (can also be custom depending on your config - checkout your settings in Branding->Domain)
+
+For further information about cognito endpoints read [this](https://docs.aws.amazon.com/cognito/latest/developerguide/federation-endpoints.html)
+
+Authorization test tab is completely buggy and does not work (probably only works with IDTokens). Just deploy it to dev and test it instead. Bearer or not bearer both works.
+
+#### Watch Out 👀
+
+- _VPC LINK in REST API does not work with ALB_: If you want to route your traffic to an ALB, always ensure that you put an NLB between (NLB that routes to ALB). While the ALB is selectable in the UI it will just cause timeouted 500 errors.
