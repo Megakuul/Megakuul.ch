@@ -29,11 +29,61 @@ A very cool feature is that stages in API gateway support stage variables. Those
 
 This way you can for example set the Lambda integration ARN like this `arn:aws:lambda:eu-central-1:111111111111:function:Cowsay:${stageVariables.lambdaAlias}`. This allows you to use one integration and route the request to a specific alias based on the gateway stage used.
 
+#### Authorization
+
+The HTTP API supports 4 ways to authorize:
+
+1. **No authorization**: applies when no Authorizer is attached to a route
+2. **IAM (built in)**: Checks the SigV4 signature on the request and expects `execute-api:Invoke` (for more information see [here](https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-control-access-using-iam-policies-to-invoke-api.html)).
+3. **JWT**: Validates a JWT token against a provided JWKS endpoint and checks the audience (very basic).
+4. **Lambda**: Provides the authorization header (or any specified request information like `$request.querystring.myquery`) to a lambda function. This function can respond either with an objectified bool `{"isAuthorized":true/false}` in **Simple Mode** or with a full IAM policy which is validated with the procedure from **IAM (built in)** in **IAM Policy Mode**. Functions can use an "authorizer cache" feature which uses the identity source (e.g. authorization header) as cache key for a specified duration. It's important to understand that lambda authorizers are NOT EVEN INVOKED if only ONE of the identity sources is NOT present (e.g. if authorization header is missing).
+
 #### Watch Out 👀
 
 - _OPTIONS preflight returns `204` but no CORS header_: ensure method, header, credentials (cookies, auth header) and origin of the sent request are contained in the CORS configuration (often this can be very finicky especially on origins (e.g. S3 website origin is different from S3 origin)).
 
 - _Your lambda returns something and the Gateway returns something different?_ Check out parameter mappings on the integration
+
+- _The lambda authorizer example from AWS is completely outdated and does not work?_ Use this (the example is for REST API):
+
+```javascript
+export const handler = function (event, context) {
+  if (
+    event.headers.fckapigateway === 'true' ||
+    event.identitySource.includes('API GATEWAY SUCKS')
+  ) {
+    return {
+      // this is required and passed down to the integration as $context.authorizer.principalId (otherwise it returns internal error)
+      // however, please don't ask why? WTF!? ARE YOU KIDDING ME? NAH NOT REALLY? or something like this...
+      principalId: 'ALARRRMmMM',
+      policyDocument: {
+        Version: '2012-10-17',
+        Statement: [
+          {
+            Effect: 'Allow',
+            Action: 'execute-api:Invoke',
+            Resource: event.routeArn,
+          },
+        ],
+      },
+    };
+  } else {
+    return {
+      principalId: 'bombaclad',
+      policyDocument: {
+        Version: '2012-10-17',
+        Statement: [
+          {
+            Effect: 'Deny',
+            Action: 'execute-api:Invoke',
+            Resource: event.routeArn,
+          },
+        ],
+      },
+    };
+  }
+};
+```
 
 #### Quirks
 
@@ -76,9 +126,9 @@ There are 5 major ways to integrate authorization in the method request phase:
 
 1. **NONE**: The default, it allows anonymous users to access the gateway depending on resource policy (has to be Principal: "\*" or completely empty to allow anonymous).
 2. **API Key**: Attach an API key to the Gateway and tick the box. Now the API only accepts requests with a matching `x-api-key` header. (attention API keys are more like to enforce user limits and not for authorization... they can also be used with the other options in conjunction)
-3. **AWS_IAM**: Reads SigV4 from Authorization header or query params (like every other SigV4 verifier). The signature must provide access either via resource policy or identity based policy to the **execute-api:Invoke** action.
+3. **AWS_IAM**: Reads SigV4 from Authorization header or query params (like every other SigV4 verifier). The signature must provide access either via resource policy or identity based policy to the `execute-api:Invoke` action.
 4. **Cognito**: Reads a specified header and validates the accesstoken against a Cognito userpool and verifies that it contains the according scope.
-5. **Lambda**: Executes a lambda function that returns an IAM policy which then must define the appropriate action like **execute-api:Invoke** to the gateway in order to proceed.
+5. **Lambda**: Executes a lambda function that returns an IAM policy which then must define the appropriate action like `execute-api:Invoke` to the gateway in order to proceed. An outdated crap example for the authorizers can be found [here](https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-use-lambda-authorizer.html).
 
 ### Cognito
 
@@ -97,3 +147,5 @@ Authorization test tab is completely buggy and does not work (probably only work
 #### Watch Out 👀
 
 - _VPC LINK in REST API does not work with ALB_: If you want to route your traffic to an ALB, always ensure that you put an NLB between (NLB that routes to ALB). While the ALB is selectable in the UI it will just cause timeouted 500 errors.
+
+- _Lambda Authorizer does not detect your header / identity source_: Very simple, unlike the HTTP API authorizer, the REST API lambda authorizer requires the raw HEADER as tokensource (e.g. `Authorization`) and no weird format like `method.request.header.Authorization`.
