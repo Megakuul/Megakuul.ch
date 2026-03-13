@@ -281,13 +281,81 @@ Output example with proxy integration (must match otherwise it returns 502).
 
 (this is actually Payload 1.0 format also used in old HTTP API versions)
 
+#### Validation
+
+Integration requests can be validated in REST API Gateway. Validation is actually very simple (considering we are talking about API Gateway here):
+
+1. **Query Params**: Allow basic key matchers that just check if a parameter key is present.
+2. **Headers**: Allow basic key matchers that just check if the header is present.
+3. **Body**: Create models (which is just JSON Schema) that validate the body.
+
+<Note>
+Validation is executed BEFORE VTL transformations in the <b>Method Request</b> stage!
+</Note>
+
+While the mentioned validation happens in the **Method Request** you can also specify model validators and headers in one of the **Method Responses**. However, this only serves documentation purposes (API Gateway does not actually validate anything in the response (besser ist das)).
+
+#### Responses
+
+The response UI in AWS for Lambda integrations is highly confusing 🤷 It works that way:
+
+You define responses (only for documentation purposes there is no technical functionality) in the **Method Response** tab and use them in the **Integration Response** tab to create a new response.
+
+The **Integration Response** stage uses a regex on the header `errorMessage` to route the response to a **Method Response**.
+
+Now guess how this `errorMessage` can be populated: YOU HAVE TO FUCKING THROW AN ERROR IN LAMBDA.
+
+Okay lets calm down. If you throw an error in Lambda (only way to get a response different from 200 btw) you can now use the regex to analyze the thrown exception matching it to the appropriate response.
+
+#### Transform
+
+The holy grail of shitcoding is the transformation feature of AWS REST API Gateway.
+
+**Incoming Requests**:
+You can transform requests with VTL and access to things like query params, headers, path and body:
+
+```vtl
+{
+  "id": { "trailer": -1
+  #foreach($param in $input.params().keySet())
+    , "$param": "$velocityCount"
+  #end
+  }
+}
+```
+
+<Note type="caution">
+For lambda integration without proxy specifically it is very important that template output is VALID JSON otherwise Lambda engine will reject it (it parses the event before passing it to the lambda).
+<br>
+It's important to understand that API Gateway literally uses the raw API when using AWS Service Integrations or Lambda without proxy. This means that you could theoretically send a Eventbridge event to the Lambda (it won't notice the difference).
+</Note>
+
+**Outgoing Responses**:
+You can also transform responses with VTL:
+
+```vtl
+
+```
+
+However, in this scenario you cannot directly convert body attributes back to response headers. Instead, you can use the UI extractors
+
+#### Caching
+
+Don't get confused by the UI, caching must be enabled by simply provisioning a cache cluster in the stage configuration (attention the cache cluster loves money).
+
+Caching is handled on two request stages the **Method Request** and the **Integration Request**. For both you can just configure required or mapped query params and headers (even paths in lambda integration requests) with the `cache` checkbox. Ticking this checkbox adds param/header to the cachekey.
+
+<Note type="caution">
+Never use caching. Use Cloudfront instead or even better <b>DONT USE API GATEWAY AT ALL</b>.
+</Note>
+
 #### Authorizers
 
 There are 5 major ways to integrate authorization in the method request phase:
 
 1. **NONE**: The default, it allows anonymous users to access the gateway depending on resource policy (has to be Principal: "\*" or completely empty to allow anonymous).
 2. **API Key**: Attach an API key to the Gateway and tick the box. Now the API only accepts requests with a matching `x-api-key` header. (attention API keys are more like to enforce user limits and not for authorization... they can also be used with the other options in conjunction)
-3. **AWS_IAM**: Reads SigV4 from Authorization header or query params (like every other SigV4 verifier). The signature must provide access either via resource policy or identity based policy to the `execute-api:Invoke` action.
+3. **AWS_IAM**: Reads SigV4 from Authorization header or query params (like every other SigV4 verifier). The signature must provide access either via resource policy or identity based policy to the `execute-api:Invoke` action. (this is primarily used )
 4. **Cognito**: Reads a specified header and validates the accesstoken against a Cognito userpool and verifies that it contains the according scope.
 5. **Lambda**: Executes a lambda function that returns an IAM policy which then must define the appropriate action like `execute-api:Invoke` to the gateway in order to proceed. An outdated crap example for the authorizers can be found [here](https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-use-lambda-authorizer.html).
 
