@@ -307,6 +307,20 @@ Now guess how this `errorMessage` can be populated: YOU HAVE TO FUCKING THROW AN
 
 Okay lets calm down. If you throw an error in Lambda (only way to get a response different from 200 btw) you can now use the regex to analyze the thrown exception matching it to the appropriate response.
 
+To map response **headers** back from the body you have to use header mappings in the **Method Response**. Those header mappings can read data from the VTL transformed response body for example `integration.response.body.nested.id` for the following _untransformed_ (VTL runs after mapping) body:
+
+```json
+{
+  "nested": {
+    "id": "some-id"
+  }
+}
+```
+
+<Note>
+Notice that integration response header mappings require you to configure the header you want to extract in the <b>Method Response</b>.
+</Note>
+
 #### Transform
 
 The holy grail of shitcoding is the transformation feature of AWS REST API Gateway.
@@ -334,10 +348,15 @@ It's important to understand that API Gateway literally uses the raw API when us
 You can also transform responses with VTL:
 
 ```vtl
-
+{
+  "error": $input.json("$.bla"),
+  "id": $input.json("$.bla")
+}
 ```
 
-However, in this scenario you cannot directly convert body attributes back to response headers. Instead, you can use the UI extractors
+<Note>
+The VTL response transformer only transforms the body, header mapping is done in advance on the raw integration body.
+</Note>
 
 #### Caching
 
