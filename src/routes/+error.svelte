@@ -16,7 +16,7 @@
 </div>    
 {:else}
     <div class="flex flex-col justify-center items-center w-full h-screen">
-        <h1 class="text-9xl font-extrabold text-transparent bg-clip-text bg-gradient-to-tr animate-pulse from-slate-50 to-slate-400">{$page.status}</h1>
+        <h1 class="text-9xl font-extrabold text-transparent bg-clip-text bg-gradient-to-tr animate-pulse from-slate-50 to-slate-400">{page.status}</h1>
         <h3 class="my-8 text-2xl">{page.error?.message}</h3>
         <a href="/" class="btn btn-ghost">Take me Home</a>
     </div>

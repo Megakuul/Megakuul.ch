@@ -52,7 +52,7 @@
   <svg class="my-8 w-24 h-24 sm:my-64 slow-arrow text-slate-50/30" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="m12 20l6-6m-6 6l-6-6m6 6V9.5M12 4v2.5"/></svg>
 
   <Intersector
-    class="mt-10 w-5/6 sm:mt-20 apple-glass mockup-code bg-base-300 min-h-[640px] xl:h-[600px]"
+    class="mt-10 w-5/6 sm:mt-20 apple-glass mockup-code bg-base-300 min-h-160 xl:h-150"
     classOnDefault="scale-90"
     classOnIntersect="scale-100"
     transition="all ease .5s"

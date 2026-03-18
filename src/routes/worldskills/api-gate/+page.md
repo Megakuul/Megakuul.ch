@@ -328,7 +328,7 @@ The holy grail of shitcoding is the transformation feature of AWS REST API Gatew
 **Incoming Requests**:
 You can transform requests with VTL and access to things like query params, headers, path and body:
 
-```vtl
+```json
 {
   "id": { "trailer": -1
   #foreach($param in $input.params().keySet())
@@ -347,7 +347,7 @@ It's important to understand that API Gateway literally uses the raw API when us
 **Outgoing Responses**:
 You can also transform responses with VTL:
 
-```vtl
+```json
 {
   "error": $input.json("$.bla"),
   "id": $input.json("$.bla")
@@ -391,6 +391,10 @@ With your corresponding cognito domain (can also be custom depending on your con
 For further information about cognito endpoints read [this](https://docs.aws.amazon.com/cognito/latest/developerguide/federation-endpoints.html)
 
 Authorization test tab is completely buggy and does not work (probably only works with IDTokens). Just deploy it to dev and test it instead. Bearer or not bearer both works.
+
+#### Debugging
+
+To debug REST API Gateway issues (like internal server problems with VTL template), always use the **Test** tab. This testing service provides detailed outputs about the **Method Request**->**Integration Request**->**Integration**->**Integration Response**->**Method Response** flow.
 
 #### Watch Out 👀
 

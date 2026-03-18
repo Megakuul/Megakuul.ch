@@ -5,66 +5,66 @@ interface Project {
   services: string[];
 }
 
-const projects: Record<string, Project> = {
+export const projects: Record<string, Project> = {
   'pipe-plumber': {
     title: 'Pipe Plumber 🪠',
     description: 'Building a CI/CD pipeline to deploy this website',
-    published: '01.08.2026',
+    published: '08.01.2026',
     services: ['s3', 'acm', 'cloudfront', 'codebuild', 'cli', 'codepipeline'],
   },
   // renamed for pascal's sake
   'please-open-the-door': {
     title: 'Please open the door 🔒',
     description: 'How to authenticate with aws cli',
-    published: '01.09.2026',
+    published: '09.01.2026',
     services: ['cli', 'iam', 'sts'],
   },
   'how-about-a-magic-trick': {
     title: 'How about a magic trick 🎩',
     description: 'Some neat magictricks for latenight debugging sessions',
-    published: '01.15.2026',
+    published: '15.01.2026',
     services: ['cli', 'ssm', 'todo'],
   },
   'the-reason-aws-is-good': {
     title: 'The reason AWS is good 🗿',
     description: 'Why the AWS permission system is crazy good',
-    published: '01.18.2026',
+    published: '18.01.2026',
     services: ['iam', 'sts'],
   },
   wellarchitecter: {
     title: 'Wellarchitecter 🧱',
     description: 'AWS best practice buzzwords',
-    published: '01.23.2026',
+    published: '23.01.2026',
     services: ['iam', 'sts', 'vpc', 'todo'],
   },
   'elastic-kvm-wrapper': {
     title: 'Elastic KVM Wrapper ➰',
     description: 'Exploring virtual machines with elastic pricing',
-    published: '01.25.2026',
+    published: '25.01.2026',
     services: ['ec2', 'vpc', 'todo'],
   },
   paranoia: {
     title: 'Paranoia 🛠️',
     description: 'Parameterstore vs Secrets Manager ⚔️ FIGHT',
-    published: '01.27.2026',
+    published: '27.01.2026',
     services: ['ssm', 'secrets-manager'],
   },
   teamevent: {
     title: 'Teamevent 📅',
     description: 'How to burn your money event driven',
-    published: '01.27.2026',
+    published: '27.01.2026',
     services: ['events', 'todo'],
   },
   networking: {
     title: 'Networking 🌐',
     description: 'VPC is not that hard',
-    published: '01.30.2026',
+    published: '30.01.2026',
     services: ['vpc'],
   },
   'it-aws-dns': {
     title: 'It aws DNS 🚨',
     description: "Who would've guessed?",
-    published: '01.31.2026',
+    published: '31.01.2026',
     services: ['route53', 'todo'],
   },
   'transitive-gateway': {
@@ -76,31 +76,31 @@ const projects: Record<string, Project> = {
   'client-vpn': {
     title: 'Client VPN 💸',
     description: 'Make OpenVPN Expensive Again',
-    published: '02.07.2026',
+    published: '07.02.2026',
     services: ['vpc'],
   },
   'cloud-trailer': {
     title: 'Cloud Trailer 🚛',
     description: 'Wait, what did I just do?',
-    published: '02.16.2026',
+    published: '16.02.2026',
     services: ['cloudtrail', 'todo'],
   },
   'edgy-functions': {
     title: 'Edgy Functions 🎱',
     description: 'Unleash the power of servers that are less',
-    published: '02.18.2026',
+    published: '18.02.2026',
     services: ['lambda', 'todo'],
   },
   'the-big-s': {
     title: 'The Big 💲',
     description: 'Store your cat memes directly to a money printing machine',
-    published: '02.25.2026',
+    published: '25.02.2026',
     services: ['s3', 'todo'],
   },
   'api-gate': {
     title: 'api-gate 🍝',
     description: 'A service created with the dark power of spaghetti code',
-    published: '02.26.2026',
+    published: '26.02.2026',
     services: ['api-gateway', 'todo'],
   },
   'red-feature-flag': {
@@ -114,6 +114,12 @@ const projects: Record<string, Project> = {
     description: 'Kubernetes built by Java developers',
     published: '06.03.2026',
     services: ['ec2', 'autoscaler', 'todo'],
+  },
+  'inmemory-rds': {
+    title: 'Inmemory RDS 🧠',
+    description: "Wait a minute, isn't that just Valkey?",
+    published: '18.03.2026',
+    services: ['elasticache', 'todo'],
   },
 };
 
