@@ -11,7 +11,7 @@ export async function GET() {
         <title>Worldskills | Megakuul</title>
         <description>Master more AWS services than you will ever need (preparation for the Worldskills 2026) 🇨🇭</description>
         <link>https://megakuul.ch/worldskills</link>
-        <atom:link href="https://megakuul.ch/worldskills/feed" rel="self" type="application/rss+xml"/>
+        <atom:link href="https://megakuul.ch/worldskills/feed.xml" rel="self" type="application/rss+xml"/>
         ${Object.entries(projects)
           .reverse()
           .map(project => {
