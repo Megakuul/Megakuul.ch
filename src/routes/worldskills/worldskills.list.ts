@@ -121,6 +121,12 @@ export const projects: Record<string, Project> = {
     published: '18.03.2026',
     services: ['elasticache', 'todo'],
   },
+  'simple-tube': {
+    title: 'Simple Tube Service 🧪',
+    description: 'Why is message broker just one letter away from "message broken"?',
+    published: '23.03.2026',
+    services: ['sqs', 'sns', 'todo'],
+  },
 };
 
 export default projects;
