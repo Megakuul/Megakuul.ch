@@ -68,3 +68,44 @@ Just add two PrivateLink Endpoints with the following services:
 And add a security group that allows ingress on `443` to the endpoints. That's all! You are now officially bankrupt.
 
 (Consulting this document after your insolvency court proceedings? Check out EC2 Instance Connect!).
+
+
+### Confuse the deputy 😵‍💫
+
+If a service is calling another service on your behalf you can use this simple condition check to avoid service deputy confusion:
+
+```json
+{
+    "Effect": "Allow",
+    "Principal": {
+        "Service": "events.amazonaws.com"
+    },
+    "Action": "...",
+    "Resource": "...",
+    "Condition": {
+        "ArnLike": {
+            "aws:SourceArn": "arn:aws:events:eu-central-1:111111111111:event-bus/commerce-bus"
+        },
+        "StringEquals": {
+            "aws:SourceAccount": "111111111111"
+        },
+    }
+}
+```
+*Notice: the SourceAccount is kinda useless here as it is already enforced via arn*
+
+<Note type="caution">
+Caution: At LEAST the <b>aws:SourceAccount</b> check should be included in every single resource policy (ESPECIALLY in IAM TRUST POLICIES).
+<br>
+Technically by granting access from a service principal, every AWS account on earth can <b>sts:AssumeRole</b> your role.
+<br>
+Services only use <b>iam:PassRole</b> to check if you can configure this role (for example: I can't add the role <b>Klaus</b> from another account to my lambda function because I do not have <b>iam:PassRole</b> on <b>Klaus</b>).
+<br>
+Now since you cannot grant another account access to <b>iam:PassRole</b> the problem is effectively inexistent right?
+<br>
+Unfortunately no, the main reason is that <b>iam:PassRole</b> is a "pseudo" role. Other IAM permissions belong to exactly one "action" which is probably an endpoint in the AWS API that automatically checks if the IAM permissions match before even starting endpoint logic. PassRole on the other hand is completely unbound, you just rely on the developers ability to insert it on every possible code path where he passes a role (remember "passing a role" is not an action its just the process of configuring your service to use a role... the real "operation" which is assuming the role happens later but unrestricted).
+<br>
+Now the important question: <b>Do we trust the developers?</b>
+<br>
+This should answer the question whether you should add an additional condition or not.
+</Note>

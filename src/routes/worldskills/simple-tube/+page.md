@@ -49,12 +49,14 @@ best practice lambda workflow:
 - if receiveCount is above the dlq count, the message is moved to dlq, otherwise its deleted after its retention date.
 
 
+
 - ALARM: requires kms:Decrypt if custom kms key
 
 ## Watch Out 👀
 
 - The consoles receiver does also remove the message from the queue for visibility timeout...
 - Receive count in the dashboard is how many times it has been received from sqs not how many times sns sent it...
+- Multiple lambda triggers cause potentially unfair stealing 
 
 ## Quirks
 
