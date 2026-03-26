@@ -52,11 +52,14 @@ best practice lambda workflow:
 
 - ALARM: requires kms:Decrypt if custom kms key
 
+- Batching uses multiple parallel processors (in fifo per queue partitioned) testing on low volume often does not trigger records to be batched.
+
 ## Watch Out 👀
 
 - The consoles receiver does also remove the message from the queue for visibility timeout...
 - Receive count in the dashboard is how many times it has been received from sqs not how many times sns sent it...
 - Multiple lambda triggers cause potentially unfair stealing 
+- Lambda trigger tags for sqs can only be set when configured from lambda side
 
 ## Quirks
 
