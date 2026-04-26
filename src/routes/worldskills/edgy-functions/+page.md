@@ -141,4 +141,4 @@ Executes synchron and waits for the response; this effectively hijacks the retur
 
 #### Notes
 
-- use pino logger or enable JSON and console.log({}) for wrapping. Alternative you can use process.stdout.write(JSON.stringify({}) + "\n") to write RAW logs
+- use pino logger or enable JSON and `console.log({})` for wrapping. Alternative you can use `process.stdout.write(JSON.stringify({}) + "\n")` to write RAW logs

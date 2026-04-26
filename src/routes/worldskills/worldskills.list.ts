@@ -127,6 +127,12 @@ export const projects: Record<string, Project> = {
     published: '23.03.2026',
     services: ['sqs', 'sns', 'todo'],
   },
+  'elite-kubernetes-shenanigans': {
+    title: 'Elite Kubernetes Shenanigans 🦅',
+    description: 'Not even AWS dared to call it "Simple Kubernetes Service"',
+    published: '25.04.2026',
+    services: ['eks'],
+  },
 };
 
 export default projects;

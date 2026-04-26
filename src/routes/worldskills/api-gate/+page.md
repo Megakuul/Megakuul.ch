@@ -5,6 +5,8 @@
 
 ## Table of Contents
 
+## API Gateway
+
 <Note type="caution" class="flex flex-col items-center text-center">
     <b class="text-3xl">Warning</b>
     <span>If you are seriously considering using this service for production:</span>

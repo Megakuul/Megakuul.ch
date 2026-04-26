@@ -1,0 +1,165 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/aws/serverless-application-model/main/samtranslator/schema/schema.json
+Transform: AWS::Serverless-2016-10-31
+Parameters:
+  AppName:
+    Type: String
+    Default: 'practice-feed'
+  StageName:
+    Type: String
+    Default: '$default'
+  FocusId:
+    Type: String
+    Default: '1337'
+  FocusTitle:
+    Type: String
+    Default: 'Clodform'
+Resources:
+  ParamVakiliFocusId:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Type: 'String'
+      Name: 'focus-id'
+      Value: !Ref FocusId
+  ParamVakiliFocusTitle:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Type: 'String'
+      Name: 'focus-title'
+      Value: !Ref FocusTitle
+  Api:
+    Type: AWS::Serverless::HttpApi
+    Properties:
+      Name: !Sub ${AWS::StackName}-api
+      StageName: !Ref StageName
+  FocusRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: FocusRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AmazonSSMReadOnlyAccess
+      AssumeRolePolicyDocument:
+        # prettier-ignore
+        {
+          "Version": "2012-10-17",
+          "Statement":
+            [
+              {
+                "Effect": "Allow",
+                "Principal": { "Service": "lambda.amazonaws.com" },
+                "Action": "sts:AssumeRole",
+                "Condition":
+                  { "StringEquals": { "aws:SourceAccount": "202720548515" } }
+              }
+            ]
+        }
+      Policies:
+        - PolicyDocument:
+            # prettier-ignore
+            {
+              "Version": "2012-10-17",
+              "Statement":
+                [
+                  {
+                    "Effect": "Allow",
+                    "Action": ["ssm:GetParameter", "ssm:GetParameters"],
+                    "Resource": "*"
+                  }
+                ]
+            }
+          PolicyName: ReadParams
+  Healthcheck:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: !Sub
+        - Stack ${AWS::StackName} Function ${ResourceName}
+        - ResourceName: Healthcheck
+      InlineCode: |
+        exports.handler = (event, ctx, callback) => {
+          callback(null, {
+            statusCode: 200
+          })
+        }
+      Handler: index.handler
+      Runtime: nodejs22.x
+      MemorySize: 128
+      Timeout: 3
+      Tracing: Active
+      Events:
+        ApiGEThealth:
+          Type: HttpApi
+          Properties:
+            Path: /health
+            Method: GET
+            ApiId: !Ref Api
+      Architectures:
+        - arm64
+  HealthcheckLogGroup:
+    Type: AWS::Logs::LogGroup
+    DeletionPolicy: Retain
+    Properties:
+      LogGroupName: !Sub /aws/lambda/${Healthcheck}
+  Focus:
+    Type: AWS::Serverless::Function
+    Properties:
+      Description: !Sub
+        - Stack ${AWS::StackName} Function ${ResourceName}
+        - ResourceName: Focus
+      InlineCode: |
+        exports.handler = async (event, ctx, callback) => {
+          try {
+            const id = await fetch(`http://localhost:2773/systemsmanager/parameters/get/?name=${process.env.FOCUS_ID}`, {
+              headers: {
+                "X-Aws-Parameters-Secrets-Token": process.env.AWS_SESSION_TOKEN,
+              }
+            })
+            const title = await fetch(`http://localhost:2773/systemsmanager/parameters/get/?name=${process.env.FOCUS_TITLE}`, {
+              headers: {
+                "X-Aws-Parameters-Secrets-Token": process.env.AWS_SESSION_TOKEN,
+              }
+            })
+            callback(null, {
+              statusCode: 200,
+              body: JSON.stringify({id: JSON.parse(await id.text()).Parameter.Value, title: JSON.parse(await title.text()).Parameter.Value})
+            })
+          } catch (err) {
+            callback(null, {
+              statusCode: 500,
+              body: JSON.stringify({err: err.message})
+            })
+          }
+        }
+
+      Handler: index.handler
+      Runtime: nodejs22.x
+      Layers:
+        - !Sub '{{resolve:ssm:/aws/service/aws-parameters-and-secrets-lambda-extension/arm64/latest}}'
+      Role: !GetAtt FocusRole.Arn
+      Environment:
+        Variables:
+          FOCUS_ID: !Ref ParamVakiliFocusId
+          FOCUS_TITLE: !Ref ParamVakiliFocusTitle
+      MemorySize: 128
+      Timeout: 3
+      Tracing: Active
+      Events:
+        ApiGETapifocus:
+          Type: HttpApi
+          Properties:
+            Path: /api/focus
+            Method: GET
+            ApiId: !Ref Api
+      Architectures:
+        - arm64
+  FocusLogGroup:
+    Type: AWS::Logs::LogGroup
+    DeletionPolicy: Retain
+    Properties:
+      LogGroupName: !Sub /aws/lambda/${Focus}
+  FocusLogs:
+    Type: AWS::Logs::LogGroup
+    Properties: {}
+Outputs:
+  URL:
+    Value: !Sub https://${Api}.execute-api.${AWS::Region}.amazonaws.com/${StageName}
+  STACKNAME:
+    Value: !Ref AWS::StackName
