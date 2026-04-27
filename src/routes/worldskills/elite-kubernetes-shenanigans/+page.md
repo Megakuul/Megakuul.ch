@@ -67,7 +67,32 @@ In `Auto-Mode` this includes updating "Cluster Components" (CNI, CSI, etc...) an
 
 In `Hard-Mode` you have to update everything by yourself (CNI, CSI, etc... Kubernetes operators / addons).
 
-### IAM Integration
+### IAM Access (into the Cluster)
+
+The primary way to access the EKS cluster with IAM credentials is to use this:
+
+```bash
+aws eks update-kubeconfig --name yourcluster
+```
+
+This creates a `~/.kube/config` which uses the AWS CLI to generate STS tokens that are approved by the EKS control plane authenticator.
+
+To map a subject to the role use `iam access entries`:
+
+```bash
+
+```
+*(notice that there is a cool UI to manage this in the EKS cluster "access" tab)*
+
+
+Besides this basic IAM access AWS also provides you with the option of associating an OIDC provider with the control plane.
+Under the hood this creates an OIDC trust on the control plane, therefore, you can use it like a normal Kubernetes OIDC provider (just use `sub` claims to match on k8s user). 
+
+<Note type="note">
+Don't confuse the <b>OIDC identity providers</b> tab on the UI with the IAM integration, this is what you are looking for in this section! 
+</Note>
+
+### IAM Integration (out of the Cluster)
 
 There are two types of IAM integration in EKS:
 
