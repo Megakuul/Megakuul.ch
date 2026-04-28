@@ -156,6 +156,39 @@ I believe this completely misses the primary centralized IAM approach that makes
 An important detail to understand is that Auto-Mode deploys many of its preconfigured services on worker nodes (most notably the `coredns.service`, `eks-pod-identity-agent.service`, `aws-node.service` / `ipamd.service` (VPC) and `ebs-plugin.service`) with systemd. This is different from `Hard-Mode` where are usually deployed as `DaemonSets`.
 
 
+### ArgoCDrrrrrrrr
+
+Before we start doing stupid things, lets dive into an example for how to PROPERLY operate EKS 🔥
+
+In this example I will use the ArgoCD capability that can be enabled on the AWS console (costs 20$ per month; it is recommended to preemptively reserve a spot under your favorite bridge).
+
+The capability installs ArgoCD conveniently auto-managed on the control plane and integrates quite good with `IAM Identity Center` for authentication.
+
+After setting up ArgoCD you can apply the following secret with kubectl to add the local cluster to ArgoCD:
+
+```yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: local-cluster
+  namespace: argocd
+  labels:
+    argocd.argoproj.io/secret-type: cluster
+stringData:
+  name: local-cluster
+  server: arn:aws:eks:us-east-1:1111111111:cluster/acme # change with your cluster arn
+  project: default
+```
+
+Now you can add an `app-of-app` project pointing to your CodeCommit repository (for this access to work, simply provide the Argo Capability Role with `codecommit:GitPull` access for the repository).
+
+You will probably notice that ArgoCD will fail the deployment because it lacks Kubernetes resource access, to fix this, simply associate the Argo Capability Role with a higher privileged policy like `AmazonEKSClusterAdminPolicy` (can also be done via AWS console very conveniently in the `Access` tab).
+
+
+## Common Issues
+
+- Karpenter Nodepool Event (`DisruptionBlocked`) `Nodeclaim does not have an associated node`: Wait 10-20 minutes, after bootstrapping an EKS cluster it can take some time to deploy.
+
 ## References
 
 - [Auto-Mode workshop](https://catalog.workshops.aws/workshops/aadbd25d-43fa-4ac3-ae88-32d729af8ed4) for EKS (overly explicit)
