@@ -131,7 +131,13 @@ export const projects: Record<string, Project> = {
     title: 'Elite Kubernetes Shenanigans 🦅',
     description: 'Not even AWS dared to call it "Simple Kubernetes Service"',
     published: '25.04.2026',
-    services: ['eks'],
+    services: ['eks', 'todo'],
+  },
+  incognito: {
+    title: 'Incognito 🥸',
+    description: "Guys we haven't read the OIDC spec either, so what?",
+    published: '30.04.2026',
+    services: ['cognito', 'todo'],
   },
 };
 
