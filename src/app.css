@@ -3,6 +3,7 @@
 @import 'tailwindcss';
 @plugin "daisyui";
 @plugin "@tailwindcss/typography";
+@source "../.svelte-kit/";
 
 html,
 body {

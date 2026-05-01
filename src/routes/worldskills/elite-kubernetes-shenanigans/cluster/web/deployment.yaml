@@ -1,4 +1,4 @@
-# yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.34.3/all.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.34.3/deployment.json
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -27,3 +27,19 @@ spec:
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 80
+              name: web-svc
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.34.3/service.json
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx
+spec:
+  type: ClusterIP
+  selector:
+    app: nginx
+  ports:
+    - name: web
+      protocol: TCP
+      port: 80
+      targetPort: web-svc

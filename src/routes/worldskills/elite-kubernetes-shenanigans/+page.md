@@ -118,7 +118,7 @@ There are two types of IAM integration in EKS:
 }
 ```
 
-2. Pod Identity 👺: A new system that maps service accounts directly to roles. This system does NOT require an IAM `sts:AssumeRoleWithWebIdentity` jump (though the AWS SDK uses an HTTP call to a local `pod identity agent` which itself uses `sts:AssumeRoleForPodIdentity` under the hood). In this system you grant the `pod.eks.amazonaws.com` service full access to assume your role but create the explicit service account to role bindings in a mystical new API (similar to how GCP bindings work):
+2. **Pod Identity** 👺: A new system that maps service accounts directly to roles. This system does NOT require an IAM `sts:AssumeRoleWithWebIdentity` jump (though the AWS SDK uses an HTTP call to a local `pod identity agent` which itself uses `sts:AssumeRoleForPodIdentity` under the hood). In this system you grant the `pod.eks.amazonaws.com` service full access to assume your role but create the explicit service account to role bindings in a mystical new API (similar to how GCP bindings work):
 ```json
 {
     "Version": "2012-10-17",
@@ -188,6 +188,7 @@ You will probably notice that ArgoCD will fail the deployment because it lacks K
 ## Common Issues
 
 - Karpenter Nodepool Event (`DisruptionBlocked`) `Nodeclaim does not have an associated node`: Wait 10-20 minutes, after bootstrapping an EKS cluster it can take some time to deploy.
+- Kubernetes Clusterjoin fails: Analyze the `kubelet` service on the node.
 
 ## References
 
