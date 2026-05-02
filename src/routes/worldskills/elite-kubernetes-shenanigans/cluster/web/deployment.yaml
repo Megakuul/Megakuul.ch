@@ -20,6 +20,9 @@ spec:
           minDomains: 2
           topologyKey: topology.kubernetes.io/zone
           whenUnsatisfiable: DoNotSchedule
+          labelSelector:
+            matchLabels:
+              app: nginx
       restartPolicy: Always
       containers:
         - name: nginx

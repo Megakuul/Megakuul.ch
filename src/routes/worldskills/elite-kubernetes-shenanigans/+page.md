@@ -156,7 +156,7 @@ I believe this completely misses the primary centralized IAM approach that makes
 An important detail to understand is that Auto-Mode deploys many of its preconfigured services on worker nodes (most notably the `coredns.service`, `eks-pod-identity-agent.service`, `aws-node.service` / `ipamd.service` (VPC) and `ebs-plugin.service`) with systemd. This is different from `Hard-Mode` where are usually deployed as `DaemonSets`.
 
 
-### ArgoCDrrrrrrrr
+### ArgoCDrrrrrrrr 🪼
 
 Before we start doing stupid things, lets dive into an example for how to PROPERLY operate EKS 🔥
 
@@ -184,6 +184,17 @@ Now you can add an `app-of-app` project pointing to your CodeCommit repository (
 
 You will probably notice that ArgoCD will fail the deployment because it lacks Kubernetes resource access, to fix this, simply associate the Argo Capability Role with a higher privileged policy like `AmazonEKSClusterAdminPolicy` (can also be done via AWS console very conveniently in the `Access` tab).
 
+### Arctic Zonal Shift 🥶
+
+EKS provides a feature that is called `ARC Zonal Shift`. While this sounds extremely fancy and magical, it is simply an `ALB` / `NLB` feature which disables DNS traffic routing to loadbalancer instances in impaired zones.
+
+### Metric Server
+
+EKS like most k8s distros deploys the `metrics-server` used to aggregate data (which can be queried via delegated call to `kube-api-server` e.g. via `kubectl top pods`) on the worker-nodes.
+
+<Note type="caution">
+<b>Caution</b>: In Auto-Mode the metrics-server pods use <b>nodeSelector.karpenter.sh/nodepool: system</b> which requires a NodePool with the name <b>system</b> to exist.
+</Note>
 
 ## Common Issues
 

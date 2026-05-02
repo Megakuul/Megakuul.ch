@@ -1,0 +1,47 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/karpenter.sh/nodepool_v1.json
+apiVersion: karpenter.sh/v1
+kind: NodePool
+metadata:
+  name: cheap-purpose # alternative to general-purpose
+spec:
+  template:
+    metadata:
+      labels:
+        type: cheap # <-- nodes are labelled with this
+    spec:
+      nodeClassRef:
+        group: eks.amazonaws.com # <-- router that decides which catalog to filter (in this case the AWS AMI catalog)
+        kind: NodeClass
+        name: default
+      # requirements are actually more like a filter for the node class,
+      # they specify which nodes from the referenced nodeclass CAN be considered.
+      # ah and the filters are AND joined
+      requirements: # just call this "filters" please
+        # - key: 'eks.amazonaws.com/instance-category'
+        #  operator: In
+        #  values: ['t'] # e.g. we want burstable, alternatives are c compute optimized, m general purpose, r memory optimized or g gpu optimized
+        - key: 'eks.amazonaws.com/instance-family'
+          operator: In
+          values: ['t4g', 't3']
+        - key: 'karpenter.sh/capacity-type'
+          operator: In
+          values: ['spot', 'on-demand']
+---
+# checkout https://docs.aws.amazon.com/eks/latest/userguide/create-node-class.html
+apiVersion: eks.amazonaws.com/v1
+kind: NodeClass
+metadata:
+  name: default
+spec:
+  networkPolicy: DefaultAllow
+  networkPolicyEventLogs: Disabled
+  role: AmazonEKSAutoNodeRole
+  securityGroupSelectorTerms:
+    - tags:
+        Name: 'acme-worker'
+  snatPolicy: Random
+  subnetSelectorTerms:
+    - tags:
+        Name: 'acme-public-a'
+    - tags:
+        Name: 'acme-public-b'

@@ -69,6 +69,11 @@ kubectl logs -f -l app.kubernetes.io/name=<your pod name> --prefix=true
 kubectl get nodes -o wide
 ```
 
+Find the impostor that blocks the node from shutting down
+```bash
+kubectl get pods -A --field-selector spec.nodeName=<node-name>
+```
+
 ### Access to isolated network resources 💲📉
 
 Just add two PrivateLink Endpoints with the following services:
