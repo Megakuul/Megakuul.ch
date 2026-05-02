@@ -74,6 +74,11 @@ Find the impostor that blocks the node from shutting down
 kubectl get pods -A --field-selector spec.nodeName=<node-name>
 ```
 
+Check storageclass defaults:
+```bash
+kubectl get sc -o custom-columns="NAME:.metadata.name,DEFAULT:.metadata.annotations.storageclass\.kubernetes\.io/is-default-class"
+```
+
 ### Access to isolated network resources 💲📉
 
 Just add two PrivateLink Endpoints with the following services:

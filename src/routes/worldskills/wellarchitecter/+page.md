@@ -33,3 +33,9 @@
 > Avoid lambda $LATEST version for production
 
 ~ A concerned citizen (Well Architected OPS06)
+
+---
+
+> Shut up and enable GuardDuty
+
+~ The one you send to kill the Boogeyman (Well Architected SEC04)

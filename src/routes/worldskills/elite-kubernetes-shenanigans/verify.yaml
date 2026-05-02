@@ -1,0 +1,189 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.34.3/namespace.json
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: apps
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.34.3/deployment.json
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: verify
+  namespace: apps
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: verify
+  template:
+    metadata:
+      namespace: web
+      labels:
+        app: verify
+    spec:
+      tolerations:
+        - key: 'role'
+          value: 'workload'
+          effect: 'NoSchedule'
+      topologySpreadConstraints:
+        - maxSkew: 1
+          minDomains: 2
+          topologyKey: topology.kubernetes.io/zone
+          whenUnsatisfiable: DoNotSchedule
+          labelSelector:
+            matchLabels:
+              app: verify
+      restartPolicy: Always
+      containers:
+        - name: nginx
+          image: nginx:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 80
+              name: web-svc
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.34.3/service.json
+apiVersion: v1
+kind: Service
+metadata:
+  name: verify
+  namespace: apps
+spec:
+  type: ClusterIP
+  selector:
+    app: verify
+  ports:
+    - name: web
+      protocol: TCP
+      port: 80
+      targetPort: web-svc
+---
+# for examples check out https://github.com/kubernetes-sigs/aws-ebs-csi-driver/tree/master/examples/kubernetes/storageclass
+# yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.34.3/storageclass.json
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: ebs
+provisioner: ebs.csi.aws.com
+reclaimPolicy: Delete
+allowVolumeExpansion: true
+volumeBindingMode: WaitForFirstConsumer
+parameters:
+  csi.storage.k8s.io/fstype: ext4
+  type: io1
+  iopsPerGB: '50'
+  encrypted: 'true'
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.34.3/persistentvolumeclaim.json
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: journal
+  namespace: apps
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: ebs
+  resources:
+    requests:
+      storage: 4Gi
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.34.3/deployment.json
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: journal-rwo
+  namespace: apps
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: journal
+  template:
+    metadata:
+      name: journal
+      labels:
+        app: journal
+    spec:
+      tolerations:
+        - key: 'role'
+          value: 'workload'
+          effect: 'NoSchedule'
+      containers:
+        - name: journal
+          image: ubuntu:latest
+          command: ['bash', '-c', '--']
+          args: ['trap : TERM INT; sleep infinity & wait']
+          volumeMounts:
+            - mountPath: '/data'
+              name: journal
+      volumes:
+        - name: journal
+          persistentVolumeClaim:
+            claimName: journal
+---
+# for examples check out https://github.com/kubernetes-sigs/aws-efs-csi-driver/tree/master/examples/kubernetes/efs/dynamic_provisioning
+# yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.34.3/storageclass.json
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: efs
+provisioner: efs.csi.aws.com
+parameters:
+  provisioningMode: efs-ap
+  fileSystemId: fs-0254729a1393931b2 # replace with your fs
+  directoryPerms: '700'
+  gidRangeStart: '1000' # optional
+  gidRangeEnd: '2000' # optional
+  basePath: '/dynamic_provisioning' # optional
+  subPathPattern: '${.PVC.namespace}/${.PVC.name}' # optional
+  ensureUniqueDirectory: 'true' # optional
+  reuseAccessPoint: 'false' # optional
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.34.3/persistentvolumeclaim.json
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: shared-notes
+  namespace: apps
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: efs
+  resources:
+    requests:
+      storage: 4Gi
+---
+# yaml-language-server: $schema=https://raw.githubusercontent.com/yannh/kubernetes-json-schema/master/v1.34.3/deployment.json
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: shared-notes-rwx
+  namespace: apps
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: shared-notes
+  template:
+    metadata:
+      name: shared-notes
+      labels:
+        app: shared-notes
+    spec:
+      tolerations:
+        - key: 'role'
+          value: 'workload'
+          effect: 'NoSchedule'
+      containers:
+        - name: shared-notes
+          image: ubuntu:latest
+          command: ['bash', '-c', '--']
+          args: ['trap : TERM INT; sleep infinity & wait']
+          volumeMounts:
+            - mountPath: '/data'
+              name: shared-notes
+      volumes:
+        - name: shared-notes
+          persistentVolumeClaim:
+            claimName: shared-notes
