@@ -135,7 +135,7 @@ export const projects: Record<string, Project> = {
   },
   incognito: {
     title: 'Incognito 🥸',
-    description: "Guys we haven't read the OIDC spec either, so what?",
+    description: "Guys we haven't read the OIDC spec either",
     published: '30.04.2026',
     services: ['cognito', 'todo'],
   },

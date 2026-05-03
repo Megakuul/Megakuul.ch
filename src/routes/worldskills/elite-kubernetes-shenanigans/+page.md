@@ -285,7 +285,7 @@ Fargate pods only use one ENI and one IP. The VPC CNI deamonset does NOT run on 
 <Note type="info">
 Since fargate only runs exactly 1node:1pod it does not support CNI, CSI and other features that require local pods to run on the worker node.
 </Note>
-
+<br>
 <Note type="caution">
 Automode does work notoriously bad with EKS Fargate. While the AMI deployed to fargate contains a lightweight kube-proxy (not a pod though) it does NOT come with the coredns systemd service that Automode usually expects on its own nodes (since there is no coredns deployment and the kube-dns selector is not matching any (automode dns requests are intercepted on the node level by the coredns systemd service)).
 
@@ -299,7 +299,7 @@ To enable fargate logging check out [this](https://docs.aws.amazon.com/eks/lates
 - Karpenter Nodepool Event (`DisruptionBlocked`) `Nodeclaim does not have an associated node`: Wait 10-20 minutes, after bootstrapping an EKS cluster it can take some time to deploy.
 - Kubernetes Clusterjoin fails: Analyze the `kubelet` service on the node.
 
-## References
+## Further Information
 
 - [Auto-Mode workshop](https://catalog.workshops.aws/workshops/aadbd25d-43fa-4ac3-ae88-32d729af8ed4) for EKS (overly explicit)
 - [PA Sports explaining EKS Pod Identity](https://docs.aws.amazon.com/eks/latest/userguide/pod-identities.html)

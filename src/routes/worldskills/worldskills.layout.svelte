@@ -39,9 +39,14 @@
       </div>
     {/each}
   </div>
-  <p class="text-xl text-slate-200/40">~{published}~</p>
+  <a
+    class="text-xl text-slate-200/40"
+    href="https://github.com/megakuul/megakuul.ch/tree/main/src/routes/worldskills/{key}"
+  >
+    ~{published}~
+  </a>
 
-  <article class="p-2 max-w-5xl sm:p-10 prose-sm sm:prose lg:prose-lg xl:prose-xl">
+  <article class="p-2 max-w-7xl sm:p-10 prose-sm sm:prose lg:prose-lg xl:prose-xl 2xl:prose-2xl">
     {@render children()}
   </article>
 </div>
