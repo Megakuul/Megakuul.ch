@@ -79,6 +79,12 @@ Check storageclass defaults:
 kubectl get sc -o custom-columns="NAME:.metadata.name,DEFAULT:.metadata.annotations.storageclass\.kubernetes\.io/is-default-class"
 ```
 
+Start a toolkit debugging container:
+```bash
+kubectl run toolkit -l yourlabel=value --image=docker.io/nicolaka/netshoot:latest -- bash -c -- "trap : TERM INT; sleep infinity & wait"
+kubectl exec -it toolkit -- bash
+```
+
 ### Access to isolated network resources 💲📉
 
 Just add two PrivateLink Endpoints with the following services:

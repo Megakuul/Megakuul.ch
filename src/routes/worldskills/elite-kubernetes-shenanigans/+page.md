@@ -80,7 +80,7 @@ This creates a `~/.kube/config` which uses the AWS CLI to generate STS tokens th
 To map a subject to the role use `iam access entries`:
 
 ```bash
-
+# fuck it, just use the UI I have better things to do than looking up aws cli commands
 ```
 *(notice that there is a cool UI to manage this in the EKS cluster "access" tab)*
 
@@ -239,6 +239,60 @@ spec:
 *Notice that pods without matching `SecurityGroupPolicy` operate normally and don't necessarily use the branch ENI.*
 
 For further information check out [this article](https://docs.aws.amazon.com/eks/latest/best-practices/sgpp.html).
+
+
+### Loadbalancing & Ingress
+
+kubernetes.io/role/elb=1 // internet-facing
+kubernetes.io/role/internal-elb=1 // internal
+
+### Autoscaling
+
+Basic EKS configurations support node autoscaling through a combination of `NodeGroups` (under the hood those are just ASGs) and a Helm chart operator called `Cluster-Autoscaler`.
+
+The [Cluster-Autoscaler](https://docs.aws.amazon.com/eks/latest/best-practices/cas.html) then autodiscovers ASGs from the current account (no matter if they are NodeGroup managed or not) by looking for the following tags:
+
+- k8s.io/cluster-autoscaler/enabled=true
+- k8s.io/cluster-autoscaler/<yourclustername>=owned
+
+*(this behavior applies when using the `--node-group-auto-discovery` flag)*
+
+As soon as the autoscaler is established it will scan for `Pending` pods; if it detects unscheduled pods it will run a simulation against the first `instance-type` of every discovered ASG and select a random one (if using the default expand option). The simulation only ensures that the requested pod fits on the instance.
+
+After the simulation the CA will use the selected ASG and simply call `autoscaling:SetDesiredCapacity` 👷‍♂️
+
+Shocked about the fact how incredible stupid this is, you are probably just about to grasp the fact that YES it uses the *FIRST* instance for the simulation. And YES this means you should never use a NodeGroup with multiple instance-types that do not match up in capacity. Such a scenario would cause fatal scheduling decisions: e.g. `m5.large` and `t4g.micro` now the CA will stupidly drill up the desired capacity to the maximum; suddenly you have 100 `t4g.micro` instances which all fail to schedule the original pod requesting 2 GB memory. 
+
+
+For installation instructions check out the big beautiful [Helm Chart](https://artifacthub.io/packages/helm/cluster-autoscaler/cluster-autoscaler).
+
+
+<Note type="caution">
+<b>Caution</b>: Never use ASG in production! This is a hobby project from an AWS internal limited to being used for small workshop demos.
+</Note>
+
+> Stop being an AWS softy; use Karpenter like a real man.
+<br>~ Abraham Lincoln
+
+### Fargate 🌉
+
+EKS integrates with fargate; a pretty neat feature that allows you to configure profiles that select certain pods and run them on isolated firecracker micro-vms.
+
+For every pod that is selected by a fargate profile, EKS spins up a completely new worker node (with firecracker) including a kubelet that is registered and visible in the cluster.
+
+Fargate pods only use one ENI and one IP. The VPC CNI deamonset does NOT run on this node and therefore is not able to provision routing rules that allow multiple pods with different IPs. This also means that the kubelet and the main pod share the same host IP address. Furthermore, this behavior requires the pod to be hosted exclusively in private subnets (since pods cannot have public IPs and due to the lack of a VPC CNI SNAT on the primary ENI egress would not work). 
+
+<Note type="info">
+Since fargate only runs exactly 1node:1pod it does not support CNI, CSI and other features that require local pods to run on the worker node.
+</Note>
+
+<Note type="caution">
+Automode does work notoriously bad with EKS Fargate. While the AMI deployed to fargate contains a lightweight kube-proxy (not a pod though) it does NOT come with the coredns systemd service that Automode usually expects on its own nodes (since there is no coredns deployment and the kube-dns selector is not matching any (automode dns requests are intercepted on the node level by the coredns systemd service)).
+
+This means you have to deploy the coredns addon in Automode to make DNS for fargate work (I know this is so fucking stupid...)
+</Note>
+
+To enable fargate logging check out [this](https://docs.aws.amazon.com/eks/latest/userguide/fargate-logging.html)
 
 ## Common Issues
 
