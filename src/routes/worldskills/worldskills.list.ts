@@ -101,7 +101,7 @@ export const projects: Record<string, Project> = {
     title: 'api-gate 🍝',
     description: 'A service created with the dark power of spaghetti code',
     published: '26.02.2026',
-    services: ['api-gateway', 'todo'],
+    services: ['api-gateway'],
   },
   'red-feature-flag': {
     title: 'Red Feature Flag 🚩',
