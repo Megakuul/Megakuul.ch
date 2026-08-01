@@ -8,7 +8,8 @@
 html,
 body {
   margin: 0;
-  overflow-x: hidden;
+  /* clip (not hidden) so it doesn't become a scroll container and break position: sticky */
+  overflow-x: clip;
 }
 
 html {
@@ -22,7 +23,7 @@ html {
   font-optical-sizing: auto;
   color: rgba(255, 255, 255, 0.8);
   min-height: 100%;
-  overflow-x: hidden;
+  overflow-x: clip;
   -ms-overflow-style: none;
   /* IE and Edge */
   scrollbar-width: none;

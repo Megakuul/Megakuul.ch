@@ -139,6 +139,12 @@ export const projects: Record<string, Project> = {
     published: '30.04.2026',
     services: ['cognito', 'todo'],
   },
+  lambda: {
+    title: 'Lambda Cheatsheet λ',
+    description: 'Every incoming trigger and outgoing event as a short example (JS + Python)',
+    published: '31.07.2026',
+    services: ['lambda', 'api-gateway', 'sqs', 'sns', 'events'],
+  },
 };
 
 export default projects;

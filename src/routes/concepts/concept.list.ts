@@ -19,6 +19,12 @@ const concepts: Record<string, Concept> = {
     published: '06.01.2025',
     image: 'cooking-lock.webp',
   },
+  'english-is-the-worst-programming-language': {
+    title: 'English is the worst programming language',
+    description: 'AI is not just the next natural "higher abstraction"',
+    published: '12.07.2025',
+    image: 'cooking-lock.webp',
+  },
 };
 
 export default concepts;
