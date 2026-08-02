@@ -13,7 +13,7 @@
   /** @param {string} id */
   function jump(id) {
     menuOpen = false;
-    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    document.getElementById(id)?.scrollIntoView({ behavior: 'instant', block: 'start' });
   }
 
   // Re-arm the observer whenever the item list changes (markdown scans headings after mount).
@@ -37,7 +37,7 @@
   {#each items as item (item.id)}
     <button
       onclick={() => jump(item.id)}
-      class="nav-link block w-full border-l-2 py-1 text-left transition-all"
+      class="nav-link block w-full cursor-pointer border-l-2 py-1 text-left transition-all"
       class:nav-active={activeId === item.id}
       class:pl-3={item.level === 0}
       class:pl-6={item.level > 0}
@@ -49,7 +49,6 @@
   {/each}
 {/snippet}
 
-<!-- desktop sidebar: the aside itself is sticky + self-start so it never scrolls away -->
 <aside
   class="no-scrollbar sticky top-20 hidden max-h-[calc(100vh-6rem)] w-60 shrink-0 self-start overflow-y-auto py-8 pr-3 lg:block"
 >
@@ -58,7 +57,6 @@
   </nav>
 </aside>
 
-<!-- mobile flyout -->
 {#if menuOpen}
   <div class="fixed inset-0 z-40 flex lg:hidden">
     <button

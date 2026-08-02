@@ -68,7 +68,7 @@
         class:text-slate-200-40={lang !== 'js'}
         onclick={() => (lang = 'js')}
       >
-        JavaScript
+        Javascript
       </button>
       <button
         class="rounded-lg px-3 py-1 text-sm font-medium transition-all"
@@ -87,7 +87,7 @@
 
   <main class="min-w-0 flex-1 py-8">
     <header class="mb-10">
-      <h1 class="mb-3 text-3xl font-bold sm:text-5xl">λ Lambda Cheatsheet</h1>
+      <h1 class="mb-3 text-3xl font-bold sm:text-5xl">Lambda Cheatsheet</h1>
       <p class="max-w-2xl text-slate-200/50 sm:text-lg">
         Every incoming trigger and outgoing event as a short, comment-free handler. Flip the whole
         page between JavaScript and Python with the switch up top. Jump anywhere with the menu.
@@ -130,13 +130,6 @@
         </div>
       </section>
     {/each}
-
-    <button
-      class="apple-glass rounded-xl px-4 py-2 text-sm hover:scale-105"
-      onclick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-    >
-      ↑ Back to top
-    </button>
   </main>
 </div>
 
@@ -155,6 +148,7 @@
     box-shadow:
       rgba(255, 255, 255, 0.05) 0px 6px 24px 0px,
       rgba(255, 255, 255, 0.08) 0px 0px 0px 1px;
+    background-color: rgba(255, 255, 255, 0.04) !important;
   }
 
   @media (min-width: 640px) {

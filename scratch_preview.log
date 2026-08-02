@@ -1,6 +1,0 @@
-npm notice run megakuul.ch@1.0.0 preview
-npm notice run vite preview --port 4319
-(node:150507) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
-(Use `node --trace-deprecation ...` to show where the warning was created)
-  ➜  Local:   http://localhost:4319/
-  ➜  Network: use --host to expose
