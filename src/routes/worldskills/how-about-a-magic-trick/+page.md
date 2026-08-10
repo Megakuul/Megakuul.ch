@@ -97,6 +97,15 @@ And add a security group that allows ingress on `443` to the endpoints. That's a
 (Consulting this document after your insolvency court proceedings? Check out EC2 Instance Connect!).
 
 
+### Log in to Console with Role Credentials
+
+
+Just enter the `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY` and `AWS_SESSION_TOKEN` env variables:
+```bash
+curl -s "https://signin.aws.amazon.com/federation?Action=getSigninToken&Session=$(jq -rn --arg a "$AWS_ACCESS_KEY_ID" --arg s "$AWS_SECRET_ACCESS_KEY" --arg t "$AWS_SESSION_TOKEN" '{sessionId:$a,sessionKey:$s,sessionToken:$t}|tojson|@uri')" | jq -r '"https://signin.aws.amazon.com/federation?Action=login&Issuer=https%3A%2F%2Fexample.com&Destination=https%3A%2F%2Fconsole.aws.amazon.com%2F&SigninToken=" + .SigninToken'
+```
+
+
 ### Confuse the deputy 😵‍💫
 
 If a service is calling another service on your behalf you can use this simple condition check to avoid service deputy confusion:

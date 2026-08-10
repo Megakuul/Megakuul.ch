@@ -22,7 +22,10 @@ const config = {
         highlighter: async (code, lang) => {
           const highlighter = await createHighlighter({ theme: dracula, langs: [lang] });
           const html = highlighter.codeToHtml(code, { lang: lang, theme: dracula });
-          return '{@html `' + html + '`}';
+          // the html is embedded into a js template literal, escape everything that would
+          // either break it (backtick, ${) or silently vanish from the output (backslash).
+          const escaped = html.replace(/\\/g, '\\\\').replace(/`/g, '\\`').replace(/\$\{/g, '\\${');
+          return '{@html `' + escaped + '`}';
         },
       },
       layout: {
