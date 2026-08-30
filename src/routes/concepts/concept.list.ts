@@ -6,6 +6,13 @@ interface Concept {
 }
 
 const concepts: Record<string, Concept> = {
+  'iam-conditions': {
+    title: 'IAM Conditions',
+    description:
+      'Where AWS documents condition keys, why "every key with every value" is not a real document, and what www.amazon.com:user_id is doing in your trust policy.',
+    published: '30.08.2026',
+    image: 'iam-condition-keys.svg',
+  },
   'english-is-the-worst-programming-language': {
     title: 'English is the worst programming language',
     description: 'AI is not just the next natural "higher abstraction"',
