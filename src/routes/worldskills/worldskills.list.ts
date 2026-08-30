@@ -151,6 +151,13 @@ export const projects: Record<string, Project> = {
     published: '10.08.2026',
     services: ['cloudwatch'],
   },
+  'iam-conditions': {
+    title: 'IAM Conditions',
+    description:
+      'Where AWS documents condition keys, why "every key with every value" is not a real document, and what www.amazon.com:user_id is doing in your trust policy',
+    published: '30.08.2026',
+    services: ['iam', 'sts', 'cognito'],
+  },
 };
 
 export default projects;
