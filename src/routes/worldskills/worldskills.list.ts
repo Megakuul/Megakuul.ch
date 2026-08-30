@@ -140,7 +140,7 @@ export const projects: Record<string, Project> = {
     services: ['cognito', 'todo'],
   },
   lambda: {
-    title: 'Lambda Cheatsheet λ',
+    title: 'Lambda Cheatsheet',
     description: 'The Big Beautiful Lambda Cheatsheet',
     published: '31.07.2026',
     services: ['lambda', 'api-gateway', 'sqs', 'sns', 'events'],
@@ -152,9 +152,8 @@ export const projects: Record<string, Project> = {
     services: ['cloudwatch'],
   },
   'iam-conditions': {
-    title: 'IAM Conditions',
-    description:
-      'Where AWS documents condition keys, why "every key with every value" is not a real document, and what www.amazon.com:user_id is doing in your trust policy',
+    title: 'IAM Cheatsheet',
+    description: 'The Big Beautiful IAM Condition Cheatsheet',
     published: '30.08.2026',
     services: ['iam', 'sts', 'cognito'],
   },
