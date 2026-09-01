@@ -59,6 +59,7 @@ aws ssm start-session --target <instance-id> --region <my-ec2-region> --document
 aws ec2-instance-connect open-tunnel --instance-id i-11111111111111111 --remote-port 80 --local-port 42069
 ```
 
+
 ### Some cool Kubectl tricks 🐳
 
 ```bash

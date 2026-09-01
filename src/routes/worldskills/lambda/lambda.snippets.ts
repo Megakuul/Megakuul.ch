@@ -41,7 +41,7 @@ import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { DynamoDBDocumentClient, GetCommand, PutCommand, QueryCommand, ScanCommand, UpdateCommand, DeleteCommand, BatchWriteCommand } from '@aws-sdk/lib-dynamodb';
 import { unmarshall } from '@aws-sdk/util-dynamodb';
-import { SQSClient, SendMessageCommand, ReceiveMessageCommand, DeleteMessageCommand } from '@aws-sdk/client-sqs';
+import { SQSClient, SendMessageCommand, SendMessageBatchCommand, ReceiveMessageCommand, DeleteMessageCommand } from '@aws-sdk/client-sqs';
 import { SNSClient, PublishCommand } from '@aws-sdk/client-sns';
 import { EventBridgeClient, PutEventsCommand } from '@aws-sdk/client-eventbridge';
 import { SFNClient, StartExecutionCommand, StartSyncExecutionCommand, SendTaskSuccessCommand, SendTaskFailureCommand } from '@aws-sdk/client-sfn';
@@ -49,6 +49,8 @@ import { LambdaClient, InvokeCommand } from '@aws-sdk/client-lambda';
 import { KinesisClient, PutRecordCommand } from '@aws-sdk/client-kinesis';
 import { SecretsManagerClient, GetSecretValueCommand } from '@aws-sdk/client-secrets-manager';
 import { SSMClient, GetParameterCommand, GetParametersByPathCommand, PutParameterCommand } from '@aws-sdk/client-ssm';
+import { AppConfigDataClient, StartConfigurationSessionCommand, GetLatestConfigurationCommand } from '@aws-sdk/client-appconfigdata';
+import { AppConfigClient, CreateHostedConfigurationVersionCommand, StartDeploymentCommand } from '@aws-sdk/client-appconfig';
 import { STSClient, GetCallerIdentityCommand, AssumeRoleCommand } from '@aws-sdk/client-sts';
 import { KMSClient, EncryptCommand, DecryptCommand, GenerateDataKeyCommand } from '@aws-sdk/client-kms';
 import { SESv2Client, SendEmailCommand } from '@aws-sdk/client-sesv2';
@@ -71,6 +73,8 @@ const lambda = new LambdaClient({});
 const kinesis = new KinesisClient({});
 const secrets = new SecretsManagerClient({});
 const ssm = new SSMClient({});
+const appconfigdata = new AppConfigDataClient({});
+const appconfig = new AppConfigClient({});
 const sts = new STSClient({});
 const kms = new KMSClient({});
 const ses = new SESv2Client({});
@@ -93,6 +97,8 @@ lam = boto3.client("lambda")
 kinesis = boto3.client("kinesis")
 secrets = boto3.client("secretsmanager")
 ssm = boto3.client("ssm")
+appconfigdata = boto3.client("appconfigdata")
+appconfig = boto3.client("appconfig")
 sts = boto3.client("sts")
 kms = boto3.client("kms")
 ses = boto3.client("sesv2")
@@ -113,7 +119,7 @@ unmarshall = lambda img: {k: deserialize(v) for k, v in img.items()}`,
   const method = v2?.method ?? event.httpMethod;
   const path = event.rawPath ?? event.path;
   const routeKey =
-    event.routeKey ??
+    event.routeKey && event.routeKey !== '$default' ? event.routeKey : 
     (event.resource ? event.httpMethod + ' ' + event.resource : method + ' ' + path);
   const body = event.isBase64Encoded
     ? Buffer.from(event.body, 'base64').toString()
@@ -710,21 +716,39 @@ const outgoing: Group = {
     {
       id: 'out-sqs',
       title: 'Send to SQS',
-      note: 'MessageGroupId / MessageDeduplicationId are required only for FIFO queues.',
+      note: 'MessageGroupId / MessageDeduplicationId are required only for FIFO queues. Batch send takes up to 10 entries per call and reports per-entry failures instead of throwing.',
       js: `await sqs.send(new SendMessageCommand({
   QueueUrl: process.env.QUEUE,
   MessageBody: JSON.stringify({ job: 'resize' }),
   MessageAttributes: { trace: { DataType: 'String', StringValue: 'abc' } },
   MessageGroupId: 'g1',
   MessageDeduplicationId: 'd1',
-}));`,
+}));
+
+const batch = await sqs.send(new SendMessageBatchCommand({
+  QueueUrl: process.env.QUEUE,
+  Entries: [
+    { Id: '1', MessageBody: JSON.stringify({ job: 'resize' }), MessageGroupId: 'g1', MessageDeduplicationId: 'd1' },
+    { Id: '2', MessageBody: JSON.stringify({ job: 'thumbnail' }), MessageGroupId: 'g1', MessageDeduplicationId: 'd2' },
+  ],
+}));
+const failed = batch.Failed;`,
       py: `sqs.send_message(
     QueueUrl=os.environ["QUEUE"],
     MessageBody=json.dumps({"job": "resize"}),
     MessageAttributes={"trace": {"DataType": "String", "StringValue": "abc"}},
     MessageGroupId="g1",
     MessageDeduplicationId="d1",
-)`,
+)
+
+batch = sqs.send_message_batch(
+    QueueUrl=os.environ["QUEUE"],
+    Entries=[
+        {"Id": "1", "MessageBody": json.dumps({"job": "resize"}), "MessageGroupId": "g1", "MessageDeduplicationId": "d1"},
+        {"Id": "2", "MessageBody": json.dumps({"job": "thumbnail"}), "MessageGroupId": "g1", "MessageDeduplicationId": "d2"},
+    ],
+)
+failed = batch.get("Failed", [])`,
     },
     {
       id: 'out-sfn',
@@ -806,7 +830,8 @@ out = json.loads(res["Payload"].read())`,
 const services: Group = {
   id: 'services',
   title: 'Service usage',
-  blurb: 'Drop-in SDK calls for the services you reach out to from inside a handler. They all use the clients from the import block, so paste that once and any call below drops straight in. Every call lists the params worth knowing, delete the ones you do not need.',
+  blurb:
+    'Drop-in SDK calls for the services you reach out to from inside a handler. They all use the clients from the import block, so paste that once and any call below drops straight in. Every call lists the params worth knowing, delete the ones you do not need.',
   snippets: [
     {
       id: 'svc-dynamodb',
@@ -1029,6 +1054,96 @@ await ssm.send(new PutParameterCommand({ Name: '/app/flag', Value: 'on', Type: '
 many = ssm.get_parameters_by_path(Path="/app/", Recursive=True, WithDecryption=True)["Parameters"]
 
 ssm.put_parameter(Name="/app/flag", Value="on", Type="String", Overwrite=True)`,
+    },
+    {
+      id: 'svc-appconfig',
+      title: 'AppConfig (feature flags / config profiles)',
+      note: 'Live reload: cache the token + config at module scope (outside the handler) so a warm container reuses them, and only poll again once RequiredMinimumPollIntervalInSeconds has passed. An empty Configuration on a poll means nothing changed, keep the cached value. Writing a new version and rolling it out goes through the AppConfigClient control plane instead.',
+      js: `let token, config, nextPollAt = 0;
+
+const getConfig = async () => {
+  if (!token) {
+    const session = await appconfigdata.send(new StartConfigurationSessionCommand({
+      ApplicationIdentifier: 'my-app',
+      EnvironmentIdentifier: 'prod',
+      ConfigurationProfileIdentifier: 'feature-flags',
+      RequiredMinimumPollIntervalInSeconds: 15,
+    }));
+    token = session.InitialConfigurationToken;
+  }
+  if (Date.now() < nextPollAt) return config;
+
+  const cfg = await appconfigdata.send(new GetLatestConfigurationCommand({ ConfigurationToken: token }));
+  token = cfg.NextPollConfigurationToken;
+  nextPollAt = Date.now() + 15_000;
+  if (cfg.Configuration?.length) config = JSON.parse(Buffer.from(cfg.Configuration).toString());
+  return config;
+};
+
+export const handler = async (event) => {
+  const cfg = await getConfig();
+  return { enabled: cfg.enableBeta };
+};
+
+// deploying a new version is a control-plane call, not something the handler above does
+const version = await appconfig.send(new CreateHostedConfigurationVersionCommand({
+  ApplicationId: 'app-id',
+  ConfigurationProfileId: 'profile-id',
+  ContentType: 'application/json',
+  Content: Buffer.from(JSON.stringify({ enableBeta: true })),
+}));
+
+await appconfig.send(new StartDeploymentCommand({
+  ApplicationId: 'app-id',
+  EnvironmentId: 'env-id',
+  DeploymentStrategyId: 'AppConfig.AllAtOnce',
+  ConfigurationProfileId: 'profile-id',
+  ConfigurationVersion: String(version.VersionNumber),
+}));`,
+      py: `token = None
+config = None
+next_poll_at = 0
+
+def get_config():
+    global token, config, next_poll_at
+    if not token:
+        session = appconfigdata.start_configuration_session(
+            ApplicationIdentifier="my-app",
+            EnvironmentIdentifier="prod",
+            ConfigurationProfileIdentifier="feature-flags",
+            RequiredMinimumPollIntervalInSeconds=15,
+        )
+        token = session["InitialConfigurationToken"]
+    if time.time() < next_poll_at:
+        return config
+
+    cfg = appconfigdata.get_latest_configuration(ConfigurationToken=token)
+    token = cfg["NextPollConfigurationToken"]
+    next_poll_at = time.time() + 15
+    body = cfg["Configuration"].read()
+    if body:
+        config = json.loads(body)
+    return config
+
+def handler(event, context):
+    cfg = get_config()
+    return {"enabled": cfg["enableBeta"]}
+
+# deploying a new version is a control-plane call, not something the handler above does
+version = appconfig.create_hosted_configuration_version(
+    ApplicationId="app-id",
+    ConfigurationProfileId="profile-id",
+    ContentType="application/json",
+    Content=json.dumps({"enableBeta": True}).encode(),
+)
+
+appconfig.start_deployment(
+    ApplicationId="app-id",
+    EnvironmentId="env-id",
+    DeploymentStrategyId="AppConfig.AllAtOnce",
+    ConfigurationProfileId="profile-id",
+    ConfigurationVersion=str(version["VersionNumber"]),
+)`,
     },
     {
       id: 'svc-ses',
