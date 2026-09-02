@@ -39,6 +39,8 @@ const common: Group = {
       js: `import { S3Client, GetObjectCommand, PutObjectCommand, DeleteObjectCommand, ListObjectsV2Command, CopyObjectCommand } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
+import { RDSDataClient, ExecuteStatementCommand } from '@aws-sdk/client-rds-data';
+import { Signer } from '@aws-sdk/rds-signer';
 import { DynamoDBDocumentClient, GetCommand, PutCommand, QueryCommand, ScanCommand, UpdateCommand, DeleteCommand, BatchWriteCommand } from '@aws-sdk/lib-dynamodb';
 import { unmarshall } from '@aws-sdk/util-dynamodb';
 import { SQSClient, SendMessageCommand, SendMessageBatchCommand, ReceiveMessageCommand, DeleteMessageCommand } from '@aws-sdk/client-sqs';
@@ -65,6 +67,7 @@ import { basename } from 'node:path';
 
 const s3 = new S3Client({});
 const ddb = DynamoDBDocumentClient.from(new DynamoDBClient({}));
+const rdsData = new RDSDataClient({});
 const sqs = new SQSClient({});
 const sns = new SNSClient({});
 const bus = new EventBridgeClient({});
@@ -89,6 +92,8 @@ from boto3.dynamodb.types import TypeDeserializer
 
 s3 = boto3.client("s3")
 ddb = boto3.resource("dynamodb")
+rds_data = boto3.client("rds-data")
+rds = boto3.client("rds")
 sqs = boto3.client("sqs")
 sns = boto3.client("sns")
 bus = boto3.client("events")
@@ -937,6 +942,138 @@ scanned = table.scan(FilterExpression=Attr("active").eq(True), Limit=100)
 with table.batch_writer() as batch:
     batch.put_item(Item={"pk": "a", "sk": "1"})
     batch.delete_item(Key={"pk": "b", "sk": "2"})`,
+    },
+    {
+      id: 'svc-rds-data-api',
+      title: 'RDS Data API (Aurora — no VPC, no driver)',
+      note: "AWS's simplest way to run SQL from Lambda when the database is Aurora (MySQL- or PostgreSQL-compatible): plain HTTPS calls, no VPC networking, no connection pool, no driver to bundle. Needs the Data API turned on for the cluster and a Secrets Manager secret holding the DB credentials. Standard (non-Aurora) RDS cannot use it, see RDS Proxy below for that.",
+      js: `const resourceArn = 'arn:aws:rds:eu-central-1:111122223333:cluster:my-aurora-cluster';
+const secretArn = 'arn:aws:secretsmanager:eu-central-1:111122223333:secret:my-db-secret';
+const database = 'app';
+
+await rdsData.send(new ExecuteStatementCommand({
+  resourceArn, secretArn, database,
+  sql: 'INSERT INTO users (id, name, email) VALUES (:id, :name, :email)',
+  parameters: [
+    { name: 'id', value: { longValue: 1 } },
+    { name: 'name', value: { stringValue: 'Ann' } },
+    { name: 'email', value: { stringValue: 'a@b.ch' } },
+  ],
+}));
+
+const got = await rdsData.send(new ExecuteStatementCommand({
+  resourceArn, secretArn, database,
+  sql: 'SELECT id, name, email FROM users WHERE id = :id',
+  parameters: [{ name: 'id', value: { longValue: 1 } }],
+  formatRecordsAs: 'JSON',
+}));
+const rows = JSON.parse(got.formattedRecords);
+
+await rdsData.send(new ExecuteStatementCommand({
+  resourceArn, secretArn, database,
+  sql: 'UPDATE users SET email = :email WHERE id = :id',
+  parameters: [{ name: 'email', value: { stringValue: 'new@b.ch' } }, { name: 'id', value: { longValue: 1 } }],
+}));
+
+await rdsData.send(new ExecuteStatementCommand({
+  resourceArn, secretArn, database,
+  sql: 'DELETE FROM users WHERE id = :id',
+  parameters: [{ name: 'id', value: { longValue: 1 } }],
+}));`,
+      py: `resource_arn = "arn:aws:rds:eu-central-1:111122223333:cluster:my-aurora-cluster"
+secret_arn = "arn:aws:secretsmanager:eu-central-1:111122223333:secret:my-db-secret"
+database = "app"
+
+rds_data.execute_statement(
+    resourceArn=resource_arn, secretArn=secret_arn, database=database,
+    sql="INSERT INTO users (id, name, email) VALUES (:id, :name, :email)",
+    parameters=[
+        {"name": "id", "value": {"longValue": 1}},
+        {"name": "name", "value": {"stringValue": "Ann"}},
+        {"name": "email", "value": {"stringValue": "a@b.ch"}},
+    ],
+)
+
+got = rds_data.execute_statement(
+    resourceArn=resource_arn, secretArn=secret_arn, database=database,
+    sql="SELECT id, name, email FROM users WHERE id = :id",
+    parameters=[{"name": "id", "value": {"longValue": 1}}],
+    formatRecordsAs="JSON",
+)
+rows = json.loads(got["formattedRecords"])
+
+rds_data.execute_statement(
+    resourceArn=resource_arn, secretArn=secret_arn, database=database,
+    sql="UPDATE users SET email = :email WHERE id = :id",
+    parameters=[{"name": "email", "value": {"stringValue": "new@b.ch"}}, {"name": "id", "value": {"longValue": 1}}],
+)
+
+rds_data.execute_statement(
+    resourceArn=resource_arn, secretArn=secret_arn, database=database,
+    sql="DELETE FROM users WHERE id = :id",
+    parameters=[{"name": "id", "value": {"longValue": 1}}],
+)`,
+    },
+    {
+      id: 'svc-rds-proxy',
+      title: 'RDS via RDS Proxy (any engine: MySQL, PostgreSQL, MariaDB, SQL Server, Oracle)',
+      note: "AWS's recommended path when you need a real driver against standard RDS (or Aurora without Data API): connect through the RDS Proxy endpoint, never the instance directly, using a short-lived IAM auth token instead of a stored password. The execution role needs rds-db:connect on the proxy's DB user. mysql2 is not in the runtime, bundle it as a layer, shown below. Postgres is the identical shape with pg + Client instead of mysql2 + createConnection.",
+      js: `// build + publish the driver as a layer once:
+// mkdir -p layer/nodejs && npm install mysql2 --prefix layer/nodejs && cd layer && zip -r mysql2-layer.zip nodejs
+// aws lambda publish-layer-version --layer-name mysql2 --zip-file fileb://mysql2-layer.zip --compatible-runtimes nodejs20.x
+// aws lambda update-function-configuration --function-name my-fn --layers arn:aws:lambda:eu-central-1:111122223333:layer:mysql2:1
+
+import mysql from 'mysql2/promise'; // not in the runtime: the layer above
+
+const signer = new Signer({
+  hostname: process.env.DB_PROXY_HOST,
+  port: 3306,
+  username: process.env.DB_USER,
+  region: 'eu-central-1',
+});
+
+const conn = await mysql.createConnection({
+  host: process.env.DB_PROXY_HOST,
+  port: 3306,
+  user: process.env.DB_USER,
+  database: 'app',
+  password: await signer.getAuthToken(),
+  ssl: 'Amazon RDS',
+});
+
+await conn.execute('INSERT INTO users (id, name, email) VALUES (?, ?, ?)', [1, 'Ann', 'a@b.ch']);
+const [rows] = await conn.execute('SELECT id, name, email FROM users WHERE id = ?', [1]);
+await conn.execute('UPDATE users SET email = ? WHERE id = ?', ['new@b.ch', 1]);
+await conn.execute('DELETE FROM users WHERE id = ?', [1]);
+await conn.end();`,
+      py: `# build + publish the driver as a layer once:
+# mkdir -p layer/python && pip install pymysql -t layer/python && cd layer && zip -r pymysql-layer.zip python
+# aws lambda publish-layer-version --layer-name pymysql --zip-file fileb://pymysql-layer.zip --compatible-runtimes python3.13
+# aws lambda update-function-configuration --function-name my-fn --layers arn:aws:lambda:eu-central-1:111122223333:layer:pymysql:1
+
+import pymysql  # not in the runtime: the layer above
+
+token = rds.generate_db_auth_token(
+    DBHostname=os.environ["DB_PROXY_HOST"], Port=3306, DBUsername=os.environ["DB_USER"], Region="eu-central-1"
+)
+
+conn = pymysql.connect(
+    host=os.environ["DB_PROXY_HOST"],
+    port=3306,
+    user=os.environ["DB_USER"],
+    database="app",
+    password=token,
+    ssl={"ssl": {}},
+)
+
+with conn.cursor() as cur:
+    cur.execute("INSERT INTO users (id, name, email) VALUES (%s, %s, %s)", (1, "Ann", "a@b.ch"))
+    cur.execute("SELECT id, name, email FROM users WHERE id = %s", (1,))
+    rows = cur.fetchall()
+    cur.execute("UPDATE users SET email = %s WHERE id = %s", ("new@b.ch", 1))
+    cur.execute("DELETE FROM users WHERE id = %s", (1,))
+conn.commit()
+conn.close()`,
     },
     {
       id: 'svc-s3',

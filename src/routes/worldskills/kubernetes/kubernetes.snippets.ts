@@ -256,9 +256,24 @@ const identity: Group = {
   blurb: 'Give a pod real AWS permissions without baking credentials into it, both ways EKS supports.',
   snippets: [
     {
+      id: 'id-oidc-provider',
+      title: 'Associate an OIDC provider with the cluster (IRSA prerequisite, once per cluster)',
+      note: 'IRSA does not work until this exists. Most clusters already have one, check with list-open-id-connect-providers before creating a duplicate. The thumbprint is the fixed EKS OIDC root CA thumbprint, the same value works for every cluster and region.',
+      lang: 'bash',
+      code: `oidc=$(aws eks describe-cluster --name my-cluster --query "cluster.identity.oidc.issuer" --output text)
+echo $oidc
+
+aws iam list-open-id-connect-providers
+
+aws iam create-open-id-connect-provider \\
+  --url $oidc \\
+  --client-id-list sts.amazonaws.com \\
+  --thumbprint-list 9e99a48a9960b14926bb7f3b02e22da2b0ab7280`,
+    },
+    {
       id: 'id-irsa',
       title: 'IRSA (IAM Roles for Service Accounts)',
-      note: 'Needs an OIDC provider associated with the cluster first: aws eks describe-cluster --name my-cluster --query "cluster.identity.oidc.issuer".',
+      note: 'Needs the OIDC provider above associated with the cluster first.',
       lang: 'bash',
       code: `cat > trust.json <<'JSON'
 {
