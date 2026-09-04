@@ -41,6 +41,10 @@ import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { RDSDataClient, ExecuteStatementCommand } from '@aws-sdk/client-rds-data';
 import { Signer } from '@aws-sdk/rds-signer';
+import { RedshiftDataClient, ExecuteStatementCommand as RedshiftExecuteStatementCommand, DescribeStatementCommand, GetStatementResultCommand } from '@aws-sdk/client-redshift-data';
+import { NeptunedataClient, ExecuteOpenCypherQueryCommand } from '@aws-sdk/client-neptunedata';
+import { TimestreamWriteClient, WriteRecordsCommand } from '@aws-sdk/client-timestream-write';
+import { TimestreamQueryClient, QueryCommand as TimestreamQueryCommand } from '@aws-sdk/client-timestream-query';
 import { DynamoDBDocumentClient, GetCommand, PutCommand, QueryCommand, ScanCommand, UpdateCommand, DeleteCommand, BatchWriteCommand } from '@aws-sdk/lib-dynamodb';
 import { unmarshall } from '@aws-sdk/util-dynamodb';
 import { SQSClient, SendMessageCommand, SendMessageBatchCommand, ReceiveMessageCommand, DeleteMessageCommand } from '@aws-sdk/client-sqs';
@@ -62,12 +66,15 @@ import { CognitoIdentityProviderClient, AdminGetUserCommand, AdminCreateUserComm
 import { ApiGatewayManagementApiClient, PostToConnectionCommand } from '@aws-sdk/client-apigatewaymanagementapi';
 import { gunzipSync } from 'node:zlib';
 import { spawnSync } from 'node:child_process';
-import { copyFileSync, chmodSync } from 'node:fs';
+import { copyFileSync, chmodSync, readFileSync } from 'node:fs';
 import { basename } from 'node:path';
 
 const s3 = new S3Client({});
 const ddb = DynamoDBDocumentClient.from(new DynamoDBClient({}));
 const rdsData = new RDSDataClient({});
+const redshiftData = new RedshiftDataClient({});
+const timestreamWrite = new TimestreamWriteClient({});
+const timestreamQuery = new TimestreamQueryClient({});
 const sqs = new SQSClient({});
 const sns = new SNSClient({});
 const bus = new EventBridgeClient({});
@@ -94,6 +101,9 @@ s3 = boto3.client("s3")
 ddb = boto3.resource("dynamodb")
 rds_data = boto3.client("rds-data")
 rds = boto3.client("rds")
+redshift_data = boto3.client("redshift-data")
+timestream_write = boto3.client("timestream-write")
+timestream_query = boto3.client("timestream-query")
 sqs = boto3.client("sqs")
 sns = boto3.client("sns")
 bus = boto3.client("events")
@@ -153,7 +163,7 @@ unmarshall = lambda img: {k: deserialize(v) for k, v in img.items()}`,
     alb = event.get("requestContext", {}).get("elb")
     method = v2["method"] if v2 else event.get("httpMethod")
     path = event.get("rawPath") or event.get("path")
-    route_key = event.get("routeKey") or (
+    route_key = (event.get("routeKey") if event.get("routeKey") != "$default" else None) or (
         event["httpMethod"] + " " + event["resource"] if event.get("resource") else f"{method} {path}"
     )
     raw = base64.b64decode(event["body"]).decode() if event.get("isBase64Encoded") else event.get("body")
@@ -678,14 +688,18 @@ const outgoing: Group = {
     {
       id: 'out-batch',
       title: 'Partial batch response (SQS / Kinesis / DDB)',
-      note: 'Same envelope for all three stream/queue sources with ReportBatchItemFailures enabled.',
+      note: 'Same envelope for all three stream/queue sources with ReportBatchItemFailures enabled, but the identifier is messageId for SQS and SequenceNumber for Kinesis/DynamoDB Streams.',
       js: `export const handler = async (event) => {
   const failed = event.Records.filter(shouldRetry);
-  return { batchItemFailures: failed.map((r) => ({ itemIdentifier: r.messageId })) };
+  return { batchItemFailures: failed.map((r) => ({
+    itemIdentifier: r.messageId ?? r.kinesis?.sequenceNumber ?? r.dynamodb?.SequenceNumber,
+  })) };
 };`,
       py: `def handler(event, context):
     failed = [r for r in event["Records"] if should_retry(r)]
-    return {"batchItemFailures": [{"itemIdentifier": r["messageId"]} for r in failed]}`,
+    return {"batchItemFailures": [{
+        "itemIdentifier": r.get("messageId") or r.get("kinesis", {}).get("sequenceNumber") or r.get("dynamodb", {}).get("SequenceNumber")
+    } for r in failed]}`,
     },
     {
       id: 'out-eventbridge',
@@ -721,7 +735,7 @@ const outgoing: Group = {
     {
       id: 'out-sqs',
       title: 'Send to SQS',
-      note: 'MessageGroupId / MessageDeduplicationId are required only for FIFO queues. Batch send takes up to 10 entries per call and reports per-entry failures instead of throwing.',
+      note: 'This example targets a FIFO queue. Remove MessageGroupId / MessageDeduplicationId for a standard queue. Batch send takes up to 10 entries per call and reports per-entry failures instead of throwing.',
       js: `await sqs.send(new SendMessageCommand({
   QueueUrl: process.env.QUEUE,
   MessageBody: JSON.stringify({ job: 'resize' }),
@@ -832,11 +846,11 @@ out = json.loads(res["Payload"].read())`,
   ],
 };
 
-const services: Group = {
-  id: 'services',
-  title: 'Service usage',
+const databases: Group = {
+  id: 'databases',
+  title: 'Database data operations',
   blurb:
-    'Drop-in SDK calls for the services you reach out to from inside a handler. They all use the clients from the import block, so paste that once and any call below drops straight in. Every call lists the params worth knowing, delete the ones you do not need.',
+    'Fast, copy-paste CRUD for every current AWS database family plus Redshift. SDK-only examples use the import block; protocol databases show the dependency to bundle and assume the table or collection already exists.',
   snippets: [
     {
       id: 'svc-dynamodb',
@@ -893,12 +907,14 @@ const scanned = await ddb.send(new ScanCommand({
   Limit: 100,
 }));
 
-await ddb.send(new BatchWriteCommand({
-  RequestItems: { 'my-table': [
+let pending = { 'my-table': [
     { PutRequest: { Item: { pk: 'a', sk: '1' } } },
     { DeleteRequest: { Key: { pk: 'b', sk: '2' } } },
-  ] },
-}));`,
+  ] };
+do {
+  const batch = await ddb.send(new BatchWriteCommand({ RequestItems: pending }));
+  pending = batch.UnprocessedItems ?? {};
+} while (Object.keys(pending).length);`,
       py: `table = ddb.Table("my-table")
 
 got = table.get_item(
@@ -1016,10 +1032,12 @@ rds_data.execute_statement(
     },
     {
       id: 'svc-rds-proxy',
-      title: 'RDS via RDS Proxy (any engine: MySQL, PostgreSQL, MariaDB, SQL Server, Oracle)',
-      note: "AWS's recommended path when you need a real driver against standard RDS (or Aurora without Data API): connect through the RDS Proxy endpoint, never the instance directly, using a short-lived IAM auth token instead of a stored password. The execution role needs rds-db:connect on the proxy's DB user. mysql2 is not in the runtime, bundle it as a layer, shown below. Postgres is the identical shape with pg + Client instead of mysql2 + createConnection.",
+      title: 'RDS via RDS Proxy (MySQL / MariaDB IAM auth)',
+      note: 'Use RDS Proxy for supported engines: MySQL, MariaDB, PostgreSQL, and SQL Server. It does not support Oracle or Db2, and SQL Server cannot use this password-token pattern. This is the MySQL/MariaDB IAM-auth shape; PostgreSQL is equivalent with pg. The role needs rds-db:connect and the driver must be bundled.',
       js: `// build + publish the driver as a layer once:
-// mkdir -p layer/nodejs && npm install mysql2 --prefix layer/nodejs && cd layer && zip -r mysql2-layer.zip nodejs
+// mkdir -p layer/nodejs && npm install mysql2 --prefix layer/nodejs
+// curl -o layer/global-bundle.pem https://truststore.pki.rds.amazonaws.com/global/global-bundle.pem
+// cd layer && zip -r mysql2-layer.zip nodejs global-bundle.pem
 // aws lambda publish-layer-version --layer-name mysql2 --zip-file fileb://mysql2-layer.zip --compatible-runtimes nodejs20.x
 // aws lambda update-function-configuration --function-name my-fn --layers arn:aws:lambda:eu-central-1:111122223333:layer:mysql2:1
 
@@ -1038,7 +1056,7 @@ const conn = await mysql.createConnection({
   user: process.env.DB_USER,
   database: 'app',
   password: await signer.getAuthToken(),
-  ssl: 'Amazon RDS',
+  ssl: { ca: readFileSync('/opt/global-bundle.pem') },
 });
 
 await conn.execute('INSERT INTO users (id, name, email) VALUES (?, ?, ?)', [1, 'Ann', 'a@b.ch']);
@@ -1047,7 +1065,9 @@ await conn.execute('UPDATE users SET email = ? WHERE id = ?', ['new@b.ch', 1]);
 await conn.execute('DELETE FROM users WHERE id = ?', [1]);
 await conn.end();`,
       py: `# build + publish the driver as a layer once:
-# mkdir -p layer/python && pip install pymysql -t layer/python && cd layer && zip -r pymysql-layer.zip python
+# mkdir -p layer/python && pip install pymysql -t layer/python
+# curl -o layer/global-bundle.pem https://truststore.pki.rds.amazonaws.com/global/global-bundle.pem
+# cd layer && zip -r pymysql-layer.zip python global-bundle.pem
 # aws lambda publish-layer-version --layer-name pymysql --zip-file fileb://pymysql-layer.zip --compatible-runtimes python3.13
 # aws lambda update-function-configuration --function-name my-fn --layers arn:aws:lambda:eu-central-1:111122223333:layer:pymysql:1
 
@@ -1063,7 +1083,10 @@ conn = pymysql.connect(
     user=os.environ["DB_USER"],
     database="app",
     password=token,
-    ssl={"ssl": {}},
+    auth_plugin_map={"mysql_clear_password": None},
+    ssl_ca="/opt/global-bundle.pem",
+    ssl_verify_cert=True,
+    ssl_verify_identity=True,
 )
 
 with conn.cursor() as cur:
@@ -1075,6 +1098,387 @@ with conn.cursor() as cur:
 conn.commit()
 conn.close()`,
     },
+    {
+      id: 'db-dsql',
+      title: 'Aurora DSQL (PostgreSQL wire protocol)',
+      note: 'Bundle the AWS Aurora DSQL connector and its PostgreSQL peer driver. The connector creates short-lived IAM tokens automatically; the Lambda role needs dsql:DbConnectAdmin for user admin (use dsql:DbConnect for a mapped custom role).',
+      js: `// npm install @aws/aurora-dsql-node-postgres-connector @aws-sdk/credential-providers @aws-sdk/dsql-signer pg
+import { AuroraDSQLClient } from '@aws/aurora-dsql-node-postgres-connector';
+
+const conn = new AuroraDSQLClient({
+  host: process.env.DSQL_HOST,
+  user: 'admin',
+  database: 'postgres',
+});
+
+await conn.connect();
+try {
+  await conn.query('INSERT INTO users (id, name, email) VALUES ($1, $2, $3)', [1, 'Ann', 'a@b.ch']);
+  const got = await conn.query('SELECT id, name, email FROM users WHERE id = $1', [1]);
+  const rows = got.rows;
+  await conn.query('UPDATE users SET email = $1 WHERE id = $2', ['new@b.ch', 1]);
+  await conn.query('DELETE FROM users WHERE id = $1', [1]);
+} finally {
+  await conn.end();
+}`,
+      py: `# pip install aurora-dsql-python-connector "psycopg[binary]" into the function package or a layer
+import aurora_dsql_psycopg as dsql
+
+conn = dsql.connect(host=os.environ["DSQL_HOST"], region=os.environ["AWS_REGION"], user="admin", dbname="postgres")
+try:
+    with conn.cursor() as cur:
+        cur.execute("INSERT INTO users (id, name, email) VALUES (%s, %s, %s)", (1, "Ann", "a@b.ch"))
+        cur.execute("SELECT id, name, email FROM users WHERE id = %s", (1,))
+        rows = cur.fetchall()
+        cur.execute("UPDATE users SET email = %s WHERE id = %s", ("new@b.ch", 1))
+        cur.execute("DELETE FROM users WHERE id = %s", (1,))
+    conn.commit()
+finally:
+    conn.close()`,
+    },
+    {
+      id: 'db-redshift',
+      title: 'Amazon Redshift Data API (Serverless or provisioned)',
+      note: 'No VPC attachment or SQL driver is needed. ExecuteStatement is asynchronous, so the helper waits for FINISHED before returning and fetches rows only for SELECT. Use WorkgroupName for Serverless; replace it with ClusterIdentifier plus DbUser or SecretArn for provisioned Redshift.',
+      js: `const redshiftRun = async (Sql, Parameters = []) => {
+  const submitted = await redshiftData.send(new RedshiftExecuteStatementCommand({
+    WorkgroupName: 'my-workgroup',
+    Database: 'dev',
+    Sql,
+    Parameters,
+  }));
+  let statement;
+  do {
+    await new Promise((resolve) => setTimeout(resolve, 200));
+    statement = await redshiftData.send(new DescribeStatementCommand({ Id: submitted.Id }));
+  } while (statement.Status === 'SUBMITTED' || statement.Status === 'PICKED' || statement.Status === 'STARTED');
+  if (statement.Status !== 'FINISHED') throw new Error(statement.Error ?? statement.Status);
+  return statement.HasResultSet
+    ? redshiftData.send(new GetStatementResultCommand({ Id: submitted.Id }))
+    : statement;
+};
+
+await redshiftRun('INSERT INTO users (id, name, email) VALUES (:id, :name, :email)', [
+  { name: 'id', value: '1' }, { name: 'name', value: 'Ann' }, { name: 'email', value: 'a@b.ch' },
+]);
+const got = await redshiftRun('SELECT id, name, email FROM users WHERE id = :id', [{ name: 'id', value: '1' }]);
+const rows = got.Records;
+await redshiftRun('UPDATE users SET email = :email WHERE id = :id', [
+  { name: 'email', value: 'new@b.ch' }, { name: 'id', value: '1' },
+]);
+await redshiftRun('DELETE FROM users WHERE id = :id', [{ name: 'id', value: '1' }]);`,
+      py: `def redshift_run(sql, parameters=None):
+    submitted = redshift_data.execute_statement(
+        WorkgroupName="my-workgroup", Database="dev", Sql=sql, Parameters=parameters or []
+    )
+    while True:
+        statement = redshift_data.describe_statement(Id=submitted["Id"])
+        if statement["Status"] not in ("SUBMITTED", "PICKED", "STARTED"):
+            break
+        time.sleep(0.2)
+    if statement["Status"] != "FINISHED":
+        raise RuntimeError(statement.get("Error") or statement["Status"])
+    return redshift_data.get_statement_result(Id=submitted["Id"]) if statement["HasResultSet"] else statement
+
+redshift_run("INSERT INTO users (id, name, email) VALUES (:id, :name, :email)", [
+    {"name": "id", "value": "1"}, {"name": "name", "value": "Ann"}, {"name": "email", "value": "a@b.ch"},
+])
+got = redshift_run("SELECT id, name, email FROM users WHERE id = :id", [{"name": "id", "value": "1"}])
+rows = got["Records"]
+redshift_run("UPDATE users SET email = :email WHERE id = :id", [
+    {"name": "email", "value": "new@b.ch"}, {"name": "id", "value": "1"},
+])
+redshift_run("DELETE FROM users WHERE id = :id", [{"name": "id", "value": "1"}])`,
+    },
+    {
+      id: 'db-documentdb',
+      title: 'Amazon DocumentDB (MongoDB API)',
+      note: 'Put mongodb / pymongo and the AWS global RDS CA bundle in a layer, attach Lambda to the cluster VPC, and store username/password/host in Secrets Manager. retryWrites must stay false because DocumentDB does not support retryable writes.',
+      js: `// npm install mongodb; place global-bundle.pem at /opt/global-bundle.pem
+import { MongoClient } from 'mongodb';
+
+const cfg = JSON.parse((await secrets.send(new GetSecretValueCommand({ SecretId: 'prod/documentdb' }))).SecretString);
+const uri = 'mongodb://' + encodeURIComponent(cfg.username) + ':' + encodeURIComponent(cfg.password) + '@' + cfg.host + ':27017/app';
+const mongo = new MongoClient(uri, {
+  tls: true,
+  tlsCAFile: '/opt/global-bundle.pem',
+  replicaSet: 'rs0',
+  readPreference: 'primaryPreferred',
+  retryWrites: false,
+  authSource: 'admin',
+});
+
+await mongo.connect();
+try {
+  const users = mongo.db('app').collection('users');
+  await users.insertOne({ _id: 'user#42', name: 'Ann', email: 'a@b.ch' });
+  const item = await users.findOne({ _id: 'user#42' });
+  await users.updateOne({ _id: 'user#42' }, { $set: { email: 'new@b.ch' } });
+  await users.deleteOne({ _id: 'user#42' });
+} finally {
+  await mongo.close();
+}`,
+      py: `# pip install pymongo into the function package or a layer; place global-bundle.pem at /opt/global-bundle.pem
+import pymongo
+from urllib.parse import quote_plus
+
+cfg = json.loads(secrets.get_secret_value(SecretId="prod/documentdb")["SecretString"])
+uri = "mongodb://" + quote_plus(cfg["username"]) + ":" + quote_plus(cfg["password"]) + "@" + cfg["host"] + ":27017/app"
+mongo = pymongo.MongoClient(
+    uri, tls=True, tlsCAFile="/opt/global-bundle.pem", replicaSet="rs0",
+    readPreference="primaryPreferred", retryWrites=False, authSource="admin",
+)
+try:
+    users = mongo.app.users
+    users.insert_one({"_id": "user#42", "name": "Ann", "email": "a@b.ch"})
+    item = users.find_one({"_id": "user#42"})
+    users.update_one({"_id": "user#42"}, {"$set": {"email": "new@b.ch"}})
+    users.delete_one({"_id": "user#42"})
+finally:
+    mongo.close()`,
+    },
+    {
+      id: 'db-keyspaces',
+      title: 'Amazon Keyspaces (Cassandra / CQL)',
+      note: "Bundle the Cassandra driver and CA bundle. This short version uses IAM service-specific credentials from Secrets Manager; for temporary Lambda-role credentials, bundle AWS's SigV4 Cassandra plugin instead. The regional endpoint is public unless you configure an interface VPC endpoint.",
+      js: `// npm install cassandra-driver; place keyspaces-bundle.pem at /opt/keyspaces-bundle.pem
+import cassandra from 'cassandra-driver';
+
+const region = process.env.AWS_REGION;
+const cfg = JSON.parse((await secrets.send(new GetSecretValueCommand({ SecretId: 'prod/keyspaces' }))).SecretString);
+const keyspaces = new cassandra.Client({
+  contactPoints: ['cassandra.' + region + '.amazonaws.com'],
+  localDataCenter: region,
+  authProvider: new cassandra.auth.PlainTextAuthProvider(cfg.username, cfg.password),
+  sslOptions: { ca: [readFileSync('/opt/keyspaces-bundle.pem')], host: 'cassandra.' + region + '.amazonaws.com', rejectUnauthorized: true },
+  protocolOptions: { port: 9142 },
+});
+
+await keyspaces.connect();
+try {
+  await keyspaces.execute('INSERT INTO app.users (id, name, email) VALUES (?, ?, ?)', ['42', 'Ann', 'a@b.ch'], { prepare: true });
+  const got = await keyspaces.execute('SELECT id, name, email FROM app.users WHERE id = ?', ['42'], { prepare: true });
+  const rows = got.rows;
+  await keyspaces.execute('UPDATE app.users SET email = ? WHERE id = ?', ['new@b.ch', '42'], { prepare: true });
+  await keyspaces.execute('DELETE FROM app.users WHERE id = ?', ['42'], { prepare: true });
+} finally {
+  await keyspaces.shutdown();
+}`,
+      py: `# pip install cassandra-driver into the function package or a layer; place keyspaces-bundle.pem at /opt/keyspaces-bundle.pem
+from cassandra.auth import PlainTextAuthProvider
+from cassandra.cluster import Cluster
+from ssl import SSLContext, PROTOCOL_TLS_CLIENT
+
+region = os.environ["AWS_REGION"]
+cfg = json.loads(secrets.get_secret_value(SecretId="prod/keyspaces")["SecretString"])
+tls = SSLContext(PROTOCOL_TLS_CLIENT)
+tls.load_verify_locations("/opt/keyspaces-bundle.pem")
+cluster = Cluster(
+    ["cassandra." + region + ".amazonaws.com"], port=9142, ssl_context=tls,
+    auth_provider=PlainTextAuthProvider(username=cfg["username"], password=cfg["password"]),
+)
+session = cluster.connect()
+try:
+    session.execute("INSERT INTO app.users (id, name, email) VALUES (%s, %s, %s)", ("42", "Ann", "a@b.ch"))
+    rows = session.execute("SELECT id, name, email FROM app.users WHERE id = %s", ("42",)).all()
+    session.execute("UPDATE app.users SET email = %s WHERE id = %s", ("new@b.ch", "42"))
+    session.execute("DELETE FROM app.users WHERE id = %s", ("42",))
+finally:
+    cluster.shutdown()`,
+    },
+    {
+      id: 'db-neptune',
+      title: 'Amazon Neptune Database (openCypher Data API)',
+      note: 'The SDK signs requests, so no graph driver is needed. Lambda still needs network access to the Neptune cluster endpoint and neptune-db read/write/delete query permissions. Retries are disabled because retrying a mutation that is still running can duplicate work.',
+      js: `const neptune = new NeptunedataClient({
+  endpoint: 'https://' + process.env.NEPTUNE_HOST + ':8182',
+  maxAttempts: 1,
+});
+const cypher = (openCypherQuery, parameters = {}) => neptune.send(new ExecuteOpenCypherQueryCommand({
+  openCypherQuery,
+  parameters: JSON.stringify(parameters),
+}));
+
+await cypher('CREATE (u:User {id: $id, name: $name, email: $email})', { id: '42', name: 'Ann', email: 'a@b.ch' });
+const got = await cypher('MATCH (u:User {id: $id}) RETURN u', { id: '42' });
+const rows = got.results;
+await cypher('MATCH (u:User {id: $id}) SET u.email = $email', { id: '42', email: 'new@b.ch' });
+await cypher('MATCH (u:User {id: $id}) DETACH DELETE u', { id: '42' });`,
+      py: `from botocore.config import Config
+
+neptune = boto3.client(
+    "neptunedata",
+    endpoint_url="https://" + os.environ["NEPTUNE_HOST"] + ":8182",
+    config=Config(read_timeout=None, retries={"total_max_attempts": 1}),
+)
+
+def cypher(query, parameters=None):
+    return neptune.execute_open_cypher_query(
+        openCypherQuery=query, parameters=json.dumps(parameters or {})
+    )
+
+cypher("CREATE (u:User {id: $id, name: $name, email: $email})", {"id": "42", "name": "Ann", "email": "a@b.ch"})
+got = cypher("MATCH (u:User {id: $id}) RETURN u", {"id": "42"})
+rows = got["results"]
+cypher("MATCH (u:User {id: $id}) SET u.email = $email", {"id": "42", "email": "new@b.ch"})
+cypher("MATCH (u:User {id: $id}) DETACH DELETE u", {"id": "42"})`,
+    },
+    {
+      id: 'db-timestream',
+      title: 'Amazon Timestream for LiveAnalytics',
+      note: 'WriteRecords inserts and upserts time-series points; a larger Version wins for the same dimensions, measure name, and timestamp. Reads are eventually consistent and there is no record-level delete operation—expire data with retention or delete the table.',
+      js: `const ts = String(Date.now());
+const point = (value, version) => ({
+  Dimensions: [{ Name: 'device_id', Value: 'sensor-42' }],
+  MeasureName: 'temperature',
+  MeasureValue: String(value),
+  MeasureValueType: 'DOUBLE',
+  Time: ts,
+  TimeUnit: 'MILLISECONDS',
+  Version: version,
+});
+
+await timestreamWrite.send(new WriteRecordsCommand({
+  DatabaseName: 'app', TableName: 'readings', Records: [point(21.5, 1)],
+}));
+await timestreamWrite.send(new WriteRecordsCommand({
+  DatabaseName: 'app', TableName: 'readings', Records: [point(22.0, 2)],
+}));
+
+const got = await timestreamQuery.send(new TimestreamQueryCommand({
+  QueryString: "SELECT device_id, time, measure_value::double AS temperature FROM app.readings WHERE device_id = 'sensor-42' ORDER BY time DESC LIMIT 20",
+}));
+const rows = got.Rows;`,
+      py: `ts = str(int(time.time() * 1000))
+
+def point(value, version):
+    return {
+        "Dimensions": [{"Name": "device_id", "Value": "sensor-42"}],
+        "MeasureName": "temperature",
+        "MeasureValue": str(value),
+        "MeasureValueType": "DOUBLE",
+        "Time": ts,
+        "TimeUnit": "MILLISECONDS",
+        "Version": version,
+    }
+
+timestream_write.write_records(DatabaseName="app", TableName="readings", Records=[point(21.5, 1)])
+timestream_write.write_records(DatabaseName="app", TableName="readings", Records=[point(22.0, 2)])
+
+got = timestream_query.query(
+    QueryString="SELECT device_id, time, measure_value::double AS temperature FROM app.readings WHERE device_id = 'sensor-42' ORDER BY time DESC LIMIT 20"
+)
+rows = got["Rows"]`,
+    },
+    {
+      id: 'db-elasticache',
+      title: 'Amazon ElastiCache (Valkey / Redis OSS)',
+      note: 'Bundle redis / redis-py and run Lambda in the cache VPC. This targets ElastiCache Serverless or a cluster-mode-disabled primary endpoint with TLS and password auth; for cluster mode enabled, use createCluster / RedisCluster with the configuration endpoint.',
+      js: `// npm install redis into the function package or a layer
+import { createClient } from 'redis';
+
+const redis = createClient({
+  url: 'rediss://' + encodeURIComponent(process.env.CACHE_USER) + ':' + encodeURIComponent(process.env.CACHE_PASSWORD) + '@' + process.env.CACHE_HOST + ':6379',
+});
+redis.on('error', (err) => console.error(err));
+await redis.connect();
+try {
+  await redis.set('user:42', JSON.stringify({ name: 'Ann', email: 'a@b.ch' }), { EX: 3600 });
+  const item = JSON.parse(await redis.get('user:42'));
+  await redis.hSet('user:42:profile', { name: 'Ann', email: 'new@b.ch' });
+  const profile = await redis.hGetAll('user:42:profile');
+  await redis.del('user:42', 'user:42:profile');
+} finally {
+  await redis.close();
+}`,
+      py: `# pip install redis into the function package or a layer
+import redis
+
+cache = redis.Redis(
+    host=os.environ["CACHE_HOST"], port=6379, ssl=True,
+    username=os.environ["CACHE_USER"], password=os.environ["CACHE_PASSWORD"],
+    decode_responses=True,
+)
+cache.set("user:42", json.dumps({"name": "Ann", "email": "a@b.ch"}), ex=3600)
+item = json.loads(cache.get("user:42"))
+cache.hset("user:42:profile", mapping={"name": "Ann", "email": "new@b.ch"})
+profile = cache.hgetall("user:42:profile")
+cache.delete("user:42", "user:42:profile")
+cache.close()`,
+    },
+    {
+      id: 'db-elasticache-memcached',
+      title: 'Amazon ElastiCache (Memcached)',
+      note: 'Bundle memcache-client / pymemcache and run Lambda in the cache VPC. The serverless cache endpoint requires TLS; set overwrites an existing key, so it doubles as the update operation.',
+      js: `// npm install memcache-client into the function package or a layer
+import { MemcacheClient } from 'memcache-client';
+
+const cache = new MemcacheClient({
+  server: process.env.MEMCACHED_HOST + ':11211',
+  tls: {},
+});
+await cache.set('user:42', JSON.stringify({ name: 'Ann', email: 'a@b.ch' }), { lifetime: 3600 });
+const item = JSON.parse((await cache.get('user:42')).value);
+await cache.set('user:42', JSON.stringify({ name: 'Ann', email: 'new@b.ch' }), { lifetime: 3600 });
+await cache.delete('user:42');
+cache.shutdown();`,
+      py: `# pip install pymemcache into the function package or a layer
+import ssl
+from pymemcache.client.base import Client
+
+cache = Client((os.environ["MEMCACHED_HOST"], 11211), tls_context=ssl.create_default_context())
+cache.set("user:42", json.dumps({"name": "Ann", "email": "a@b.ch"}), expire=3600, noreply=False)
+item = json.loads(cache.get("user:42"))
+cache.set("user:42", json.dumps({"name": "Ann", "email": "new@b.ch"}), expire=3600, noreply=False)
+cache.delete("user:42", noreply=False)
+cache.close()`,
+    },
+    {
+      id: 'db-memorydb',
+      title: 'Amazon MemoryDB (Valkey / Redis OSS)',
+      note: 'Bundle redis / redis-py and run Lambda in the MemoryDB VPC. MemoryDB is cluster-mode enabled, so use a cluster-aware client against the cluster endpoint. This concise version uses an ACL username/password; IAM auth can replace the password with a 15-minute signed token.',
+      js: `// npm install redis into the function package or a layer
+import { createCluster } from 'redis';
+
+const memorydb = createCluster({
+  rootNodes: [{ url: 'rediss://' + encodeURIComponent(process.env.MEMORYDB_USER) + ':' + encodeURIComponent(process.env.MEMORYDB_PASSWORD) + '@' + process.env.MEMORYDB_HOST + ':6379' }],
+  defaults: { socket: { tls: true } },
+});
+memorydb.on('error', (err) => console.error(err));
+await memorydb.connect();
+try {
+  await memorydb.set('user:42', JSON.stringify({ name: 'Ann', email: 'a@b.ch' }));
+  const item = JSON.parse(await memorydb.get('user:42'));
+  await memorydb.hSet('user:42:profile', { name: 'Ann', email: 'new@b.ch' });
+  const profile = await memorydb.hGetAll('user:42:profile');
+  await memorydb.del('user:42', 'user:42:profile');
+} finally {
+  await memorydb.close();
+}`,
+      py: `# pip install redis into the function package or a layer
+from redis.cluster import RedisCluster
+
+memorydb = RedisCluster(
+    host=os.environ["MEMORYDB_HOST"], port=6379, ssl=True,
+    username=os.environ["MEMORYDB_USER"], password=os.environ["MEMORYDB_PASSWORD"],
+    decode_responses=True,
+)
+memorydb.set("user:42", json.dumps({"name": "Ann", "email": "a@b.ch"}))
+item = json.loads(memorydb.get("user:42"))
+memorydb.hset("user:42:profile", mapping={"name": "Ann", "email": "new@b.ch"})
+profile = memorydb.hgetall("user:42:profile")
+memorydb.delete("user:42", "user:42:profile")
+memorydb.close()`,
+    },
+  ],
+};
+
+const services: Group = {
+  id: 'services',
+  title: 'Other service usage',
+  blurb:
+    'Drop-in SDK calls for the other services you reach from a handler. They use clients from the import block; paste that once and any call below drops straight in.',
+  snippets: [
     {
       id: 'svc-s3',
       title: 'S3 objects',
@@ -1093,7 +1497,6 @@ await s3.send(new PutObjectCommand({
   ContentType: 'application/json',
   CacheControl: 'max-age=60',
   Metadata: { owner: 'ann' },
-  ACL: 'private',
 }));
 
 await s3.send(new DeleteObjectCommand({ Bucket: 'my-bucket', Key: 'path/file.json' }));
@@ -1120,7 +1523,6 @@ s3.put_object(
     ContentType="application/json",
     CacheControl="max-age=60",
     Metadata={"owner": "ann"},
-    ACL="private",
 )
 
 s3.delete_object(Bucket="my-bucket", Key="path/file.json")
@@ -1212,7 +1614,7 @@ const getConfig = async () => {
 
   const cfg = await appconfigdata.send(new GetLatestConfigurationCommand({ ConfigurationToken: token }));
   token = cfg.NextPollConfigurationToken;
-  nextPollAt = Date.now() + 15_000;
+  nextPollAt = Date.now() + (cfg.NextPollIntervalInSeconds ?? 15) * 1000;
   if (cfg.Configuration?.length) config = JSON.parse(Buffer.from(cfg.Configuration).toString());
   return config;
 };
@@ -1256,7 +1658,7 @@ def get_config():
 
     cfg = appconfigdata.get_latest_configuration(ConfigurationToken=token)
     token = cfg["NextPollConfigurationToken"]
-    next_poll_at = time.time() + 15
+    next_poll_at = time.time() + cfg.get("NextPollIntervalInSeconds", 15)
     body = cfg["Configuration"].read()
     if body:
         config = json.loads(body)
@@ -1505,6 +1907,6 @@ idp.admin_set_user_password(UserPoolId=pool, Username="ann@x.ch", Password="S3cr
   ],
 };
 
-export const groups: Group[] = [common, incoming, outgoing, services];
+export const groups: Group[] = [common, incoming, outgoing, databases, services];
 
 export default groups;

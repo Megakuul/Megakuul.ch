@@ -195,6 +195,24 @@ export const projects: Record<string, Project> = {
     published: '30.08.2026',
     services: ['iam', 'sts', 'cognito'],
   },
+  gadgets: {
+    title: 'Gadgets',
+    description: 'Lambda utilities and dashboards',
+    published: '03.09.2026',
+    services: [
+      'lambda',
+      'cloudwatch',
+      'api-gateway',
+      'sqs',
+      'kinesis',
+      'dynamodb',
+      'rds',
+      'redshift',
+      'elasticache',
+      'ecr',
+      'codebuild',
+    ],
+  },
 };
 
 export default projects;

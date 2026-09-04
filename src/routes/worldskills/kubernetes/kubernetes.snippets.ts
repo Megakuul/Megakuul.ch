@@ -163,8 +163,16 @@ spec:
     {
       id: 'wl-statefulset',
       title: 'StatefulSet + headless Service',
-      note: 'volumeClaimTemplates mints one PVC per replica (my-db-0, my-db-1, ...), see the storage section below for the StorageClass.',
+      note: 'volumeClaimTemplates mints one PVC per replica (data-my-db-0, data-my-db-1, ...), see the storage section below for the StorageClass. This plain PostgreSQL example deliberately uses one replica; use a replication-aware operator before scaling it. The inline Secret is only a runnable placeholder—replace it with a managed secret before real use.',
       code: `apiVersion: v1
+kind: Secret
+metadata:
+  name: my-db
+type: Opaque
+stringData:
+  password: change-me-now
+---
+apiVersion: v1
 kind: Service
 metadata:
   name: my-db
@@ -180,7 +188,7 @@ metadata:
   name: my-db
 spec:
   serviceName: my-db
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels: { app: my-db }
   template:
@@ -192,6 +200,12 @@ spec:
           image: postgres:16
           ports:
             - containerPort: 5432
+          env:
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef: { name: my-db, key: password }
+            - name: PGDATA
+              value: /var/lib/postgresql/data/pgdata
           volumeMounts:
             - name: data
               mountPath: /var/lib/postgresql/data
@@ -236,6 +250,7 @@ metadata:
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/target-type: ip
 spec:
+  ingressClassName: alb
   rules:
     - host: app.example.com
       http:
@@ -258,17 +273,15 @@ const identity: Group = {
     {
       id: 'id-oidc-provider',
       title: 'Associate an OIDC provider with the cluster (IRSA prerequisite, once per cluster)',
-      note: 'IRSA does not work until this exists. Most clusters already have one, check with list-open-id-connect-providers before creating a duplicate. The thumbprint is the fixed EKS OIDC root CA thumbprint, the same value works for every cluster and region.',
+      note: 'IRSA does not work until this exists. eksctl discovers the cluster issuer and current CA thumbprint, and --approve idempotently creates the provider when it is missing.',
       lang: 'bash',
-      code: `oidc=$(aws eks describe-cluster --name my-cluster --query "cluster.identity.oidc.issuer" --output text)
-echo $oidc
+      code: `eksctl utils associate-iam-oidc-provider \\
+  --cluster my-cluster \\
+  --region eu-central-1 \\
+  --approve
 
-aws iam list-open-id-connect-providers
-
-aws iam create-open-id-connect-provider \\
-  --url $oidc \\
-  --client-id-list sts.amazonaws.com \\
-  --thumbprint-list 9e99a48a9960b14926bb7f3b02e22da2b0ab7280`,
+aws eks describe-cluster --name my-cluster --region eu-central-1 --query "cluster.identity.oidc.issuer" --output text
+aws iam list-open-id-connect-providers`,
     },
     {
       id: 'id-irsa',
@@ -392,7 +405,7 @@ spec:
     {
       id: 'st-efs',
       title: 'EFS volume (ReadWriteMany, shared)',
-      note: 'Needs the "Amazon EFS CSI Driver" addon and an EFS filesystem with mount targets in the node subnets.',
+      note: 'Needs the "Amazon EFS CSI Driver" addon, AmazonEFSCSIDriverPolicy on its controller service account, and an EFS filesystem with mount targets in the node subnets.',
       code: `apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
@@ -429,7 +442,8 @@ kind: EC2NodeClass
 metadata:
   name: arm64
 spec:
-  amiFamily: AL2023
+  amiSelectorTerms:
+    - alias: al2023@latest
   role: KarpenterNodeRole-my-cluster
   subnetSelectorTerms:
     - tags: { karpenter.sh/discovery: my-cluster }
