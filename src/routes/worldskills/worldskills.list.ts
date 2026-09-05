@@ -213,6 +213,22 @@ export const projects: Record<string, Project> = {
       'codebuild',
     ],
   },
+  codepipeline: {
+    title: 'CodePipeline',
+    description: 'Source, build, test, approval, and deployment examples',
+    published: '05.09.2026',
+    services: [
+      'codepipeline',
+      'codebuild',
+      'codedeploy',
+      'lambda',
+      'ecr',
+      'ecs',
+      'ec2',
+      's3',
+      'cloudformation',
+    ],
+  },
 };
 
 export default projects;
